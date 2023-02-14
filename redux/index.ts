@@ -11,9 +11,9 @@ import { RootState } from './types/global.types';
 const isOnProduction = process.env.NODE_ENV === 'production';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-declare module "react-redux" {
+declare module 'react-redux' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultRootState extends RootState {}
+  interface DefaultRootState extends RootState {} 
 }
 
 const bindMiddleware = (middleware: Array<Middleware>) => {
