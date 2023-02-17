@@ -1,8 +1,7 @@
+import { useAppDispatch } from 'hooks/useRedux';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { useDispatch } from 'react-redux';
 
 import actions from '../../redux/actions';
 const Login: React.FC = () => {
@@ -12,7 +11,7 @@ const Login: React.FC = () => {
     password: '',
   });
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const togglePassword = () => {
     if (passwordType === 'password') {

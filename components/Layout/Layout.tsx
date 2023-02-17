@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 
+import Footer from './Footer';
 import MainNavigation from './MainNavigation';
 
 type Props = {
@@ -10,6 +11,7 @@ const Layout = ({ children }: Props) => {
     <Fragment>
       <MainNavigation />
       <main>{children}</main>
+      <Footer />
     </Fragment>
   );
 };

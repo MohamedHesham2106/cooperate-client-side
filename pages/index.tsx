@@ -10,5 +10,15 @@ const Home: NextPage = () => {
     </Fragment>
   );
 };
+// ? export const getServerSideProps: GetServerSideProps = (
+//   ctx: GetServerSidePropsContext
+// ):Promise<GetServerSidePropsResult<any>> => {
+//   const req = ctx.req;
+//   const cookie = req.cookies;
+//   console.log(cookie.jwt_access);
+//   return {
+//     props: {},
+//   };
+// };
 
 export default Home;

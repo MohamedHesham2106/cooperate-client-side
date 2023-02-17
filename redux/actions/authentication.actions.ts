@@ -2,7 +2,7 @@ import axiosInstance from 'lib/axios';
 import Router from 'next/router';
 
 import { AUTHENTICATE, DEAUTHENTICATE } from '../types/authentication.types';
-import { removeCookie, setCookie } from '../../lib/cookie';
+import { getCookie, removeCookie, setCookie } from '../../lib/cookie';
 
 type Login = {
   email: string;
@@ -24,7 +24,6 @@ const authenticate = ({ email, password, refresh, access }: Login) => {
           password,
         });
         const { accessToken, refreshToken } = response.data;
-        console.log(response.data);
         setCookie('jwt_access', accessToken, 0.5);
         setCookie('jwt_refresh', refreshToken, 30);
         dispatch({
@@ -49,7 +48,7 @@ const reauthenticate = (
       if (refresh && access) {
         dispatch({ type: AUTHENTICATE, payload: { access, refresh } });
       }
-      if (!access) {
+      if (!access && refresh) {
         const response = await axiosInstance.post('/api/refresh-token', {
           refreshToken: refresh,
         });
@@ -67,26 +66,23 @@ const reauthenticate = (
 };
 
 // removing the token
-const deauthenticate = (
-  refresh: string | undefined,
-  access: string | undefined
-) => {
+const deauthenticate = () => {
   return async (dispatch: any) => {
     try {
+      const refresh = getCookie('jwt_refresh');
+      const access = getCookie('jwt_access');
+
       if (refresh) {
         await axiosInstance.delete('/api/logout', {
+          headers: { Authorization: `Bearer ${access}` },
           data: { refreshToken: refresh },
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
         });
         removeCookie('jwt_access');
         removeCookie('jwt_refresh');
         const { pathname } = Router;
-        if (pathname !== '/') {
-          await Router.push('/');
-          dispatch({ type: DEAUTHENTICATE });
-        }
+
+        await Router.push(pathname);
+        dispatch({ type: DEAUTHENTICATE });
       } else {
         removeCookie('jwt_access');
         removeCookie('jwt_refresh');

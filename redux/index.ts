@@ -1,20 +1,16 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { createWrapper, MakeStore } from 'next-redux-wrapper';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { applyMiddleware, createStore, Middleware } from 'redux';
+import { applyMiddleware, createStore, Middleware, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
+import thunk, { ThunkMiddleware } from 'redux-thunk';
 
 import rootReducer from './reducers';
 import { RootState } from './types/global.types';
 
 const isOnProduction = process.env.NODE_ENV === 'production';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-declare module 'react-redux' {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultRootState extends RootState {} 
-}
 
 const bindMiddleware = (middleware: Array<Middleware>) => {
   if (!isOnProduction) {
@@ -23,9 +19,16 @@ const bindMiddleware = (middleware: Array<Middleware>) => {
   return applyMiddleware(...middleware);
 };
 
-const makeStore: MakeStore<RootState> = () =>
-  createStore(rootReducer, bindMiddleware([thunk]));
+const makeStore: MakeStore<Store<RootState>> = () =>
+  createStore(
+    rootReducer,
+    bindMiddleware([thunk as ThunkMiddleware<RootState>])
+  );
 
-export const wrapper = createWrapper<RootState>(makeStore, {
+export const wrapper = createWrapper<Store<RootState>>(makeStore, {
   debug: !isOnProduction,
 });
+
+// You can export your custom `wrapper` and `RootState` types as well
+export type AppStore = ReturnType<typeof makeStore>;
+export type AppState = ReturnType<AppStore['getState']>;
