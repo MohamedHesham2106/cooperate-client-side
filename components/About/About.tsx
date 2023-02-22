@@ -1,19 +1,20 @@
+import Container from 'components/UI/Container';
 import Image from 'next/image';
-import React from 'react';
+import { FC } from 'react';
 import { TiTick } from 'react-icons/ti';
-const About: React.FC = () => {
+const About: FC = () => {
   return (
-    <div className='relative w-full md:w-[93%] p-4 px-12 mx-auto  bg-white  sm:px-6 lg:px-8 my-5  md:drop-shadow-xl'>
+    <Container className='relative w-full md:w-[93%] p-4 px-12 mx-auto  bg-white  sm:px-6 lg:px-8 my-5  md:drop-shadow-xl'>
       <div className='relative'>
         <div className='lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:gap-8 lg:items-center'>
-          <div className='flex justify-center lg:justify-start'>
-            <Image
-              width={500}
-              height={500}
-              src='/images/businessman-working-on-laptop.svg'
-              alt='working on laptop'
-            />
-          </div>
+          <Image
+            className='flex justify-center lg:justify-start w-auto h-auto'
+            width={500}
+            height={500}
+            src='/images/businessman-working-on-laptop.svg'
+            alt='working on laptop'
+          />
+
           <div className='ml-auto lg:col-start-2 lg:max-w-2xl'>
             <h4 className='mt-2 text-2xl font-extrabold leading-8 text-gray-900  sm:text-3xl sm:leading-9'>
               What&apos;s great about it?
@@ -74,7 +75,7 @@ const About: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 };
 

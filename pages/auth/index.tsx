@@ -1,4 +1,3 @@
-import Login from 'components/Forms/Login';
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -7,6 +6,8 @@ import type {
   Redirect,
 } from 'next';
 import React, { Fragment } from 'react';
+
+import Login from '../../components/Forms/Login';
 
 const LogIn: NextPage = () => {
   return (

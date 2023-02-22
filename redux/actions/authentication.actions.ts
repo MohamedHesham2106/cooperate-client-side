@@ -1,8 +1,9 @@
-import axiosInstance from 'lib/axios';
 import Router from 'next/router';
-
+import { Dispatch } from 'redux';
+import actions from '.';
 import { AUTHENTICATE, DEAUTHENTICATE } from '../types/authentication.types';
-import { getCookie, removeCookie, setCookie } from '../../lib/cookie';
+import axiosInstance from '../../utils/axios';
+import { getCookie, removeCookie, setCookie } from '../../utils/cookie';
 
 type Login = {
   email: string;
@@ -10,91 +11,77 @@ type Login = {
   access?: string;
   refresh?: string;
 };
+
 const authenticate = ({ email, password, refresh, access }: Login) => {
   return async (dispatch: any) => {
-    try {
-      if (refresh && access) {
-        dispatch({
-          type: AUTHENTICATE,
-          payload: { refresh: refresh, access: access },
-        });
-      } else {
-        const response = await axiosInstance.post('/api/authenticate', {
-          email,
-          password,
-        });
-        const { accessToken, refreshToken } = response.data;
-        setCookie('jwt_access', accessToken, 0.5);
-        setCookie('jwt_refresh', refreshToken, 30);
-        dispatch({
-          type: AUTHENTICATE,
-          payload: { refresh: refreshToken, access: accessToken },
-        });
-        await Router.push('/');
-      }
-    } catch (e) {
-      // console.log(e);
-      dispatch({ type: DEAUTHENTICATE });
-    }
+    refresh && access
+      ? dispatch({ type: AUTHENTICATE, payload: { refresh, access } })
+      : (async () => {
+          try {
+            const { data } = await axiosInstance.post('/api/authenticate', {
+              email,
+              password,
+            });
+            const { accessToken, refreshToken } = data;
+            setCookie('jwt_access', accessToken, 0.5);
+            setCookie('jwt_refresh', refreshToken, 30);
+            dispatch({
+              type: AUTHENTICATE,
+              payload: { refresh: refreshToken, access: accessToken },
+            });
+            await Router.push('/');
+          } catch (error) {
+            const err = error as IError;
+            const { message } = err.response.data;
+            console.log(message);
+            dispatch(actions.showError(message, 'error'));
+          }
+        })();
   };
 };
 
-const reauthenticate = (
-  refresh: string | undefined,
-  access: string | undefined
-): any => {
+const reauthenticate = (refresh?: string, access?: string): unknown => {
   return async (dispatch: any) => {
-    try {
-      if (refresh && access) {
-        dispatch({ type: AUTHENTICATE, payload: { access, refresh } });
-      }
-      if (!access && refresh) {
+    if (refresh && access) {
+      dispatch({ type: AUTHENTICATE, payload: { access, refresh } });
+    }
+    if (!access && refresh) {
+      try {
         const response = await axiosInstance.post('/api/refresh-token', {
           refreshToken: refresh,
         });
-        const { accessToken } = response.data;
+        const accessToken = response.data?.accessToken;
         setCookie('jwt_access', accessToken, 0.5);
         dispatch({
           type: AUTHENTICATE,
           payload: { refresh, access: accessToken },
         });
+      } catch (e) {
+        dispatch({ type: DEAUTHENTICATE });
       }
-    } catch (e) {
-      dispatch({ type: DEAUTHENTICATE });
     }
   };
 };
 
 // removing the token
-const deauthenticate = () => {
+const deauthenticate = (): unknown => {
   return async (dispatch: any) => {
-    try {
-      const refresh = getCookie('jwt_refresh');
-      const access = getCookie('jwt_access');
+    const access = getCookie('jwt_access');
+    const refresh = getCookie('jwt_refresh');
+    removeCookie('jwt_access');
+    removeCookie('jwt_refresh');
 
-      if (refresh) {
-        await axiosInstance.delete('/api/logout', {
+    if (refresh) {
+      await Promise.all([
+        axiosInstance.delete('/api/logout', {
           headers: { Authorization: `Bearer ${access}` },
           data: { refreshToken: refresh },
-        });
-        removeCookie('jwt_access');
-        removeCookie('jwt_refresh');
-        const { pathname } = Router;
-
-        await Router.push(pathname);
-        dispatch({ type: DEAUTHENTICATE });
-      } else {
-        removeCookie('jwt_access');
-        removeCookie('jwt_refresh');
-        const { pathname } = Router;
-        if (pathname !== '/') {
-          await Router.push('/');
-          dispatch({ type: DEAUTHENTICATE });
-        }
-      }
-    } catch (e) {
-      dispatch({ type: DEAUTHENTICATE });
+        }),
+        await Router.push('/'),
+      ]);
     }
+
+    dispatch({ type: DEAUTHENTICATE });
   };
 };
 

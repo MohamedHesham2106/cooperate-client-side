@@ -1,16 +1,17 @@
-import UserDropDown from 'components/DropDownMenus/UserDropDown';
-import Search from 'components/UI/Search/Search';
-import { useScrollPosition } from 'hooks/useScrollPosition';
-import { isAuthenticated } from 'lib/cookie';
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+
+import UserDropDown from '../DropDownMenus/UserDropDown';
+import { useScrollPosition } from '../../hooks/useScrollPosition';
+import { isAuthenticated } from '../../utils/cookie';
+
 const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
 };
 
-const MainNavigation: React.FC = () => {
+const MainNavigation: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
@@ -30,32 +31,19 @@ const MainNavigation: React.FC = () => {
         'transition-shadow fixed top-0 left-0 z-10 w-full bg-white '
       )}
     >
-      <nav className='justify-between h-16 max-w-full flex  items-center p-4 text-black'>
-        {!isAuth && (
-          <div className='block sm:hidden z-10 cursor-pointer'>
-            {isOpen ? (
-              <AiOutlineClose size={28} color='black' onClick={NavHandler} />
-            ) : (
-              <AiOutlineMenu size={28} color='black' onClick={NavHandler} />
-            )}
-          </div>
-        )}
-        <Link href='/' className='md:pl-24 pt-2'>
+      <nav className='justify-between h-16 max-w-full flex  items-center p-2 text-black'>
+        <Link href='/' className='md:pl-24 pt-2 h-full flex items-center'>
           <Image
             src='/logo.png'
             alt='Cooperate Logo'
             width={140}
             height={140}
+            priority
           />
         </Link>
 
-        {/* Search */}
-        <div className='relative sm:w-1/4 w-3/4 sm:block'>
-          <Search />
-        </div>
-
         {/* Menu */}
-        <ul className='hidden sm:flex  md:pr-24'>
+        <ul className='hidden sm:flex'>
           {!isAuth && (
             <li className='p-4'>
               <Link href='/auth'>Log In</Link>
@@ -76,6 +64,15 @@ const MainNavigation: React.FC = () => {
         {isAuth && (
           <div className='md:pr-5'>
             <UserDropDown />
+          </div>
+        )}
+        {!isAuth && (
+          <div className='block sm:hidden z-10 cursor-pointer'>
+            {isOpen ? (
+              <AiOutlineClose size={28} color='black' onClick={NavHandler} />
+            ) : (
+              <AiOutlineMenu size={28} color='black' onClick={NavHandler} />
+            )}
           </div>
         )}
       </nav>

@@ -1,14 +1,14 @@
-import Layout from 'components/Layout/Layout';
-import { useAppDispatch } from 'hooks/useRedux';
-import { getCookie } from 'lib/cookie';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import actions from 'redux/actions';
 
 import '../styles/globals.css';
 
+import Layout from '../components/Layout/Layout';
+import { useAppDispatch } from '../hooks/useRedux';
 import { wrapper } from '../redux';
+import actions from '../redux/actions';
+import { getCookie } from '../utils/cookie';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const dispatch = useAppDispatch();

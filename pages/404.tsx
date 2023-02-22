@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+import Button from '../components/UI/Button';
+
 const FourOhFour: NextPage = () => {
   return (
     <div className='h-screen flex flex-col justify-center mx-auto items-center'>
@@ -15,12 +17,12 @@ const FourOhFour: NextPage = () => {
             <h1 className='font-sans text-3xl font-light text-center text-gray-700 lg:text-left lg:text-8xl md:text-5xl'>
               Sorry, this page isn&#x27;t available
             </h1>
-            <button
+            <Button
               type='button'
               className='font-semi-bold px-2 py-2 mt-16 text-lg transition duration-200 ease-in bg-blue-400 border-2 border-gray-700 w-auto hover:bg-blue-500 focus:outline-none'
             >
               <Link href='/'> Go back Home </Link>
-            </button>
+            </Button>
           </div>
           <div className='relative block w-full mx-auto'>
             <Image

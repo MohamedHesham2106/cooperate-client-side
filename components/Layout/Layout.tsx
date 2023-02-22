@@ -1,12 +1,12 @@
-import { Fragment } from 'react';
+import { FC, Fragment } from 'react';
 
 import Footer from './Footer';
 import MainNavigation from './MainNavigation';
 
-type Props = {
+type IProps = {
   children: JSX.Element;
 };
-const Layout = ({ children }: Props) => {
+const Layout: FC<IProps> = ({ children }) => {
   return (
     <Fragment>
       <MainNavigation />

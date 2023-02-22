@@ -1,20 +1,25 @@
 import { useAppDispatch } from 'hooks/useRedux';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { BiUserCircle } from 'react-icons/bi';
 import { ImUser } from 'react-icons/im';
 import { SlLogout, SlSettings } from 'react-icons/sl';
+import { getCookie, getPayloadFromToken } from 'utils/cookie';
 
 import actions from '../../redux/actions';
 
-const UserDropDown = () => {
+const UserDropDown: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
 
   const logOutHandler = () => {
     dispatch(actions.deauthenticate());
   };
+
   const menuRef = useRef(null);
+
+  const tokenPayload = getPayloadFromToken(getCookie('jwt_access'));
+  const userURL = `/${tokenPayload?.role}/~${tokenPayload?.sub}`;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -45,7 +50,7 @@ const UserDropDown = () => {
           <div className='px-2 py-2 bg-white rounded-md shadow-sm border'>
             <Link
               className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
-              href='#'
+              href={userURL}
             >
               <span className='pt-1'>
                 <ImUser size={20} />
@@ -54,22 +59,23 @@ const UserDropDown = () => {
             </Link>
             <Link
               className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
-              href='#'
+              href={`${userURL}/settings`}
             >
               <span className='pt-1'>
                 <SlSettings size={20} />
               </span>
               <span>Settings</span>
             </Link>
-            <a
+            <Link
+              href='/'
               onClick={logOutHandler}
-              className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+              className='cursor-pointer flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
             >
               <span className='pt-1'>
                 <SlLogout size={18} />
               </span>
               <span>Log out</span>
-            </a>
+            </Link>
           </div>
         </div>
       )}

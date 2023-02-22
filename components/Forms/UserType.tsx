@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { MouseEvent, useState } from 'react';
+
+import Button from '../UI/Button';
+import Container from '../UI/Container';
 type Props = {
   roleFetch: (arg: string) => void;
 };
@@ -16,14 +19,17 @@ const UserType = ({ roleFetch }: Props) => {
     event.preventDefault();
     roleFetch(role);
   };
-  const buttonStatement = !role
-    ? 'Create Account'
-    : role == 'client'
-    ? 'Join as a Client'
-    : 'Apply as a Freelancer';
 
+  let buttonStatement;
+  if (!role) {
+    buttonStatement = 'Create Account';
+  } else if (role === 'client') {
+    buttonStatement = 'Join as a Client';
+  } else {
+    buttonStatement = 'Apply as a Freelancer';
+  }
   return (
-    <div className='max-w-xl mx-auto py-12 my-28 flex items-center justify-between flex-col border-2 shadow-sm rounded-md font-semibold text-md text-center'>
+    <Container className='max-w-xl mx-auto py-12 my-28 flex items-center justify-between flex-col border-2 shadow-sm rounded-md font-semibold text-md text-center'>
       <h1 className='text-3xl'>Join as a client or freelancer</h1>
       <div className='w-full flex flex-col p-3 md:flex-row items-center justify-evenly gap-2 my-4 sm:gap-4'>
         <label
@@ -129,20 +135,20 @@ const UserType = ({ roleFetch }: Props) => {
           </div>
         </label>
       </div>
-      <button
+      <Button
         onClick={submitHandler}
         disabled={role == ''}
         className={role ? 'primary-btn' : 'disabled-btn'}
       >
         {buttonStatement}
-      </button>
+      </Button>
       <div className='text-sm flex gap-1 font-normal'>
         <p>Already have an account?</p>
-        <Link href='/login' className='text-blue-500'>
+        <Link href='/auth' className='text-blue-500'>
           Log In
         </Link>
       </div>
-    </div>
+    </Container>
   );
 };
 

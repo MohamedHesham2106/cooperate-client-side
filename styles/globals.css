@@ -9,6 +9,9 @@
     @apply w-4/5 my-2 bg-gray-400 text-white font-bold py-2 px-4 rounded-full lg:w-1/2 xl:w-1/2 md:w-2/3 sm:w-4/5 cursor-not-allowed font-sans;
   }
   .register-field {
-    @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white;
+    @apply bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none;
+  }
+  .error-field {
+    @apply bg-gray-50 border border-red-500 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none;
   }
 }

@@ -1,9 +1,9 @@
-type country = {
+type ICountry = {
   id: string;
   name: string;
 };
 // TODO: FIX LATER
-type Register = {
+type IRegister = {
   firstname?: string;
   lastname?: string;
   username?: string;

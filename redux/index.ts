@@ -1,8 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { createWrapper, MakeStore } from 'next-redux-wrapper';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { applyMiddleware, createStore, Middleware, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
