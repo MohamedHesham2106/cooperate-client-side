@@ -1,12 +1,12 @@
-import { useAppDispatch } from 'hooks/useRedux';
 import Link from 'next/link';
 import { FC, useEffect, useRef, useState } from 'react';
 import { BiUserCircle } from 'react-icons/bi';
 import { ImUser } from 'react-icons/im';
 import { SlLogout, SlSettings } from 'react-icons/sl';
-import { getCookie, getPayloadFromToken } from 'utils/cookie';
 
+import { useAppDispatch } from '../../hooks/useRedux';
 import actions from '../../redux/actions';
+import { getCookie, getPayloadFromToken } from '../../utils/cookie';
 
 const UserDropDown: FC = () => {
   const [isOpen, setIsOpen] = useState(false);

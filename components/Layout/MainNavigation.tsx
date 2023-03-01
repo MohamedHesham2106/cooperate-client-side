@@ -46,7 +46,7 @@ const MainNavigation: FC = () => {
         <ul className='hidden sm:flex'>
           {!isAuth && (
             <li className='p-4'>
-              <Link href='/auth'>Log In</Link>
+              <Link href='/oauth'>Log In</Link>
             </li>
           )}
 
@@ -87,7 +87,7 @@ const MainNavigation: FC = () => {
         >
           <ul className='w-full'>
             <li className='p-4 text-2xl hover:text-blue-400'>
-              <Link href='/auth' onClick={NavHandler}>
+              <Link href='/oauth' onClick={NavHandler}>
                 Log In
               </Link>
             </li>

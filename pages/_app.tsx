@@ -8,7 +8,7 @@ import Layout from '../components/Layout/Layout';
 import { useAppDispatch } from '../hooks/useRedux';
 import { wrapper } from '../redux';
 import actions from '../redux/actions';
-import { getCookie } from '../utils/cookie';
+import { getCookie, getPayloadFromToken } from '../utils/cookie';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const dispatch = useAppDispatch();
@@ -17,6 +17,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const access = getCookie('jwt_access');
     const refresh = getCookie('jwt_refresh');
+
+    // Check if access token is expired
+    if (access) {
+      const decodedToken = getPayloadFromToken(access);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+        window.location.reload();
+      }
+    }
     dispatch(actions.reauthenticate(refresh, access));
     if (!refresh) {
       dispatch(actions.deauthenticate());

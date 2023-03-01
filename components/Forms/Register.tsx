@@ -61,7 +61,7 @@ const Register: React.FC<IRegister> = ({ role }) => {
           country: selected,
           username: userInfo.username,
         })
-        .then((_response) => router.push('/auth'))
+        .then((_response) => router.push('/oauth'))
         .catch((error) => {
           const err = error as IError;
           const { message } = err.response.data;
@@ -209,7 +209,7 @@ const Register: React.FC<IRegister> = ({ role }) => {
       </Form>
       <div className='text-sm flex py-5 gap-1 font-normal w-full justify-center '>
         <p>Already have an account?</p>
-        <Link href='/auth' className='text-blue-500'>
+        <Link href='/oauth' className='text-blue-500'>
           Log In
         </Link>
       </div>

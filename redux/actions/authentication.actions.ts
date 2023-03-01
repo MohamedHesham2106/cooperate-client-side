@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import { Dispatch } from 'redux';
+
 import actions from '.';
 import { AUTHENTICATE, DEAUTHENTICATE } from '../types/authentication.types';
 import axiosInstance from '../../utils/axios';
@@ -12,6 +12,9 @@ type Login = {
   refresh?: string;
 };
 
+const REFRESH_TOKEN_EXPIRE = 30 * 24 * 60 * 60 * 1000;
+const ACCESS_TOKEN_EXPIRE = 30 * 60 * 1000;
+
 const authenticate = ({ email, password, refresh, access }: Login) => {
   return async (dispatch: any) => {
     refresh && access
@@ -23,8 +26,8 @@ const authenticate = ({ email, password, refresh, access }: Login) => {
               password,
             });
             const { accessToken, refreshToken } = data;
-            setCookie('jwt_access', accessToken, 0.5);
-            setCookie('jwt_refresh', refreshToken, 30);
+            setCookie('jwt_access', accessToken, ACCESS_TOKEN_EXPIRE);
+            setCookie('jwt_refresh', refreshToken, REFRESH_TOKEN_EXPIRE);
             dispatch({
               type: AUTHENTICATE,
               payload: { refresh: refreshToken, access: accessToken },
@@ -51,7 +54,7 @@ const reauthenticate = (refresh?: string, access?: string): unknown => {
           refreshToken: refresh,
         });
         const accessToken = response.data?.accessToken;
-        setCookie('jwt_access', accessToken, 0.5);
+        setCookie('jwt_access', accessToken, ACCESS_TOKEN_EXPIRE);
         dispatch({
           type: AUTHENTICATE,
           payload: { refresh, access: accessToken },

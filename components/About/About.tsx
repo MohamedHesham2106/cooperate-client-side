@@ -1,7 +1,8 @@
-import Container from 'components/UI/Container';
 import Image from 'next/image';
 import { FC } from 'react';
 import { TiTick } from 'react-icons/ti';
+
+import Container from '../../components/UI/Container';
 const About: FC = () => {
   return (
     <Container className='relative w-full md:w-[93%] p-4 px-12 mx-auto  bg-white  sm:px-6 lg:px-8 my-5  md:drop-shadow-xl'>

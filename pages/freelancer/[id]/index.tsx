@@ -3,46 +3,54 @@ import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   NextPage,
+  Redirect,
 } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { Fragment } from 'react';
 
+import FreelancerDetails from '../../../components/Profile/FreelancerDetails';
+import FreelancerProfile from '../../../components/Profile/FreelancerProfile';
+import Container from '../../../components/UI/Container';
 import { getPayloadFromToken } from '../../../utils/cookie';
+import { getUserData } from '../../../utils/user';
+
 interface IProps {
-  userId: undefined | string;
+  user: IUser;
   isOwnProfile: boolean;
 }
-const Freelancer: NextPage<IProps> = ({ userId, isOwnProfile }) => {
+const Freelancer: NextPage<IProps> = ({ isOwnProfile, user }) => {
   return (
-    <Fragment>
-      {isOwnProfile ? (
-        <h1 className='h-screen flex items-center justify-center'>
-          I'm The User:{userId}
-        </h1>
-      ) : (
-        <h1 className='h-screen flex items-center justify-center'>
-          NOPE NOT ME:{userId}
-        </h1>
-      )}
-    </Fragment>
+    <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
+      <FreelancerProfile isOwnProfile={isOwnProfile} user={user} />
+      <FreelancerDetails isOwnProfile={isOwnProfile} user={user} />
+    </Container>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ [key: string]: unknown }>> => {
+): Promise<GetServerSidePropsResult<Redirect | { [key: string]: unknown }>> => {
   const { req, params } = ctx;
   const { id } = params as ParsedUrlQuery;
   const userId = id?.toString().replace('~', '');
-  const { jwt_refresh } = req.cookies;
+  const { jwt_refresh, jwt_access } = req.cookies;
+
+  const user = await getUserData(userId, jwt_access);
   const payloadId = getPayloadFromToken(jwt_refresh)?.sub;
-  const role = getPayloadFromToken(jwt_refresh)?.role;
-  if (payloadId === userId && role === 'freelancer') {
+  if (!!user && payloadId === user._id && user.role === 'freelancer') {
     return {
-      props: { userId: payloadId, isOwnProfile: true },
+      props: { user: user, isOwnProfile: true },
+    };
+  } else if (!!user && user.role === 'freelancer') {
+    return {
+      props: { user: user, isOwnProfile: false },
+    };
+  } else {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
     };
   }
-  return {
-    props: { userId: userId, isOwnProfile: false },
-  };
 };
 export default Freelancer;
