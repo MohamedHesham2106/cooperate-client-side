@@ -1,4 +1,4 @@
-type ICountry = {
+type IOption = {
   id: string;
   name: string;
 };

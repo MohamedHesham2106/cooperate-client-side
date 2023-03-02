@@ -1,22 +1,58 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { FC } from 'react';
+import { useRouter } from 'next/router';
+import { FC, MouseEvent, ReactNode } from 'react';
 import { BiMap } from 'react-icons/bi';
 
 import Rating from './Rating';
 import Button from '../UI/Button';
 interface IProps {
   isOwnProfile: boolean;
+  isSameRole: boolean;
   user: IUser;
+  isFreelancer: 'freelancer' | 'client';
 }
-const FreelancerProfile: FC<IProps> = ({ isOwnProfile, user }) => {
+interface IProfileButton {
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  className?: string;
+  children: ReactNode;
+}
+const ProfileButton: FC<IProfileButton> = ({
+  onClick,
+  className,
+  children,
+}) => {
+  return (
+    <div className='flex justify-between'>
+      <Button
+        onClick={onClick}
+        className={`w-44 text-sm text-white text-center py-2 px-8 capitalize rounded bg-blue-500 hover:bg-blue-700 shadow hover:shadow-lg font-medium ${className}`}
+      >
+        {children}
+      </Button>
+    </div>
+  );
+};
+
+const Profile: FC<IProps> = ({
+  isOwnProfile,
+  user,
+  isSameRole,
+  isFreelancer,
+}) => {
   const { first_name, last_name, country, address, categories } = user;
   const nameStyle = !isOwnProfile
     ? 'flex flex-col gap-3 md:w-full md:pl-6'
     : 'flex flex-col gap-3 md:w-full';
+
   const handleInvite = () => {
     //Invite Logic
   };
+  const router = useRouter();
+  const handleSettings = () => {
+    const { pathname } = router;
+    console.log(pathname);
+  };
+
   return (
     <div className='p-6 bg-white rounded-t-md '>
       <div
@@ -39,10 +75,7 @@ const FreelancerProfile: FC<IProps> = ({ isOwnProfile, user }) => {
               />
             </svg>
             {isOwnProfile && (
-              <Button
-                onClick={handleInvite}
-                className='w-24 h-24 group  hover:bg-gray-200 opacity-70 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-500'
-              >
+              <Button className='w-24 h-24 group  hover:bg-gray-200 opacity-70 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-500'>
                 <Image
                   className='hidden group-hover:block w-10'
                   src='https://www.svgrepo.com/show/33565/upload.svg'
@@ -76,25 +109,20 @@ const FreelancerProfile: FC<IProps> = ({ isOwnProfile, user }) => {
             <Rating />
           </div>
         </div>
-        {!isOwnProfile ? (
-          <div className='flex justify-between'>
-            <Button className='w-44 text-white text-center py-2 px-8 capitalize rounded bg-blue-500 hover:bg-blue-700 shadow hover:shadow-lg font-medium'>
-              Invite
-            </Button>
-          </div>
-        ) : (
-          <div className='flex justify-between'>
-            <Link
-              href={`/${user.role}/~${user._id}/settings`}
-              className='w-44 text-white py-2 text-center px-8 capitalize rounded bg-blue-500 hover:bg-blue-700 shadow hover:shadow-lg font-medium'
-            >
-              Profile Settings
-            </Link>
-          </div>
+        {!isOwnProfile && !isSameRole && isFreelancer === 'client' && (
+          <ProfileButton onClick={handleInvite}>Invite</ProfileButton>
+        )}
+        {isOwnProfile && isSameRole && isFreelancer === 'client' && (
+          <ProfileButton onClick={handleInvite}>Post a job</ProfileButton>
+        )}
+        {isOwnProfile && (
+          <ProfileButton className='text-lg' onClick={handleSettings}>
+            Profile Settings
+          </ProfileButton>
         )}
       </div>
     </div>
   );
 };
 
-export default FreelancerProfile;
+export default Profile;

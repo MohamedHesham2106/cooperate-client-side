@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiChevronDown } from 'react-icons/bi';
 
-interface Props {
-  countryList: ICountry[] | undefined;
+interface IProps {
+  options?: IOption[];
   onSelect: (selected: string) => void;
+  label: string;
 }
 
-const CountrySelect = ({ countryList, onSelect }: Props) => {
+const CustomSelect: FC<IProps> = ({ options, onSelect, label }) => {
   const [selected, setSelected] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
-  const [countryValue, setCountryValue] = useState<string>('');
+  const [optionValue, setOptionValue] = useState<string>('');
 
   const selectedText =
     selected?.length > 25 ? selected?.substring(0, 25) + '...' : selected;
-  const displayText = selected ? selectedText : 'Select Country';
+  const displayText = selected ? selectedText : `Select ${label}`;
 
   return (
     <div className='mb-6'>
@@ -37,34 +38,34 @@ const CountrySelect = ({ countryList, onSelect }: Props) => {
             <AiOutlineSearch size={18} className='text-gray-700' />
             <input
               type='text'
-              value={countryValue}
-              onChange={(e) => setCountryValue(e.target.value.toLowerCase())}
+              value={optionValue}
+              onChange={(e) => setOptionValue(e.target.value.toLowerCase())}
               className='placeholder:text-gray-700 p-2 outline-none w-full rounded-full bg-gray-300'
             />
           </div>
-          {countryList?.map((country) => (
+          {options?.map((option) => (
             <li
-              key={country?.name}
-              className={`p-2 text-sm hover:bg-blue-500 hover:text-white
+              key={option?.id}
+              className={`capitalize cursor-pointer p-2 text-sm hover:bg-blue-500 hover:text-white
           ${
-            country?.name?.toLowerCase() === selected?.toLowerCase() &&
+            option?.name?.toLowerCase() === selected?.toLowerCase() &&
             'bg-blue-500 text-white'
           }
           ${
-            country?.name?.toLowerCase().startsWith(countryValue)
+            option?.name?.toLowerCase().startsWith(optionValue)
               ? 'block'
               : 'hidden'
           }`}
               onClick={() => {
-                if (country?.name?.toLowerCase() !== selected?.toLowerCase()) {
-                  onSelect(country.name);
-                  setSelected(country?.name);
+                if (option?.name?.toLowerCase() !== selected?.toLowerCase()) {
+                  onSelect(option.name);
+                  setSelected(option?.name);
                   setOpen(false);
-                  setCountryValue('');
+                  setOptionValue('');
                 }
               }}
             >
-              {country?.name}
+              {option?.name}
             </li>
           ))}
         </ul>
@@ -72,4 +73,4 @@ const CountrySelect = ({ countryList, onSelect }: Props) => {
     </div>
   );
 };
-export default CountrySelect;
+export default CustomSelect;

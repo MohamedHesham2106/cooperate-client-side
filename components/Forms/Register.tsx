@@ -5,7 +5,7 @@ import { FaWindowClose } from 'react-icons/fa';
 
 import Button from '../UI/Button';
 import Container from '../UI/Container';
-import CountrySelect from '../UI/CountrySelect';
+import CustomSelect from '../UI/CustomSelect';
 import Error from '../UI/Error';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
@@ -15,7 +15,7 @@ import { fetchCountries } from '../../utils/countries';
 
 const Register: React.FC<IRegister> = ({ role }) => {
   // State variables for the country list and the selected country
-  const [countryList, setCountryList] = useState<ICountry[]>();
+  const [countryList, setCountryList] = useState<IOption[]>();
   const [selected, setSelected] = useState('');
 
   // Initial user info for the registration form
@@ -157,8 +157,9 @@ const Register: React.FC<IRegister> = ({ role }) => {
           onBlur={handleBlur}
         />
         <div className='mb-6'>
-          <CountrySelect
-            countryList={countryList}
+          <CustomSelect
+            label='Country'
+            options={countryList}
             onSelect={selectCountryHandler}
           />
         </div>
