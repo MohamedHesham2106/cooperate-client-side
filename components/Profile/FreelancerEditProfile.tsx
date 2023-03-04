@@ -1,10 +1,12 @@
 import { FC, useState } from 'react';
 
-import ContactInfo from '../Forms/ContactInfo';
 import ChangePassword from '../Forms/ChangePassword';
+import ContactInfo from '../Forms/ContactInfo';
+import SkillsAndCategory from '../Forms/SkillsAndCategory';
 
 interface IProps {
   user: IUser;
+  categories: Category[];
 }
 
 const FreelancerEditProfile: FC<IProps> = ({ user }) => {
@@ -54,7 +56,7 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
           <ChangePassword user={user} />
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'}>
-          React JS with Tailwind CSS Tab 3 Content show
+          <SkillsAndCategory user={user} />
         </div>
       </div>
     </div>
