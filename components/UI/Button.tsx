@@ -17,7 +17,7 @@ const Button: FC<IButton> = ({
   width,
   type = 'button',
 }) => {
-  const currWidth = width ? 'w-' + width : 'w-full';
+  const currWidth = width ? width : 'w-full';
   return (
     <button
       className={

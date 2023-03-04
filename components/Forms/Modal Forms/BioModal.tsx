@@ -1,10 +1,11 @@
+import { useRouter } from 'next/router';
 import { ChangeEvent, FC, FormEvent, MouseEvent, useState } from 'react';
 
-import Button from '../UI/Button';
-import Error from '../UI/Error';
-import Form from '../UI/Form';
-import Modal from '../UI/Modal';
-import axiosInstance from '../../utils/axios';
+import Button from '../../UI/Button';
+import Error from '../../UI/Error';
+import Form from '../../UI/Form';
+import Modal from '../../UI/Modal';
+import axiosInstance from '../../../utils/axios';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
@@ -15,6 +16,8 @@ const BioModal: FC<IProps> = ({ onClose, userId, bio }) => {
   const [biography, setBiography] = useState<string | undefined>(bio);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+
+  const router = useRouter();
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,6 +34,9 @@ const BioModal: FC<IProps> = ({ onClose, userId, bio }) => {
       .finally(() => {
         setFormSubmitted(true);
         onClose();
+        if (!error) {
+          router.reload();
+        }
       });
     setFormSubmitted(true);
   };
@@ -66,7 +72,7 @@ const BioModal: FC<IProps> = ({ onClose, userId, bio }) => {
             name='bio'
             onChange={changeHandler}
             rows={8}
-            className='block p-5 w-full text-sm text-gray-800 bg-white border-2 border-black focus:ring-0'
+            className='block p-5 w-full text-sm text-gray-800 bg-white border-2 border-black focus:ring-0 resize-none'
             value={biography}
             required
           ></textarea>

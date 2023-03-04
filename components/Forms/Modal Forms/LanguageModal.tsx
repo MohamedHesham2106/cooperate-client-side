@@ -1,12 +1,13 @@
+import { useRouter } from 'next/router';
 import { FC, FormEvent, MouseEvent, useCallback, useState } from 'react';
 import useSWR from 'swr';
 
-import Button from '../UI/Button';
-import CustomSelect from '../UI/CustomSelect';
-import Error from '../UI/Error';
-import Form from '../UI/Form';
-import Modal from '../UI/Modal';
-import axiosInstance from '../../utils/axios';
+import Button from '../../UI/Button';
+import CustomSelect from '../../UI/CustomSelect';
+import Error from '../../UI/Error';
+import Form from '../../UI/Form';
+import Modal from '../../UI/Modal';
+import axiosInstance from '../../../utils/axios';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
@@ -40,6 +41,8 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
     setSelectProf(selected);
   }, []);
 
+  const router = useRouter();
+
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -57,6 +60,9 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
       .finally(() => {
         setFormSubmitted(true);
         onClose();
+        if (!error) {
+          router.reload();
+        }
       });
     setFormSubmitted(true);
   };
@@ -105,7 +111,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
       onClose={onClose}
       className='p-2 flex flex-col gap-5 justify-center '
     >
-      <h1 className='text-2xl font-semibold'>Add language</h1>
+      <h1 className='text-2xl font-semibold'>Add/Edit language</h1>
       {error && <Error message={error} />}
       <Form OnSubmit={submitHandler}>
         <div className='flex flex-col justify-between gap-2'>

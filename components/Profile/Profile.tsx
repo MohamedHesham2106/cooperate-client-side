@@ -10,6 +10,9 @@ interface IProps {
   isSameRole: boolean;
   user: IUser;
   isFreelancer: 'freelancer' | 'client';
+  ModalHandler?: (
+    event: MouseEvent<SVGAElement | HTMLDivElement | HTMLButtonElement>
+  ) => void;
 }
 interface IProfileButton {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -38,6 +41,7 @@ const Profile: FC<IProps> = ({
   user,
   isSameRole,
   isFreelancer,
+  ModalHandler,
 }) => {
   const { first_name, last_name, country, address, categories } = user;
   const nameStyle = !isOwnProfile
@@ -49,8 +53,7 @@ const Profile: FC<IProps> = ({
   };
   const router = useRouter();
   const handleSettings = () => {
-    const { pathname } = router;
-    console.log(pathname);
+    router.push(`/freelancer/~${user._id}/settings`);
   };
 
   return (
@@ -75,7 +78,11 @@ const Profile: FC<IProps> = ({
               />
             </svg>
             {isOwnProfile && (
-              <Button className='w-24 h-24 group  hover:bg-gray-200 opacity-70 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-500'>
+              <button
+                onClick={ModalHandler}
+                data-modal-type='profile'
+                className='w-24 h-24 group  hover:bg-gray-200 opacity-70 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-500'
+              >
                 <Image
                   className='hidden group-hover:block w-10'
                   src='https://www.svgrepo.com/show/33565/upload.svg'
@@ -83,7 +90,7 @@ const Profile: FC<IProps> = ({
                   width={128}
                   height={128}
                 />
-              </Button>
+              </button>
             )}
           </div>
         </div>

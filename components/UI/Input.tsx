@@ -3,7 +3,7 @@ import { ChangeEvent, FC, FocusEvent } from 'react';
 interface IProps {
   name: string;
   type?: string;
-  value: string | undefined;
+  value?: string | undefined;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
@@ -12,6 +12,7 @@ interface IProps {
   errorMessage?: string;
   ContainerClass?: string;
   onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
+  defaultValue?: string;
 }
 
 const Input: FC<IProps> = ({
@@ -26,6 +27,7 @@ const Input: FC<IProps> = ({
   ContainerClass,
   errorMessage,
   onBlur,
+  defaultValue,
 }) => {
   const isValid = !errorMessage ? 'register-field' : 'error-field';
   return (
@@ -37,6 +39,7 @@ const Input: FC<IProps> = ({
       <input
         id={name}
         name={name}
+        defaultValue={defaultValue}
         type={type}
         value={value}
         className={className ? className : isValid}

@@ -2,12 +2,13 @@ import { FC, MouseEvent } from 'react';
 import { AiOutlineLaptop } from 'react-icons/ai';
 import { BiCategory, BiLinkExternal } from 'react-icons/bi';
 import { FaGraduationCap } from 'react-icons/fa';
-import { GrEdit, GrLanguage } from 'react-icons/gr';
+import { GrLanguage } from 'react-icons/gr';
+import { MdEdit } from 'react-icons/md';
 
 interface IProps {
   isOwnProfile: boolean;
   user: IUser;
-  ModalHandler: (event: MouseEvent<SVGAElement>) => void;
+  ModalHandler?: (event: MouseEvent<SVGAElement | HTMLDivElement>) => void;
 }
 
 const FreelancerDetails: FC<IProps> = ({
@@ -99,15 +100,15 @@ const FreelancerDetails: FC<IProps> = ({
           <div className='flex items-center gap-2 flex-wrap'>
             <GrLanguage size={18} />
             <span className='font-semibold text-2xl pb-1'>Languages</span>
-            <div className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'>
-              {isOwnProfile && (
-                <GrEdit
-                  data-modal-type='language'
-                  size={12}
-                  onClick={ModalHandler}
-                />
-              )}
-            </div>
+            {isOwnProfile && (
+              <div
+                className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'
+                onClick={ModalHandler}
+                data-modal-type='language'
+              >
+                <MdEdit size={12} />
+              </div>
+            )}
           </div>
           {renderLanguages()}
         </div>
@@ -115,15 +116,6 @@ const FreelancerDetails: FC<IProps> = ({
           <div className='flex items-center gap-2 flex-wrap'>
             <FaGraduationCap size={18} />
             <span className='font-semibold text-2xl pb-1'>Education</span>
-            <div className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'>
-              {isOwnProfile && (
-                <GrEdit
-                  data-modal-type='education'
-                  size={12}
-                  onClick={ModalHandler}
-                />
-              )}
-            </div>
           </div>
           {renderEducation()}
         </div>
@@ -131,15 +123,6 @@ const FreelancerDetails: FC<IProps> = ({
           <div className='flex items-center gap-2 flex-wrap'>
             <BiCategory size={18} />
             <span className='font-semibold text-2xl pb-1'>Work Category</span>
-            <div className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'>
-              {isOwnProfile && (
-                <GrEdit
-                  data-modal-type='category'
-                  size={12}
-                  onClick={ModalHandler}
-                />
-              )}
-            </div>
           </div>
           {renderWorkCategories()}
         </div>
@@ -158,15 +141,15 @@ const FreelancerDetails: FC<IProps> = ({
           <div className='flex flex-col gap-2'>
             <div className='flex items-center gap-3'>
               <h1 className='font-semibold text-2xl'>Biography</h1>
-              <div className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'>
-                {isOwnProfile && (
-                  <GrEdit
-                    data-modal-type='bio'
-                    size={12}
-                    onClick={ModalHandler}
-                  />
-                )}
-              </div>
+              {isOwnProfile && (
+                <div
+                  className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'
+                  onClick={ModalHandler}
+                  data-modal-type='bio'
+                >
+                  <MdEdit size={12} />
+                </div>
+              )}
             </div>
 
             <div className='md:p-4 pt-4'>{biography}</div>

@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { MouseEvent, useState } from 'react';
 
-import ModalManager from '../../../components/Forms/ModalManager';
+import ModalManager from '../../../components/Forms/Modal Forms/ModalManager';
 import FreelancerDetails from '../../../components/Profile/FreelancerDetails';
 import Profile from '../../../components/Profile/Profile';
 import Container from '../../../components/UI/Container';
@@ -25,7 +25,9 @@ const Freelancer: NextPage<IProps> = ({
   const [modalType, setModalType] = useState<string>();
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const showModalHandler = (event: MouseEvent<SVGAElement>) => {
+  const showModalHandler = (
+    event: MouseEvent<SVGAElement | HTMLDivElement | HTMLButtonElement>
+  ) => {
     const type = event.currentTarget.getAttribute('data-modal-type');
     setModalType(type ? type : undefined);
     setShowModal(true);
@@ -43,6 +45,7 @@ const Freelancer: NextPage<IProps> = ({
         isSameRole={isSameRole}
         isFreelancer={isFreelancer}
         user={user}
+        ModalHandler={showModalHandler}
       />
       <FreelancerDetails
         isOwnProfile={isOwnProfile}

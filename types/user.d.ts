@@ -1,18 +1,18 @@
 type IUser = {
-  _id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  username: string;
-  password: string;
-  isEmailVerified: boolean;
+  _id?: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  username?: string;
+  password?: string;
+  isEmailVerified?: boolean;
   address?: string;
-  phone?: number;
+  phone?: string;
   gender?: 'M' | 'F';
   birthDate?: Date;
   imageUrl?: string;
-  country: string;
-  role: 'admin' | 'freelancer' | 'client';
+  country?: string;
+  role?: 'admin' | 'freelancer' | 'client';
   CvUrl?: string;
   language?: { _id: string; language: string; level: string }[];
   education?: string;
