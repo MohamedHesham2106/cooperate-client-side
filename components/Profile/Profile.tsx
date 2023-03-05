@@ -52,9 +52,6 @@ const Profile: FC<IProps> = ({
     //Invite Logic
   };
   const router = useRouter();
-  const handleSettings = () => {
-    router.push(`/freelancer/~${user._id}/settings`);
-  };
 
   return (
     <div className='p-6 bg-white rounded-t-md '>
@@ -120,10 +117,17 @@ const Profile: FC<IProps> = ({
           <ProfileButton onClick={handleInvite}>Invite</ProfileButton>
         )}
         {isOwnProfile && isSameRole && isFreelancer === 'client' && (
-          <ProfileButton onClick={handleInvite}>Post a job</ProfileButton>
+          <ProfileButton
+            onClick={() => router.push(`/${user.role}/~${user._id}/job-post`)}
+          >
+            Post a job
+          </ProfileButton>
         )}
         {isOwnProfile && (
-          <ProfileButton className='text-lg' onClick={handleSettings}>
+          <ProfileButton
+            className='text-lg'
+            onClick={() => router.push(`/${user.role}/~${user._id}/settings`)}
+          >
             Profile Settings
           </ProfileButton>
         )}

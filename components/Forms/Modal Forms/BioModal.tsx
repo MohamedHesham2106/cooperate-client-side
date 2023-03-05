@@ -9,7 +9,7 @@ import axiosInstance from '../../../utils/axios';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
-  userId: string;
+  userId?: string;
   bio?: string;
 }
 const BioModal: FC<IProps> = ({ onClose, userId, bio }) => {

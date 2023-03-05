@@ -1,9 +1,9 @@
-import { ChangeEvent, FC, FocusEvent } from 'react';
+import { ChangeEvent, FC, FocusEvent, KeyboardEvent } from 'react';
 
 interface IProps {
   name: string;
   type?: string;
-  value?: string | undefined;
+  value?: string | undefined | number;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
@@ -13,6 +13,7 @@ interface IProps {
   ContainerClass?: string;
   onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   defaultValue?: string;
+  onKeyPress?: (event: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Input: FC<IProps> = ({

@@ -4,13 +4,12 @@ import { FC, useEffect, useState } from 'react';
 
 import ChangePassword from '../Forms/User Forms/ChangePassword';
 import ContactInfo from '../Forms/User Forms/ContactInfo';
-import SkillsAndCategory from '../Forms/User Forms/SkillsAndCategory';
 
 interface IProps {
   user: IUser;
 }
 
-const FreelancerEditProfile: FC<IProps> = ({ user }) => {
+const ClientEditProfile: FC<IProps> = ({ user }) => {
   const [openTab, setOpenTab] = useState(1);
   const router = useRouter();
 
@@ -20,8 +19,6 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
       setOpenTab(1);
     } else if (tab === 'security') {
       setOpenTab(2);
-    } else if (tab === 'skills&categories') {
-      setOpenTab(3);
     }
   }, [router.query]);
 
@@ -46,7 +43,7 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
         <li>
           <Link
             href={{
-              pathname: `/freelancer/~${user._id}/settings`,
+              pathname: `/${user.role}/~${user._id}/settings`,
               query: { tab: 'security' },
             }}
             prefetch={false}
@@ -58,21 +55,6 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             Password &amp; Security
           </Link>
         </li>
-        <li>
-          <Link
-            href={{
-              pathname: `/${user.role}/~${user._id}/settings`,
-              query: { tab: 'skills&categories' },
-            }}
-            scroll={false}
-            prefetch={false}
-            className={` ${
-              openTab === 3 ? 'bg-blue-500 text-white' : ''
-            } inline-block px-4 py-2 text-gray-600   shadow  w-full cursor-pointer hover:bg-blue-500 hover:text-white`}
-          >
-            Skills &amp; Categories
-          </Link>
-        </li>
       </ul>
       <div className='p-3 bg-white border-l'>
         <div className={openTab === 1 ? 'block' : 'hidden'}>
@@ -81,12 +63,9 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
         <div className={openTab === 2 ? 'block' : 'hidden'}>
           <ChangePassword user={user} />
         </div>
-        <div className={openTab === 3 ? 'block' : 'hidden'}>
-          <SkillsAndCategory user={user} />
-        </div>
       </div>
     </div>
   );
 };
 
-export default FreelancerEditProfile;
+export default ClientEditProfile;

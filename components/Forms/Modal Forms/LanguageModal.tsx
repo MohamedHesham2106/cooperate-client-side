@@ -11,10 +11,10 @@ import axiosInstance from '../../../utils/axios';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
-  user: string;
+  user?: string;
 }
 
-interface ICountry {
+interface ILanguage {
   altSpellings: string[];
   languages: {
     [key: string]: string;
@@ -79,7 +79,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
   const languages: IOption[] = [];
   if (data) {
     for (const key in data) {
-      const country: ICountry = data[key];
+      const country: ILanguage = data[key];
       for (const languageCode in country.languages) {
         const languageName = country.languages[languageCode];
         const languageOption: IOption = {

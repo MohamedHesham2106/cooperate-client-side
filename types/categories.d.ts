@@ -1,9 +1,9 @@
-interface Skill {
+interface ISkill {
   _id: string;
   name: string;
 }
 
-interface Category {
+interface ICategory {
   _id: string;
   name: string;
   skills: Skill[];

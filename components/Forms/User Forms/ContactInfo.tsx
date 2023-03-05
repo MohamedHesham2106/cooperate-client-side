@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 
-import Button from '../UI/Button';
-import Error from '../UI/Error';
-import Form from '../UI/Form';
-import Input from '../UI/Input';
-import Success from '../UI/Success';
-import axiosInstance from '../../utils/axios';
+import Button from '../../UI/Button';
+import Error from '../../UI/Error';
+import Form from '../../UI/Form';
+import Input from '../../UI/Input';
+import Success from '../../UI/Success';
+import axiosInstance from '../../../utils/axios';
 
 interface IProps {
   user: IUser;
@@ -137,10 +137,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           </div>
         </div>
         <div className='flex flex-col gap-1'>
-          <label
-            htmlFor='email'
-            className='text-sm font-medium text-gray-600'
-          >
+          <label htmlFor='email' className='text-sm font-medium text-gray-600'>
             Email
           </label>
           <Input
@@ -171,10 +168,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           />
         </div>
         <div className='flex flex-col gap-1'>
-          <label
-            htmlFor='phone'
-            className='text-sm font-medium text-gray-600'
-          >
+          <label htmlFor='phone' className='text-sm font-medium text-gray-600'>
             Phone Number
           </label>
           <Input

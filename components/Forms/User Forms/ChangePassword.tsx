@@ -1,12 +1,12 @@
 import { FC, useState } from 'react';
 
-import Button from '../UI/Button';
-import Error from '../UI/Error';
-import Form from '../UI/Form';
-import Input from '../UI/Input';
-import Success from '../UI/Success';
-import axiosInstance from '../../utils/axios';
-import { getCookie } from '../../utils/cookie';
+import Button from '../../UI/Button';
+import Error from '../../UI/Error';
+import Form from '../../UI/Form';
+import Input from '../../UI/Input';
+import Success from '../../UI/Success';
+import axiosInstance from '../../../utils/axios';
+import { getCookie } from '../../../utils/cookie';
 
 interface IProps {
   user: IUser;

@@ -9,7 +9,7 @@ import Form from '../../UI/Form';
 import Modal from '../../UI/Modal';
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
-  userId: string;
+  userId?: string;
 }
 
 const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
