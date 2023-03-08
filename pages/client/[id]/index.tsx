@@ -45,7 +45,13 @@ const Client: NextPage<IProps> = ({
         user={user}
         ModalHandler={showModalHandler}
       />
-      <ClientDetails isOwnProfile={isOwnProfile} user={user} />
+      <ClientDetails
+        isOwnProfile={isOwnProfile}
+        isSameRole={isSameRole}
+        isFreelancer={isFreelancer}
+        user={user}
+        ModalHandler={showModalHandler}
+      />
     </Container>
   );
 };
@@ -64,7 +70,9 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
-
+    if (user.role !== 'client') {
+      return { redirect: { destination: '/404', permanent: false } };
+    }
     return {
       props: {
         user,

@@ -71,7 +71,9 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
-
+    if (user.role !== 'freelancer') {
+      return { redirect: { destination: '/404', permanent: false } };
+    }
     return {
       props: {
         user,

@@ -43,12 +43,12 @@ const FreelancerDetails: FC<IProps> = ({
   );
 
   const renderWorkCategories = () => (
-    <div className='flex justify-center flex-col mt-3 gap-3 cursor-pointer'>
+    <div className='grid md:grid-cols-2 grid-cols-1 mt-3 gap-3 cursor-pointer'>
       {categories.map(({ _id, name }) => (
         <span
           key={_id}
           title={name}
-          className='px-4 py-2  text-base rounded-md text-blue-600 font-semibold bg-blue-100 '
+          className='px-4 py-2 text-sm rounded-md text-blue-600 font-semibold bg-blue-100 text-center'
         >
           {name}
         </span>

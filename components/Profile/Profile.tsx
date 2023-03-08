@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode } from 'react';
 import { BiMap } from 'react-icons/bi';
+import { BsBuilding } from 'react-icons/bs';
 
 import Rating from './Rating';
 import Button from '../UI/Button';
@@ -43,7 +44,8 @@ const Profile: FC<IProps> = ({
   isFreelancer,
   ModalHandler,
 }) => {
-  const { first_name, last_name, country, address, categories } = user;
+  const { first_name, last_name, country, address, categories, company_name } =
+    user;
   const nameStyle = !isOwnProfile
     ? 'flex flex-col gap-3 md:w-full md:pl-6'
     : 'flex flex-col gap-3 md:w-full';
@@ -95,13 +97,26 @@ const Profile: FC<IProps> = ({
           <div className='capitalize text-2xl font-normal '>
             {first_name} {last_name}
           </div>
-          {categories && (
-            <div className='capitalize text-sm font-semibold flex items-center justify-center md:justify-start'>
-              <span title={categories[0]?.name} className='text-blue-500 '>
-                {categories[0]?.name}
-              </span>
-            </div>
-          )}
+          <div className='flex gap-2 justify-center md:justify-start'>
+            {company_name && <BsBuilding />}
+            {categories || company_name ? (
+              <div className='capitalize text-sm font-semibold flex items-center justify-center md:justify-start'>
+                <span
+                  title={
+                    ((categories && categories[0]?.name) ||
+                      company_name) as string
+                  }
+                  className='text-blue-500'
+                >
+                  {
+                    ((categories && categories[0]?.name) ||
+                      company_name) as string
+                  }
+                </span>
+              </div>
+            ) : null}
+          </div>
+
           <div className='capitalize text-xs font-normal flex md:gap-1 items-center justify-center md:justify-start'>
             <BiMap size={15} color='#fa923d' />
             <span>

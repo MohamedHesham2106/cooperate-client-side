@@ -8,3 +8,21 @@ interface IJob {
   category?: string;
   skills?: string[] | [];
 }
+interface IJobs {
+  _id: string;
+  description: string;
+  payment_type: string;
+  project_length: string;
+  skills: {
+    _id: string;
+    name: string;
+  }[];
+  category: {
+    _id: string;
+    name: string;
+  };
+  experience_level: string;
+  budget: number;
+  title: string;
+  __v: number;
+}

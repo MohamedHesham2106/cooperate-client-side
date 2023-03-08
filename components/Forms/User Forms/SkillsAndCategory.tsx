@@ -118,9 +118,9 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
         {!currentCategories || (currentCategories?.length === 0 && <Spinner />)}
         {currentCategories &&
           currentCategories.map((category: ICategory) => {
-            const skills = category.skills.map((skill) => skill.name);
+            const skills = category.skills?.map((skill) => skill.name);
             const user_skills = user.skills
-              ?.filter((skill) => skills.includes(skill.name))
+              ?.filter((skill) => skills?.includes(skill.name))
               .map((skill) => skill.name);
             const isChecked =
               user.categories &&
@@ -231,7 +231,7 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
         </div>
         <div className='flex justify-end'>
           <Button type='submit' width='lg:w-1/3 w-full'>
-            Update
+            Update Skills &amp; Categories
           </Button>
         </div>
       </Form>

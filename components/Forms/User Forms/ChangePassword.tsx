@@ -123,7 +123,7 @@ const ChangePassword: FC<IProps> = ({ user }) => {
         </div>
         <div className='flex justify-end'>
           <Button type='submit' width='md:w-1/3 w-full'>
-            Update
+            Change Password
           </Button>
         </div>
       </Form>

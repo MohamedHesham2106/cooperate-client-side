@@ -21,6 +21,8 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     phone,
     education,
     address,
+    role,
+    company_name,
   } = user;
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
@@ -32,6 +34,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     country,
     education,
     address,
+    company_name,
   });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +59,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         country,
         education,
         address,
+        company_name,
       });
 
     // If there were no changes made, return from the function
@@ -71,6 +75,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         new_phone: contactInfo.phone,
         new_address: contactInfo.address,
         new_education: contactInfo.education,
+        new_company_name: contactInfo.company_name,
       })
       .then((_response) => {
         setSuccess('Updated Account Successfully.');
@@ -198,9 +203,29 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             required={true}
           />
         </div>
+        {role === 'client' && (
+          <div className='flex flex-col gap-1'>
+            <label
+              htmlFor='company_name'
+              className='text-sm font-medium text-gray-600'
+            >
+              Company Name
+            </label>
+            <Input
+              ContainerClass='mb-6'
+              name='company_name'
+              type='text'
+              defaultValue={company_name}
+              placeholder='Company Name'
+              onChange={handleChange}
+              required={true}
+            />
+          </div>
+        )}
+        
         <div className='flex justify-end'>
           <Button type='submit' width='w-1/3'>
-            Update
+            Update Information
           </Button>
         </div>
       </Form>

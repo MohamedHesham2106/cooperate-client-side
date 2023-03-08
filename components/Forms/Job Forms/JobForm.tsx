@@ -25,11 +25,7 @@ const JobForm: FC<IProps> = ({ user }) => {
     category: '',
     budget: 0,
     payment_type: undefined,
-    project_length: new Date().toLocaleDateString('en-Us', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-    }),
+    project_length: new Date().toISOString().substr(0, 10),
   });
 
   // Add Skills
@@ -101,7 +97,31 @@ const JobForm: FC<IProps> = ({ user }) => {
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await axiosInstance.post(`/api/job/${user._id}`,{});
+    const {
+      description,
+      budget,
+      category,
+      experience_level,
+      payment_type,
+      project_length,
+      skills,
+      title,
+    } = jobValues;
+    await axiosInstance
+      .post(`/api/job/${user._id}`, {
+        description,
+        budget,
+        category_name: category,
+        payment_type,
+        experience_level,
+        title,
+        skills,
+        project_length,
+      })
+      .then((res) => {
+        router.back();
+      })
+      .catch((error) => console.log(error));
   };
 
   return (

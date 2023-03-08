@@ -32,8 +32,9 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
   const [selectedProf, setSelectProf] = useState<string>('');
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const [action, setAction] = useState<'edit' | 'remove'>('edit');
 
-  const selectCountryHandler = useCallback((selected: string) => {
+  const selectLanguageHandler = useCallback((selected: string) => {
     setSelectedLang(selected);
   }, []);
 
@@ -113,23 +114,50 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
     >
       <h1 className='text-2xl font-semibold'>Add/Edit language</h1>
       {error && <Error message={error} />}
+      <div className='flex gap-2'>
+        <Button
+          type='button'
+          className={`${
+            action === 'edit'
+              ? 'bg-gray-700 text-white '
+              : 'bg-gray-50 text-gray-900 border'
+          }text-sm rounded-lg focus:ring-blue-500 text-center font-semibold focus:border-blue-500 block w-full p-2.5`}
+          onClick={() => setAction('edit')}
+        >
+          Add/Edit Language
+        </Button>
+        <Button
+          type='button'
+          onClick={() => setAction('remove')}
+          className={`${
+            action === 'remove'
+              ? 'bg-gray-700 text-white '
+              : 'bg-gray-50 text-gray-900 border'
+          } text-gray-900 text-sm rounded-lg text-center font-semibold focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+        >
+          Remove Language
+        </Button>
+      </div>
+
       <Form OnSubmit={submitHandler}>
         <div className='flex flex-col justify-between gap-2'>
           <h1 className='text-sm font-semibold'>Language</h1>
           <CustomSelect
             label='Language'
-            onSelect={selectCountryHandler}
+            onSelect={selectLanguageHandler}
             options={sortedLanguage}
           />
         </div>
-        <div className='flex flex-col justify-between gap-2'>
-          <h1 className='text-sm font-semibold'>Proficiency level</h1>
-          <CustomSelect
-            label='Proficiency level'
-            onSelect={selectProfHandler}
-            options={profLevel}
-          />
-        </div>
+        {action === 'edit' && (
+          <div className='flex flex-col justify-between gap-2'>
+            <h1 className='text-sm font-semibold'>Proficiency level</h1>
+            <CustomSelect
+              label='Proficiency level'
+              onSelect={selectProfHandler}
+              options={profLevel}
+            />
+          </div>
+        )}
 
         <Button type='submit' onClick={formSubmitted ? onClose : undefined}>
           Submit

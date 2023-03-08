@@ -16,10 +16,10 @@
   }
   #wifi-loader {
     @apply w-16 h-16 relative flex justify-center items-center rounded-[50px];
-    --background: #62abff;
-    --front-color: #258bff;
+    --background: #3b82f6;
+    --front-color: #3b82f6;
     --back-color: #c3c8de;
-    --text-color: #414856;
+    --text-color: #ef9d59;
   }
   #wifi-loader svg {
     @apply absolute flex justify-center items-center;
@@ -71,7 +71,13 @@
   #wifi-loader svg.circle-inner circle.front {
     @apply animate-[circle-inner162_1.8s_ease_infinite_0.05s];
   }
-
+  #wifi-loader .text {
+    @apply absolute flex justify-center items-center uppercase font-medium text-sm tracking-[0.2px] -bottom-10 before:text-[color:var(--text-color)] after:text-[color:var(--front-color)] after:animate-[text-animation76_3.6s_ease_infinite] after:absolute after:left-0;
+  }
+  #wifi-loader .text::before,
+  #wifi-loader .text::after {
+    @apply content-[attr(data-text)];
+  }
   @keyframes circle-outer135 {
     0% {
       stroke-dashoffset: 25;
@@ -123,6 +129,18 @@
       stroke-dashoffset: 97;
     }
   }
+  @keyframes text-animation76 {
+    0% {
+      clip-path: inset(0 100% 0 0);
+    }
+    50% {
+      clip-path: inset(0);
+    }
+    100% {
+      clip-path: inset(0 0 0 100%);
+    }
+  }
+
   @keyframes slide-down {
     from {
       @apply opacity-0 translate-y-[-3rem];
