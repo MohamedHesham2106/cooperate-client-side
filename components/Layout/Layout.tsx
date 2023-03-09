@@ -1,8 +1,8 @@
 import { FC, Fragment } from 'react';
 
+import FloatingActionButton from './FloatingActionButton';
 import Footer from './Footer';
 import MainNavigation from './MainNavigation';
-import FloatingActionButton from './FloatingActionButton';
 
 type IProps = {
   children: JSX.Element;

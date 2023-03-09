@@ -37,7 +37,7 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
     setCurrentPage(page_number);
   }, [page_number]);
 
-  const handleSelect = (selectedList: string[], _selectedItem: any) => {
+  const handleSelect = (selectedList: string[], _selectedItem: unknown) => {
     setSelectedSkills((prevState) => {
       const newSkills = selectedList.filter(
         (skill) => !prevState.includes(skill)
@@ -46,7 +46,7 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
     });
   };
 
-  const handleRemove = (selectedList: string[], removedItem: any) => {
+  const handleRemove = (selectedList: string[], removedItem: unknown) => {
     setSelectedSkills((prevState) => {
       return prevState.filter((skill) => skill !== removedItem);
     });

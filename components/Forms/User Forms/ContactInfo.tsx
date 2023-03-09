@@ -222,7 +222,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             />
           </div>
         )}
-        
+
         <div className='flex justify-end'>
           <Button type='submit' width='w-1/3'>
             Update Information

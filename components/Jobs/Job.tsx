@@ -23,7 +23,7 @@ const Job: FC<IProps> = ({ job, onClick, ModalHandler }) => {
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
   return (
     <div
-      className='flex flex-col w-full my-3 p-4 gap-3 border rounded-lg shadow-md'
+      className='flex flex-col w-full my-3 p-4 gap-3 border rounded-lg shadow-md cursor-pointer'
       onClick={handleClick}
       onMouseDown={showModalHandler}
       data-modal-type='job'

@@ -35,11 +35,22 @@ const Backdrop: FC<IBackdrop> = ({ onClose }) => {
 };
 
 const Overlay: FC<IOverlay> = ({ children, className, tall }) => {
+  useEffect(() => {
+    if (tall) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [tall]);
   return (
     <div
-      className={`fixed w-[90%] bg-[white] shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-30 animate-[slide-down_300ms_ease-out_forwards] p-4 rounded-lg left-[5%] ${
-        tall ? 'top-[5vh]' : 'top-[20vh] max-h-screen overflow-y-auto'
-      } md:w-[45rem] md:left-[calc(50%_-_22.5rem)]`}
+      className={` ${
+        tall
+          ? 'top-0 min-h-screen max-h-screen right-0 overflow-y-auto fixed bg-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-50 animate-[slide-down_300ms_ease-out_forwards] p-4 rounded-tl-lg rounded-bl-lg md:w-[45rem] '
+          : 'top-[20vh] max-h-screen overflow-y-auto fixed w-[90%] bg-[white] shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-50 animate-[slide-down_300ms_ease-out_forwards] p-4 rounded-lg left-[5%] md:w-[45rem] md:left-[calc(50%_-_22.5rem)]'
+      } `}
+      onClick={(e) => e.stopPropagation()}
     >
       <div className={className}>{children}</div>
     </div>

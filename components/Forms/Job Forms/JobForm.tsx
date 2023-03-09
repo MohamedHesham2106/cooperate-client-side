@@ -46,7 +46,10 @@ const JobForm: FC<IProps> = ({ user }) => {
     }));
   };
   // Add Categories
-  const handleCategorySelect = (_selectedList: string[], selectedItem: any) => {
+  const handleCategorySelect = (
+    _selectedList: string[],
+    selectedItem: string
+  ) => {
     // Update the jobValues object with the selected category
     setJobValues((prevState) => ({
       ...prevState,
@@ -54,7 +57,10 @@ const JobForm: FC<IProps> = ({ user }) => {
     }));
   };
   // Remove Categories
-  const handleCategoryRemove = (_selectedList: string[], _removedItem: any) => {
+  const handleCategoryRemove = (
+    _selectedList: string[],
+    _removedItem: unknown
+  ) => {
     // Remove the category from the jobValues object
     setJobValues((prevState) => ({
       ...prevState,
@@ -92,7 +98,7 @@ const JobForm: FC<IProps> = ({ user }) => {
 
   // Get array of Skills
   const skills = data?.categories.flatMap((category: ICategory) =>
-    category.skills.map((skill: ISkill) => skill.name)
+    category.skills?.map((skill: ISkill) => skill.name)
   );
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -118,7 +124,7 @@ const JobForm: FC<IProps> = ({ user }) => {
         skills,
         project_length,
       })
-      .then((res) => {
+      .then((_res) => {
         router.back();
       })
       .catch((error) => console.log(error));

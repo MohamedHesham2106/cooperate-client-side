@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [formSubmitted, _setFormSubmitted] = useState<boolean>(false);
   const [error, setError] = useState<string>();
   const [image, setImage] = useState<File | null>(null);
 

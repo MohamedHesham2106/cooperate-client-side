@@ -10,6 +10,7 @@ interface IJob {
 }
 interface IJobs {
   _id: string;
+  title: string;
   description: string;
   payment_type: string;
   project_length: string;

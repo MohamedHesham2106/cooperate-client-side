@@ -1,4 +1,4 @@
-import { FC, MouseEvent,useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 
 import Job from './Job';
 import ModalManager from '../Forms/Modal Forms/ModalManager';
@@ -49,7 +49,7 @@ const JobList: FC<IProps> = ({
           type='search'
           placeholder='Find jobs by title'
           onChange={handleSearchChange}
-          className='peer cursor-pointer relative z-10 h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-blue-300 focus:pl-16 focus:pr-4'
+          className='peer cursor-pointer relative z-[2] h-12 w-12 rounded-full border bg-transparent pl-12 outline-none focus:w-full focus:cursor-text focus:border-blue-300 focus:pl-16 focus:pr-4'
         />
         <svg
           xmlns='http://www.w3.org/2000/svg'

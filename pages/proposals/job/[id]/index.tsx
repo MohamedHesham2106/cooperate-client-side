@@ -2,27 +2,30 @@ import { GetServerSideProps, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import React from 'react';
 
-import ClientEditProfile from '../../../../components/Profile/ClientEditProfile';
+import Proposals from '../../../../components/Proposal/Proposals';
 import Container from '../../../../components/UI/Container';
+import axiosInstance from '../../../../utils/axios';
 import { getPayloadFromToken } from '../../../../utils/cookie';
 import { getUserData } from '../../../../utils/user';
 
 interface IProps {
-  user: IUser;
+  userId: IUser['_id'];
+  job: IJobs;
 }
-const Settings: NextPage<IProps> = ({ user }) => {
+
+const Proposal: NextPage<IProps> = ({ userId, job }) => {
   return (
-    <Container className='md:w-10/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
-      <ClientEditProfile user={user} />
+    <Container className='md:w-10/12 w-11/12 mx-auto my-24 border border-gray-300 rounded shadow-lg'>
+      <Proposals userId={userId} job={job} />
     </Container>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   params,
 }) => {
   const { id } = params as ParsedUrlQuery;
-  const userId = id?.toString().replace('~', '');
   const { jwt_refresh, jwt_access } = req.cookies;
 
   if (!jwt_access) {
@@ -30,12 +33,15 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 
   try {
-    const user = await getUserData(userId, jwt_access);
+    const jobId = id?.toString().replace('~', '');
+    const job = (await axiosInstance.get(`/api/job/${jobId}`)).data;
     const payload = getPayloadFromToken(jwt_refresh);
-    if (payload.sub === user._id && user.role === 'client') {
+    const user = await getUserData(payload.sub, jwt_access);
+    if (payload.sub === user._id && user.role === 'freelancer') {
       return {
         props: {
-          user,
+          userId: user._id,
+          job: job.job,
         },
       };
     }
@@ -44,4 +50,4 @@ export const getServerSideProps: GetServerSideProps = async ({
     return { redirect: { destination: '/404', permanent: false } };
   }
 };
-export default Settings;
+export default Proposal;
