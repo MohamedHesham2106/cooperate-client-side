@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { FC } from 'react';
-import { MouseEvent } from 'react';
+import { useRouter } from 'next/router';
+import { FC, MouseEvent } from 'react';
 import { FaGraduationCap } from 'react-icons/fa';
 import { GrLanguage } from 'react-icons/gr';
 import { MdEdit } from 'react-icons/md';
@@ -23,6 +23,7 @@ const ClientDetails: FC<IProps> = ({
   ModalHandler,
 }) => {
   const { language, education, jobs } = user;
+  const router = useRouter();
   const renderLanguages = () => (
     <div className='flex justify-center flex-col w-1/2 mt-3'>
       {language?.map(({ language, level }, i) => (
@@ -45,7 +46,7 @@ const ClientDetails: FC<IProps> = ({
         <div className='flex flex-col justify-between mt-3'>
           <div className='flex items-center gap-2 flex-wrap'>
             <GrLanguage size={18} />
-            <span className='font-semibold text-2xl pb-1'>Languages</span>
+            <span className='font-semibold text-xl pb-1'>Languages</span>
             {isOwnProfile && (
               <div
                 className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'
@@ -61,7 +62,7 @@ const ClientDetails: FC<IProps> = ({
         <div className='flex flex-col justify-between mt-9'>
           <div className='flex items-center gap-2 flex-wrap'>
             <FaGraduationCap size={18} />
-            <span className='font-semibold text-2xl pb-1'>Education</span>
+            <span className='font-semibold text-xl pb-1'>Education</span>
           </div>
           {renderEducation()}
         </div>
@@ -81,11 +82,22 @@ const ClientDetails: FC<IProps> = ({
                 height={250}
               />
               <h1 className='font-semibold'>No active jobs posts</h1>
-              <h1 className='text-gray-400'>
-                Post a job to the marketplace and let talent come to you.
-              </h1>
+              {isOwnProfile && (
+                <h1 className='text-gray-400'>
+                  Post a job to the marketplace and let talent come to you.
+                </h1>
+              )}
 
-              {isOwnProfile && <Button width='w-45'>Post a Job</Button>}
+              {isOwnProfile && (
+                <Button
+                  width='w-45'
+                  onClick={() => {
+                    router.push(`/${user.role}/~${user._id}/job-post`);
+                  }}
+                >
+                  Post a Job
+                </Button>
+              )}
             </div>
           ) : (
             <JobList

@@ -80,7 +80,7 @@ const JobList: FC<IProps> = ({
           <p>No results found for '{searchTerm}'</p>
         </div>
       )}
-      {selectedJobId && (
+      {showModal && (
         <ModalManager
           Type={modalType}
           user={user}

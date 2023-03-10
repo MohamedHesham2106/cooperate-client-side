@@ -2,7 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import React from 'react';
 
-import Proposals from '../../../../components/Proposal/Proposals';
+import ProposalForm from '../../../../components/Proposal/ProposalForm';
 import Container from '../../../../components/UI/Container';
 import axiosInstance from '../../../../utils/axios';
 import { getPayloadFromToken } from '../../../../utils/cookie';
@@ -16,7 +16,7 @@ interface IProps {
 const Proposal: NextPage<IProps> = ({ userId, job }) => {
   return (
     <Container className='md:w-10/12 w-11/12 mx-auto my-24 border border-gray-300 rounded shadow-lg'>
-      <Proposals userId={userId} job={job} />
+      <ProposalForm userId={userId} job={job} />
     </Container>
   );
 };

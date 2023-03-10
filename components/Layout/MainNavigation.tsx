@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 
+import NotificationDropDown from '../DropDownMenus/NotificationDropDown';
 import UserDropDown from '../DropDownMenus/UserDropDown';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { isAuthenticated } from '../../utils/cookie';
@@ -62,10 +63,12 @@ const MainNavigation: FC = () => {
           )}
         </ul>
         {isAuth && (
-          <div className='md:pr-5'>
+          <div className='flex md:pr-5 items-center'>
+            <NotificationDropDown />
             <UserDropDown />
           </div>
         )}
+
         {!isAuth && (
           <div className='block sm:hidden z-10 cursor-pointer'>
             {isOpen ? (

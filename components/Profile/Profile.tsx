@@ -52,6 +52,7 @@ const Profile: FC<IProps> = ({
 
   const handleInvite = () => {
     //Invite Logic
+    router.push(`/invitation/~${user._id}`);
   };
   const router = useRouter();
 

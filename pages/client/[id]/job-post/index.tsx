@@ -3,17 +3,15 @@ import { ParsedUrlQuery } from 'querystring';
 
 import JobForm from '../../../../components/Forms/Job Forms/JobForm';
 import Container from '../../../../components/UI/Container';
-import axiosInstance from '../../../../utils/axios';
 import { getPayloadFromToken } from '../../../../utils/cookie';
 import { getUserData } from '../../../../utils/user';
 interface IProps {
   user: IUser;
-  categories: ICategory[];
 }
-const JobPost: NextPage<IProps> = ({ user, categories }) => {
+const JobPost: NextPage<IProps> = ({ user }) => {
   return (
     <Container className='md:w-9/12 w-11/12 mx-auto my-24 p-5 '>
-      <JobForm user={user} categories={categories} />
+      <JobForm user={user} />
     </Container>
   );
 };
@@ -31,14 +29,11 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   try {
     const user = await getUserData(userId, jwt_access);
-    const response = await axiosInstance.get('/api/category');
-    const categories = response.data.categories;
     const payload = getPayloadFromToken(jwt_refresh);
     if (payload.sub === user._id && user.role === 'client') {
       return {
         props: {
           user,
-          categories,
         },
       };
     }

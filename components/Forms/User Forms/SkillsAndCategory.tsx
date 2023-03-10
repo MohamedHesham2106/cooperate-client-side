@@ -2,13 +2,12 @@ import Multiselect from 'multiselect-react-dropdown';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
 import Button from '../../UI/Button';
-import Error from '../../UI/Error';
 import Form from '../../UI/Form';
 import Spinner from '../../UI/Spinner';
-import Success from '../../UI/Success';
 import axiosInstance from '../../../utils/axios';
 
 interface IProps {
@@ -18,8 +17,6 @@ interface IProps {
 const SkillsAndCategory: FC<IProps> = ({ user }) => {
   const { categories, skills, first_name, _id } = user;
 
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
   const [selectedSkills, setSelectedSkills] = useState<string[]>(
     skills?.map((skill) => skill.name) || []
   );
@@ -60,41 +57,37 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
         userCategories.filter((category) => category !== value)
       );
     }
-    console.log(userCategories);
   };
   // Define the fetcher function
   const fetcher = async (url: string) => {
     const response = await axiosInstance.get(url);
     return response.data;
   };
-  const clearMessages = () => {
-    setSuccess('');
-    setError('');
-  };
+
   // Use the useSWR hook to fetch the categories data
-  const { data, error: categoriesError } = useSWR('/api/category', fetcher);
+  const { data } = useSWR('/api/category', fetcher);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    Promise.all([
-      await axiosInstance.put(`/api/user/${_id}/updateSkills`, {
-        skills: selectedSkills,
-      }),
-      axiosInstance.put(`/api/user/${_id}/updateCategories`, {
-        categories: userCategories,
-      }),
-    ])
-      .then((_response) => {
-        setSuccess('Updated Account Successfully.');
-        setTimeout(clearMessages, 5000);
-        router.reload();
-      })
-      .catch((error) => {
-        const err = error as IError;
-        const { message } = err.response.data;
-        setError(message);
-        setTimeout(clearMessages, 5000);
-      });
+    event.preventDefault();
+    const [updateSkillsResponse, _updateCategoriesResponse] = await Promise.all(
+      [
+        await axiosInstance.put(`/api/user/${_id}/updateSkills`, {
+          skills: selectedSkills,
+        }),
+        axiosInstance.put(`/api/user/${_id}/updateCategories`, {
+          categories: userCategories,
+        }),
+      ]
+    );
+    await toast.promise(Promise.resolve(updateSkillsResponse), {
+      success: 'Updated Account Successfully.',
+      loading: 'Loading..',
+      error: 'Failed to update account.',
+    });
+    setTimeout(() => {
+      router.reload();
+    }, 2000);
   };
 
   // Render the categories data with pagination
@@ -213,19 +206,12 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
     <div className='p-1 flex flex-col gap-2'>
       <h2 className='text-2xl font-semibold'>Skills &amp; Categories</h2>
       <span className='w-1/2 border-t-2 border-black my-2 '></span>
-      {!error && !success && (
-        <p>
-          Hi {first_name}, please select the skills and category that best
-          describe you.
-        </p>
-      )}
-      {error && <Error message={error} />}
-      {success && <Success message={success} />}
+      <p>
+        Hi {first_name}, please select the skills and category that best
+        describe you.
+      </p>
       <Form OnSubmit={submitHandler} className='flex flex-col h-full'>
         <div>
-          {categoriesError && (
-            <Error message='Error loading categories. Please try again later.' />
-          )}
           {renderCategories()}
           {renderPageNumbers()}
         </div>

@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import { ChangeEvent, DragEvent, FC, MouseEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 //import axiosInstance from '../../utils/axios';
 import { ImCross } from 'react-icons/im';
 
 import Button from '../../UI/Button';
-import Error from '../../UI/Error';
 import Form from '../../UI/Form';
 import Modal from '../../UI/Modal';
 interface IProps {
@@ -14,17 +14,24 @@ interface IProps {
 
 const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
   const [formSubmitted, _setFormSubmitted] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
+  console.log(userId);
   const [image, setImage] = useState<File | null>(null);
 
   const handleFile = (event: ChangeEvent<HTMLInputElement>) => {
-    setError('');
     const currFile = event.target?.files?.[0];
     const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
     if (currFile && validImageTypes.includes(currFile.type)) {
       setImage(currFile);
     } else {
-      setError('Only images in the formats GIF, JPEG, and PNG are accepted.');
+      toast.error(
+        'Only images in the formats GIF, JPEG, and PNG are accepted.',
+        {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        }
+      );
     }
   };
   const handleOndragOver = (event: DragEvent<HTMLDivElement>) => {
@@ -36,12 +43,20 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
     event.stopPropagation();
     // grab the image file
     const imageFile = event.dataTransfer.files[0];
-    setError('');
+
     const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
     if (imageFile && validImageTypes.includes(imageFile.type)) {
       setImage(imageFile);
     } else {
-      setError('Only images in the formats GIF, JPEG, and PNG are accepted.');
+      toast.error(
+        'Only images in the formats GIF, JPEG, and PNG are accepted.',
+        {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        }
+      );
     }
   };
   const removeImage = () => {
@@ -51,13 +66,12 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
   return (
     <Modal onClose={onClose} className='p-2 flex flex-col gap-5 justify-center'>
       <h1 className='text-2xl font-semibold'>Update Profile Picture</h1>
-      {error && <Error message={error} />}
       <Form className='flex flex-col w-full p-5 '>
         <div className='p-3  w-full rounded-md'>
           <div
             onDragOver={handleOndragOver}
             onDrop={handleOndrop}
-            className='h-56 w-full overflow-hidden relative border-4 items-center rounded-md cursor-pointer   border-blue-700 border-dotted'
+            className='h-56 w-full overflow-hidden relative border-2 items-center rounded-md cursor-pointer   border-gray-400 border-dotted'
           >
             <input
               type='file'
@@ -81,11 +95,11 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
                   d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
                 ></path>
               </svg>
-              <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
+              <p className='mb-2 text-sm text-gray-500 '>
                 <span className='font-semibold'>Click to upload</span> or drag
                 and drop
               </p>
-              <p className='text-xs text-gray-500 dark:text-gray-400'>
+              <p className='text-xs text-gray-500 '>
                 SVG, PNG, JPG or GIF (MAX. 800x400px)
               </p>
             </div>

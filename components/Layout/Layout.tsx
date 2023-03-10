@@ -6,12 +6,13 @@ import MainNavigation from './MainNavigation';
 
 type IProps = {
   children: JSX.Element;
+  font: string;
 };
-const Layout: FC<IProps> = ({ children }) => {
+const Layout: FC<IProps> = ({ children, font }) => {
   return (
     <Fragment>
       <MainNavigation />
-      <main>{children}</main>
+      <main className={font}>{children}</main>
       <FloatingActionButton />
       <Footer />
     </Fragment>

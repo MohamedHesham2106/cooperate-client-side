@@ -1,13 +1,11 @@
-import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 import { ImCross } from 'react-icons/im';
 
 import Button from '../UI/Button';
-import Error from '../UI/Error';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
 import axiosInstance from '../../utils/axios';
-import Success from '../UI/Success';
 
 interface IProps {
   userId: IUser['_id'];
@@ -18,16 +16,13 @@ interface IProposal {
   website_link?: string;
   budget?: number;
 }
-const Proposals: FC<IProps> = ({ userId, job }) => {
+const ProposalForm: FC<IProps> = ({ userId, job }) => {
   const [proposal, setProposal] = useState<IProposal>({
     cover_letter: '',
     website_link: '',
     budget: job.budget,
   });
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
-  const router = useRouter();
 
   const MAX_CHARACTERS = 3000;
   // calculate number of characters left
@@ -47,7 +42,6 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
     event.preventDefault();
   };
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setError('');
     const currFile = event.target?.files?.[0];
     const validFileTypes = [
       'application/pdf',
@@ -57,10 +51,12 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
     if (currFile && validFileTypes.includes(currFile.type)) {
       setFile(currFile);
     } else {
-      setError('Only Word and PDF files are accepted.');
-      setTimeout(() => {
-        setError(undefined);
-      }, 5000);
+      toast.error('Only Word and PDF files are accepted.', {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
+      });
     }
   };
 
@@ -70,7 +66,6 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
     event.stopPropagation();
     // grab the file
     const currFile = event.dataTransfer.files[0];
-    setError('');
     const validFileTypes = [
       'application/pdf',
       'application/msword',
@@ -79,10 +74,12 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
     if (currFile && validFileTypes.includes(currFile.type)) {
       setFile(currFile);
     } else {
-      setError('Only Word and PDF files are accepted.');
-      setTimeout(() => {
-        setError(undefined);
-      }, 5000);
+      toast.error('Only Word and PDF files are accepted.', {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
+      });
     }
   };
 
@@ -94,10 +91,12 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
     event.preventDefault();
     const { cover_letter, budget, website_link } = proposal;
     if (cover_letter?.length === 0) {
-      setError('Please Fill The Cover Letter.');
-      setTimeout(() => {
-        setError(undefined);
-      }, 5000);
+      toast.error('Please Fill The Cover Letter.', {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
+      });
       return;
     }
     await axiosInstance
@@ -108,20 +107,22 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
         job_id: job._id,
       })
       .then(() => {
-        setSuccess('Proposal Sent');
-        setTimeout(() => {
-          setSuccess(undefined);
-        }, 5000);
+        toast.success('Proposal Sent!', {
+          style: {
+            border: '1px solid #07bd3a',
+            padding: '16px',
+          },
+        });
       })
       .catch((error) => {
         const err = error as IError;
         const { message } = err.response.data;
-        setError(message);
-      })
-      .finally(() => {
-        if (!error) {
-          router.back();
-        }
+        toast.error(message, {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        });
       });
   };
 
@@ -157,7 +158,7 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
                 <span
                   key={skill._id}
                   title={skill.name}
-                  className='px-4 py-2  text-sm rounded-3xl text-blue-600 font-semibold bg-blue-200 '
+                  className='px-4 py-2  text-sm rounded-3xl text-blue-600 font-medium bg-blue-200 '
                 >
                   {skill.name}
                 </span>
@@ -167,8 +168,6 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
         </div>
         <div className='p-5 flex flex-col'>
           <h2 className='text-lg font-medium '>Submit a Proposal:</h2>
-          {error && <Error message={error} />}
-          {success && <Success message={success} />}
           <Form className='mt-10 flex flex-col gap-5' OnSubmit={submitHandler}>
             <h3 className='text-left text-md font-normal'>Confirm Budget</h3>
             <section className='flex flex-col'>
@@ -283,4 +282,4 @@ const Proposals: FC<IProps> = ({ userId, job }) => {
   );
 };
 
-export default Proposals;
+export default ProposalForm;

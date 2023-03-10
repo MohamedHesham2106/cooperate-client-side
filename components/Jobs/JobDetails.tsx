@@ -7,7 +7,6 @@ import useSWR from 'swr';
 import Button from '../UI/Button';
 import Container from '../UI/Container';
 import Modal from '../UI/Modal';
-import Spinner from '../UI/Spinner';
 import axiosInstance from '../../utils/axios';
 
 interface IProps {
@@ -30,16 +29,7 @@ const JobDetails: FC<IProps> = ({
   const router = useRouter();
   return (
     <Fragment>
-      {isLoading && (
-        <Modal
-          className='p-2 flex items-center justify-center'
-          onClose={onClose}
-          tall={true}
-        >
-          <Spinner />
-        </Modal>
-      )}
-      {!isLoading && (
+      {!isLoading && data && (
         <Modal
           className='p-2 flex flex-col gap-5'
           onClose={onClose}
@@ -57,12 +47,12 @@ const JobDetails: FC<IProps> = ({
               </button>
             </div>
 
-            <h4 className='text-sm px-1 mt-4 font-semibold text-blue-500'>
+            <h4 className='text-md px-1 mt-1 font-semibold text-blue-500'>
               {data?.job.category.name}
             </h4>
           </Container>
           <Container className='px-0.5 grid grid-cols-1 gap-2'>
-            <h3 className='font-medium text-xl flex gap-1 items-center'>
+            <h3 className='font-medium text-2xl flex gap-1 mb-2 items-center'>
               <MdOutlineDescription />
               Description:
             </h3>
@@ -101,7 +91,7 @@ const JobDetails: FC<IProps> = ({
                   <span
                     key={skill._id}
                     title={skill.name}
-                    className='px-4 py-2  text-sm rounded-3xl text-blue-600 font-semibold bg-blue-200 '
+                    className='px-4 py-2  text-sm rounded-3xl text-blue-600 font-medium bg-blue-200 '
                   >
                     {skill.name}
                   </span>

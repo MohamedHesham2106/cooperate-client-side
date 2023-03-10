@@ -1,10 +1,9 @@
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import Button from '../../UI/Button';
-import Error from '../../UI/Error';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
-import Success from '../../UI/Success';
 import axiosInstance from '../../../utils/axios';
 import { getCookie } from '../../../utils/cookie';
 
@@ -14,8 +13,6 @@ interface IProps {
 
 const ChangePassword: FC<IProps> = ({ user }) => {
   const { _id } = user;
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
 
   const [contactInfo, setContactInfo] = useState({
     oldPassword: '',
@@ -28,22 +25,30 @@ const ChangePassword: FC<IProps> = ({ user }) => {
     setContactInfo((prevUserInfo) => ({ ...prevUserInfo, [name]: value }));
     console.log(contactInfo);
   };
-  const clearMessages = () => {
-    setSuccess('');
-    setError('');
-  };
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { oldPassword, newPassword, confirmPassword } = contactInfo;
     if (oldPassword === newPassword) {
-      setError('Your new password cannot be same as your current password.');
-      setTimeout(clearMessages, 5000);
+      toast.error(
+        'Your new password cannot be same as your current password.',
+        {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        }
+      );
       return;
     }
     if (confirmPassword !== newPassword) {
-      setError('Passwords do not match.');
-      setTimeout(clearMessages, 5000);
+      toast.error('Passwords do not match.', {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
+      });
+
       return;
     }
     await axiosInstance
@@ -57,14 +62,22 @@ const ChangePassword: FC<IProps> = ({ user }) => {
         { headers: { Authorization: `Bearer ${getCookie('jwt_access')}` } }
       )
       .then((_response) => {
-        setSuccess('Password Changed Successfully.');
-        setTimeout(clearMessages, 5000);
+        toast.success('Password Changed Successfully.', {
+          style: {
+            border: '1px solid #07bd3a',
+            padding: '16px',
+          },
+        });
       })
       .catch((error) => {
         const err = error as IError;
         const { message } = err.response.data;
-        setError(message);
-        setTimeout(clearMessages, 5000);
+        toast.error(message, {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        });
       });
   };
 
@@ -73,8 +86,6 @@ const ChangePassword: FC<IProps> = ({ user }) => {
       <h2 className='text-2xl font-semibold'>Change Password</h2>
 
       <span className='w-1/2 border-t-2 border-black my-2 '></span>
-      {error && <Error message={error} />}
-      {success && <Success message={success} />}
       <Form OnSubmit={submitHandler}>
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label

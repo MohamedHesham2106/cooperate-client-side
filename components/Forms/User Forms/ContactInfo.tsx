@@ -1,10 +1,10 @@
+import { useRouter } from 'next/router';
 import { FC, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import Button from '../../UI/Button';
-import Error from '../../UI/Error';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
-import Success from '../../UI/Success';
 import axiosInstance from '../../../utils/axios';
 
 interface IProps {
@@ -24,8 +24,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     role,
     company_name,
   } = user;
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
+
   const [contactInfo, setContactInfo] = useState<IUser>({
     first_name,
     last_name,
@@ -36,15 +35,12 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     address,
     company_name,
   });
+  const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setContactInfo((prevUserInfo) => ({ ...prevUserInfo, [name]: value }));
     console.log(contactInfo);
-  };
-  const clearMessages = () => {
-    setSuccess('');
-    setError('');
   };
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -64,6 +60,12 @@ const ContactInfo: FC<IProps> = ({ user }) => {
 
     // If there were no changes made, return from the function
     if (!isContactInfoChanged) {
+      toast.error('No Changes were made.', {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
+      });
       return;
     }
 
@@ -78,14 +80,23 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         new_company_name: contactInfo.company_name,
       })
       .then((_response) => {
-        setSuccess('Updated Account Successfully.');
-        setTimeout(clearMessages, 5000);
+        toast.success('Updated Information Successfully.', {
+          style: {
+            border: '1px solid #07bd3a',
+            padding: '16px',
+          },
+        });
+        router.reload();
       })
       .catch((error) => {
         const err = error as IError;
         const { message } = err.response.data;
-        setError(message);
-        setTimeout(clearMessages, 5000);
+        toast.error(message, {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        });
       });
   };
 
@@ -105,8 +116,6 @@ const ContactInfo: FC<IProps> = ({ user }) => {
       </div>
 
       <span className='w-1/2 border-t-2 border-black my-2 '></span>
-      {error && <Error message={error} />}
-      {success && <Success message={success} />}
       <Form OnSubmit={submitHandler}>
         <div className='grid gap-6 mb-6 lg:grid-cols-2'>
           <div className='flex flex-col gap-1'>

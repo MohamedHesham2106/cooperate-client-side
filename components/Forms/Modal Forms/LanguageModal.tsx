@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { FC, FormEvent, MouseEvent, useCallback, useState } from 'react';
+import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
 import Button from '../../UI/Button';
 import CustomSelect from '../../UI/CustomSelect';
-import Error from '../../UI/Error';
 import Form from '../../UI/Form';
 import Modal from '../../UI/Modal';
 import axiosInstance from '../../../utils/axios';
@@ -31,7 +31,6 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
   const [selectedLang, setSelectedLang] = useState<string>('');
   const [selectedProf, setSelectProf] = useState<string>('');
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
   const [action, setAction] = useState<'edit' | 'remove'>('edit');
 
   const selectLanguageHandler = useCallback((selected: string) => {
@@ -56,14 +55,19 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
       .catch((error) => {
         const err = error as IError;
         const { message } = err.response.data;
-        setError(message);
+        toast.error(message, {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        });
       })
       .finally(() => {
         setFormSubmitted(true);
         onClose();
-        if (!error) {
+        setTimeout(() => {
           router.reload();
-        }
+        }, 2000);
       });
     setFormSubmitted(true);
   };
@@ -113,7 +117,6 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
       className='p-2 flex flex-col gap-5 justify-center '
     >
       <h1 className='text-2xl font-semibold'>Add/Edit language</h1>
-      {error && <Error message={error} />}
       <div className='flex gap-2'>
         <Button
           type='button'
@@ -121,7 +124,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
             action === 'edit'
               ? 'bg-gray-700 text-white '
               : 'bg-gray-50 text-gray-900 border'
-          }text-sm rounded-lg focus:ring-blue-500 text-center font-semibold focus:border-blue-500 block w-full p-2.5`}
+          }text-sm rounded-lg focus:ring-blue-500 text-center font-medium focus:border-blue-500 block w-full p-2.5`}
           onClick={() => setAction('edit')}
         >
           Add/Edit Language
@@ -133,7 +136,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
             action === 'remove'
               ? 'bg-gray-700 text-white '
               : 'bg-gray-50 text-gray-900 border'
-          } text-gray-900 text-sm rounded-lg text-center font-semibold focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+          } text-gray-900 text-sm rounded-lg text-center font-medium focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
         >
           Remove Language
         </Button>
@@ -160,7 +163,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
         )}
 
         <Button type='submit' onClick={formSubmitted ? onClose : undefined}>
-          Submit
+          {action === 'edit' ? "Update" : "Remove"}
         </Button>
       </Form>
     </Modal>

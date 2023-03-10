@@ -13,20 +13,15 @@
     "autofix": "eslint --fix components && prettier --write components"
   },
   "dependencies": {
+    "@next/font": "13.1.6",
     "axios": "^1.3.2",
-    "dayjs": "^1.11.7",
     "js-cookie": "^3.0.1",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "latest",
-    "next-redux-wrapper": "^8.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
     "react-icons": "^4.7.1",
-    "react-redux": "^8.0.5",
-    "react-tailwindcss-datepicker": "^1.4.2",
-    "redux": "^4.2.1",
-    "redux-devtools-extension": "^2.13.9",
-    "redux-thunk": "^2.4.2",
     "swr": "^2.0.4"
   },
   "devDependencies": {
@@ -35,7 +30,6 @@
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
-    "@types/react-redux": "^7.1.25",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "autoprefixer": "^10.4.12",

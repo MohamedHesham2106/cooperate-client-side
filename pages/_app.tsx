@@ -1,38 +1,20 @@
+import { Roboto } from '@next/font/google';
 import type { AppProps } from 'next/app';
 import Router from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
+import { Toaster } from 'react-hot-toast';
 
 import '../styles/globals.css';
 
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/UI/Spinner';
-import { useAppDispatch } from '../hooks/useRedux';
-import { wrapper } from '../redux';
-import actions from '../redux/actions';
-import { getCookie, getPayloadFromToken } from '../utils/cookie';
-
+import AuthProvider from '../context/AuthProvider';
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['100', '300', '400', '500', '700'],
+});
 function MyApp({ Component, pageProps }: AppProps) {
-  const dispatch = useAppDispatch();
-  const { store } = wrapper.useWrappedStore(pageProps);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const access = getCookie('jwt_access');
-    const refresh = getCookie('jwt_refresh');
-
-    // Check if access token is expired
-    if (access) {
-      const decodedToken = getPayloadFromToken(access);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
-        window.location.reload();
-      }
-    }
-    dispatch(actions.reauthenticate(refresh, access));
-    if (!refresh) {
-      dispatch(actions.deauthenticate());
-    }
-  }, [dispatch]);
   useEffect(() => {
     const start = () => {
       setLoading(true);
@@ -51,18 +33,19 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <Fragment>
+      <Toaster position='top-right' reverseOrder={false} />
       {loading ? (
         <div className='h-screen flex flex-col justify-center items-center'>
           <Spinner />
         </div>
       ) : (
-        <Provider store={store}>
-          <Layout>
+        <AuthProvider>
+          <Layout font={roboto.className}>
             <Component {...pageProps} />
           </Layout>
-        </Provider>
+        </AuthProvider>
       )}
     </Fragment>
   );
 }
-export default wrapper.withRedux(MyApp);
+export default MyApp;

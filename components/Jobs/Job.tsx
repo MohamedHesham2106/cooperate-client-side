@@ -37,7 +37,7 @@ const Job: FC<IProps> = ({ job, onClick, ModalHandler }) => {
         {showFullDescription ? job.description : truncatedDescription}
         {job.description.length > 200 && (
           <button
-            className='text-blue-500 hover:text-blue-600 font-semibold px-2'
+            className='text-blue-500 hover:text-blue-600 font-medium px-2'
             onClick={toggleDescription}
           >
             {showFullDescription ? 'Show less' : 'Show more'}
@@ -48,7 +48,7 @@ const Job: FC<IProps> = ({ job, onClick, ModalHandler }) => {
         {job.skills.map((skill) => (
           <span
             key={skill._id}
-            className='px-4 py-2 shadow  text-base rounded-3xl text-blue-500 font-semibold bg-blue-200 '
+            className='px-4 py-2 shadow  text-sm rounded-3xl text-blue-500 font-medium bg-blue-200 '
           >
             {skill.name}
           </span>

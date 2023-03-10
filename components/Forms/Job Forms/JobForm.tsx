@@ -181,7 +181,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               name='description'
               onChange={handleChange}
               rows={8}
-              className='block p-5 w-full text-sm text-gray-800 bg-white border border-black outline-none focus:border-2 resize-none'
+              className='block p-5 w-full text-sm text-gray-800 bg-white border border-gray-400 outline-none focus:border-blue-500 resize-none'
               value={jobValues.description}
               placeholder='Describe your project here...'
               required
@@ -341,7 +341,7 @@ const JobForm: FC<IProps> = ({ user }) => {
                 onChange={handleChange}
                 type='date'
                 value={jobValues.project_length}
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full outline-none pl-10 p-2.5  '
                 placeholder='Select date'
               />
             </div>

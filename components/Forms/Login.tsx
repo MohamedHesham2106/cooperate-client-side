@@ -1,36 +1,12 @@
 import Link from 'next/link';
-import { FC, useState } from 'react';
-import { FaWindowClose } from 'react-icons/fa';
+import { FC, useContext, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 import Button from '../UI/Button';
 import Container from '../UI/Container';
-import Error from '../UI/Error';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
-import { useAppDispatch, useAppSelector } from '../../hooks/useRedux';
-import actions from '../../redux/actions';
-import { RootState } from '../../redux/types/global.types';
-
-//Submit handling & Redux dispatcher
-const useSubmitHandler = () => {
-  const dispatch = useAppDispatch();
-  const message = useAppSelector((state: RootState) => state.error.message);
-
-  const submitHandler = async (userInfo: {
-    email: string;
-    password: string;
-  }) => {
-    dispatch(
-      actions.authenticate({
-        email: userInfo.email,
-        password: userInfo.password,
-      })
-    );
-  };
-
-  return { submitHandler, message };
-};
+import { AuthContext } from '../../context/AuthContext';
 
 const Login: FC = () => {
   // Initialize state for password input type and user information
@@ -39,12 +15,7 @@ const Login: FC = () => {
     email: '',
     password: '',
   });
-
-  // Initialize state for error
-  const [error, setError] = useState<string>();
-
-  // Use Redux useDispatch hook
-  const { submitHandler, message } = useSubmitHandler();
+  const { Authenticate } = useContext(AuthContext);
 
   // Function to toggle password hide/show
   const togglePassword = () => {
@@ -64,12 +35,7 @@ const Login: FC = () => {
   // Function to handle form submission and authenticate user using Redux actions and router
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    await submitHandler(userInfo);
-
-    if (message) {
-      setError(message);
-    }
+    Authenticate(userInfo.email, userInfo.password);
   };
 
   return (
@@ -78,8 +44,6 @@ const Login: FC = () => {
         Login to Coo<span className='text-orange-400 font-bold'>/</span>Rate
       </h1>
       <span className='h-[1px] my-10 bg-gray-300 block'></span>
-
-      {error && <Error message={error} icon={<FaWindowClose />} />}
 
       <Form OnSubmit={handleSubmit}>
         <Input

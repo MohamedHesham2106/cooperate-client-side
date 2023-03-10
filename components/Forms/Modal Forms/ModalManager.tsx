@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { FC, MouseEvent } from 'react';
 
 import BioModal from './BioModal';
@@ -26,30 +27,38 @@ const ModalManager: FC<IModalManager> = ({
   isOwnProfile,
   isSameRole,
 }) => {
-  console.log(Type);
-  if (Type === 'language') {
-    return <LanguageModal onClose={onClose} user={user._id} />;
+  switch (Type) {
+    case 'language':
+      return <LanguageModal onClose={onClose} user={user._id} />;
+    case 'bio':
+      return (
+        <BioModal onClose={onClose} userId={user?._id} bio={user.biography} />
+      );
+    case 'profile':
+      return <ProfilePictureModal onClose={onClose} userId={user._id} />;
+    case 'job':
+      return (
+        <JobDetails
+          onClose={onClose}
+          jobId={jobId}
+          isSameRole={isSameRole}
+          isOwnProfile={isOwnProfile}
+          isFreelancer={isFreelancer}
+        />
+      );
+    default:
+      return null;
   }
-  if (Type === 'bio') {
-    return (
-      <BioModal onClose={onClose} userId={user?._id} bio={user.biography} />
-    );
-  }
-  if (Type === 'profile') {
-    return <ProfilePictureModal onClose={onClose} userId={user._id} />;
-  }
-  if (Type === 'job') {
-    return (
-      <JobDetails
-        onClose={onClose}
-        jobId={jobId}
-        isSameRole={isSameRole}
-        isOwnProfile={isOwnProfile}
-        isFreelancer={isFreelancer}
-      />
-    );
-  }
-  return null;
+};
+
+ModalManager.propTypes = {
+  Type: PropTypes.string,
+  onClose: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  jobId: PropTypes.string,
+  isSameRole: PropTypes.bool,
+  isFreelancer: PropTypes.oneOf(['freelancer', 'client']),
+  isOwnProfile: PropTypes.bool,
 };
 
 export default ModalManager;
