@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   params,
 }) => {
-  const { id } = params as ParsedUrlQuery;
+  const { jobId } = params as ParsedUrlQuery;
   const { jwt_refresh, jwt_access } = req.cookies;
 
   if (!jwt_access) {
@@ -33,8 +33,8 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
 
   try {
-    const jobId = id?.toString().replace('~', '');
-    const job = (await axiosInstance.get(`/api/job/${jobId}`)).data;
+    const job_id = jobId?.toString().replace('~', '');
+    const job = (await axiosInstance.get(`/api/job/${job_id}`)).data;
     const payload = getPayloadFromToken(jwt_refresh);
     const user = await getUserData(payload.sub, jwt_access);
     if (payload.sub === user._id && user.role === 'freelancer') {

@@ -1,13 +1,23 @@
 import { useRouter } from 'next/router';
-import { FC, Fragment, MouseEvent } from 'react';
+import {
+  FC,
+  Fragment,
+  MouseEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import toast from 'react-hot-toast';
 import { HiOutlineX } from 'react-icons/hi';
 import { MdOutlineDescription } from 'react-icons/md';
-import useSWR from 'swr';
 
 import Button from '../UI/Button';
 import Container from '../UI/Container';
 import Modal from '../UI/Modal';
+import { AuthContext } from '../../context/AuthContext';
 import axiosInstance from '../../utils/axios';
+import { getPayloadFromToken } from '../../utils/cookie';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
@@ -23,13 +33,56 @@ const JobDetails: FC<IProps> = ({
   isOwnProfile,
   isSameRole,
 }) => {
-  const fetcher = (url: string) =>
-    axiosInstance.get(url).then((res) => res.data);
-  const { data, isLoading } = useSWR(`/api/job/${jobId}`, fetcher);
+  const [data, setData] = useState<{ job: IJobs }>();
+  const { refreshToken } = useContext(AuthContext);
+  const getJob = useCallback(async () => {
+    await axiosInstance
+      .get(`/api/job/${jobId}`)
+      .then((response) => setData(response.data));
+  }, [jobId]);
+
+  useEffect(() => {
+    if (jobId) {
+      getJob();
+    }
+  }, [getJob, jobId]);
+  const removeJobHandler = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    await axiosInstance
+      .delete(`/api/job/${getPayloadFromToken(refreshToken).sub}`, {
+        data: {
+          jobId,
+        },
+      })
+
+      .then((_res) =>
+        toast.success('Job Deleted.', {
+          style: {
+            border: '1px solid #07bd3a',
+            padding: '16px',
+          },
+        })
+      )
+      .catch((error) => {
+        const err = error as IError;
+        const { message } = err.response.data;
+        toast.error(message, {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        });
+      })
+      .finally(() => {
+        router.reload();
+      });
+  };
   const router = useRouter();
   return (
     <Fragment>
-      {!isLoading && data && (
+      {data && (
         <Modal
           className='p-2 flex flex-col gap-5'
           onClose={onClose}
@@ -106,6 +159,16 @@ const JobDetails: FC<IProps> = ({
                 onClick={() => router.push(`/proposals/job/~${jobId}`)}
               >
                 Send Proposal
+              </Button>
+            </Container>
+          )}
+          {isOwnProfile && (
+            <Container className='flex mt-2'>
+              <Button
+                className='focus:outline-none w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900'
+                onClick={removeJobHandler}
+              >
+                Delete this Job
               </Button>
             </Container>
           )}

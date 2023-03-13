@@ -5,11 +5,13 @@ import BioModal from './BioModal';
 import LanguageModal from './LanguageModal';
 import ProfilePictureModal from './ProfilePictureModal';
 import JobDetails from '../../Jobs/JobDetails';
+import ProposalDetails from '../../Proposal/ProposalDetails';
 
 interface IModalManager {
   Type?: string;
-  user: IUser;
+  user?: IUser;
   jobId?: string;
+  proposal?: IProposal['proposal'];
   onClose: (
     event?: MouseEvent<HTMLDivElement | HTMLButtonElement | SVGAElement>
   ) => void;
@@ -26,16 +28,17 @@ const ModalManager: FC<IModalManager> = ({
   isFreelancer,
   isOwnProfile,
   isSameRole,
+  proposal,
 }) => {
   switch (Type) {
     case 'language':
-      return <LanguageModal onClose={onClose} user={user._id} />;
+      return <LanguageModal onClose={onClose} user={user?._id} />;
     case 'bio':
       return (
-        <BioModal onClose={onClose} userId={user?._id} bio={user.biography} />
+        <BioModal onClose={onClose} userId={user?._id} bio={user?.biography} />
       );
     case 'profile':
-      return <ProfilePictureModal onClose={onClose} userId={user._id} />;
+      return <ProfilePictureModal onClose={onClose} userId={user?._id} />;
     case 'job':
       return (
         <JobDetails
@@ -46,6 +49,8 @@ const ModalManager: FC<IModalManager> = ({
           isFreelancer={isFreelancer}
         />
       );
+    case 'proposal':
+      return <ProposalDetails onClose={onClose} proposal={proposal} />;
     default:
       return null;
   }

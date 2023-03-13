@@ -11,7 +11,7 @@ type IProps = {
 const Layout: FC<IProps> = ({ children, font }) => {
   return (
     <Fragment>
-      <MainNavigation />
+      <MainNavigation font={font} />
       <main className={font}>{children}</main>
       <FloatingActionButton />
       <Footer />

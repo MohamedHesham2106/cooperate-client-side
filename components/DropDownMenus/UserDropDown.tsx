@@ -57,16 +57,16 @@ const UserDropDown: FC = () => {
       >
         <div className='px-2 py-2 bg-white rounded-md shadow-sm border'>
           <Link
-            className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent  text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
             href={userURL}
           >
-            <span className='pt-1'>
+            <span>
               <ImUser size={20} />
             </span>
             <span>Profile</span>
           </Link>
           <Link
-            className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='flex items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
             href={`${userURL}/settings`}
           >
             <span className='pt-1'>
@@ -77,7 +77,7 @@ const UserDropDown: FC = () => {
           <Link
             href='/'
             onClick={logOutHandler}
-            className='cursor-pointer flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-semibold md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='cursor-pointer flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
           >
             <span className='pt-1'>
               <SlLogout size={18} />

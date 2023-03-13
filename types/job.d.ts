@@ -25,5 +25,6 @@ interface IJobs {
   experience_level: string;
   budget: number;
   title: string;
+  status: boolean;
   __v: number;
 }

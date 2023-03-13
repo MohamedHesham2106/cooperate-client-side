@@ -11,7 +11,6 @@ export interface IAuthContext {
 export const AuthContext = createContext<IAuthContext>({
   refreshToken: '',
   accessToken: '',
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  Authenticate: (email: string, password: string) => {},
-  SignOut: () => {},
+  Authenticate() {},
+  SignOut() {},
 });

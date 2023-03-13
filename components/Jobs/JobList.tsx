@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { FC, MouseEvent, useState } from 'react';
 
 import Job from './Job';
@@ -6,10 +7,10 @@ import Container from '../UI/Container';
 
 interface IProps {
   jobs: IUser['jobs'];
-  user: IUser;
-  isSameRole: boolean;
-  isFreelancer: 'freelancer' | 'client';
-  isOwnProfile: boolean;
+  user?: IUser;
+  isSameRole?: boolean;
+  isFreelancer?: 'freelancer' | 'client';
+  isOwnProfile?: boolean;
 }
 
 const JobList: FC<IProps> = ({
@@ -44,7 +45,7 @@ const JobList: FC<IProps> = ({
 
   return (
     <Container className='flex flex-wrap'>
-      <form className='relative w-full my-2'>
+      <form className='relative w-full my-2 h-[3rem]'>
         <input
           type='search'
           placeholder='Find jobs by title'
@@ -76,8 +77,16 @@ const JobList: FC<IProps> = ({
           />
         ))
       ) : (
-        <div className='h-40 flex items-center mx-auto text-base'>
-          <p>No results found for '{searchTerm}'</p>
+        <div className=' flex flex-col p-5 items-center mx-auto text-base'>
+          <p className=' text-2xl'>
+            Oops, it seems there are no jobs that match your criteria!
+          </p>
+          <Image
+            src='/images/404.svg'
+            height={400}
+            width={400}
+            alt='not found'
+          />
         </div>
       )}
       {showModal && (

@@ -163,7 +163,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
         )}
 
         <Button type='submit' onClick={formSubmitted ? onClose : undefined}>
-          {action === 'edit' ? "Update" : "Remove"}
+          {action === 'edit' ? 'Update' : 'Remove'}
         </Button>
       </Form>
     </Modal>
