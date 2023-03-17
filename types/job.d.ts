@@ -26,5 +26,6 @@ interface IJobs {
   budget: number;
   title: string;
   status: boolean;
-  __v: number;
+  createdAt: string;
+  updatedAt: string;
 }

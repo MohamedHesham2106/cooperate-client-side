@@ -135,7 +135,7 @@ const MainNavigation: FC<IProps> = ({ font }) => {
                   </li>
                   {role === 'client' && (
                     <li className='text-gray-900 hover:text-blue-500 text-center'>
-                      <Link href={`/proposals/~${tokenPayload.sub}`}>
+                      <Link href={`/proposals/~${tokenPayload?.sub}`}>
                         Proposals
                       </Link>
                     </li>
@@ -145,6 +145,11 @@ const MainNavigation: FC<IProps> = ({ font }) => {
                       <Link href='#'>Invitations</Link>
                     </li>
                   )}
+                  <li className='text-gray-900 hover:text-blue-500 text-center'>
+                    <Link href={`/ongoing-projects/~${tokenPayload?.sub}`}>
+                      Projects
+                    </Link>
+                  </li>
                 </ul>
               )}
 

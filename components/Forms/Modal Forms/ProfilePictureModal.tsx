@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { ChangeEvent, DragEvent, FC, MouseEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 //import axiosInstance from '../../utils/axios';
@@ -7,6 +8,7 @@ import { ImCross } from 'react-icons/im';
 import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Modal from '../../UI/Modal';
+import axiosInstance from '../../../utils/axios';
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
   userId?: string;
@@ -62,11 +64,45 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
   const removeImage = () => {
     setImage(null);
   };
-
+  const router = useRouter();
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData();
+    if (image) {
+      formData.append('image', image);
+      await axiosInstance
+        .put(`/api/user/${userId}/profilePic`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((_res) => {
+          toast.success('Image Uploaded.', {
+            style: {
+              border: '1px solid #09c72f',
+              padding: '16px',
+            },
+          });
+        })
+        .catch((error) => {
+          const err = error as IError;
+          const { message } = err.response.data;
+          toast.error(message, {
+            style: {
+              border: '1px solid #ce1500',
+              padding: '16px',
+            },
+          });
+        })
+        .finally(() => {
+          onClose();
+        });
+    }
+  };
   return (
     <Modal onClose={onClose} className='p-2 flex flex-col gap-5 justify-center'>
       <h1 className='text-2xl font-semibold'>Update Profile Picture</h1>
-      <Form className='flex flex-col w-full p-5 '>
+      <Form className='flex flex-col w-full p-5 ' OnSubmit={submitHandler}>
         <div className='p-3  w-full rounded-md'>
           <div
             onDragOver={handleOndragOver}
