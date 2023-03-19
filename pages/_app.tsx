@@ -1,4 +1,4 @@
-import { Roboto } from '@next/font/google';
+import { Open_Sans } from '@next/font/google';
 import type { AppProps } from 'next/app';
 import Router from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
@@ -9,9 +9,11 @@ import '../styles/globals.css';
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/UI/Spinner';
 import AuthProvider from '../context/AuthProvider';
-const roboto = Roboto({
+import { SocketProvider } from '../context/SocketContext';
+
+const opensans = Open_Sans({
   subsets: ['latin'],
-  weight: ['100', '300', '400', '500', '700'],
+  weight: ['300', '400', '500', '700'],
 });
 function MyApp({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(false);
@@ -31,8 +33,16 @@ function MyApp({ Component, pageProps }: AppProps) {
       Router.events.off('routeChangeError', end);
     };
   }, []);
+
   return (
     <Fragment>
+      <style jsx global>
+        {`
+          :root {
+            --opensans-font: ${opensans.style.fontFamily};
+          }
+        `}
+      </style>
       <Toaster position='top-right' reverseOrder={false} />
       {loading ? (
         <div className='h-screen flex flex-col justify-center items-center'>
@@ -40,9 +50,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         </div>
       ) : (
         <AuthProvider>
-          <Layout font={roboto.className}>
-            <Component {...pageProps} />
-          </Layout>
+          <SocketProvider url='http://localhost:8080/'>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </SocketProvider>
         </AuthProvider>
       )}
     </Fragment>

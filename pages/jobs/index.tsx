@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 import JobList from '../../components/Jobs/JobList';
 import Container from '../../components/UI/Container';
@@ -34,6 +35,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
         {}
       )
     );
+  const router = useRouter();
 
   const handleCheckboxChange = (skill: string) => {
     setSelectedCheckboxes((prev) => ({
@@ -41,6 +43,22 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
       [skill]: !prev[skill],
     }));
   };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(
+      (router.query.skills as string)?.replace(/,/g, '&')
+    );
+    const selectedSkills: ISelectedCheckboxes = {};
+
+    categories.forEach((category) => {
+      category.skills.forEach((skill) => {
+        const isChecked = queryParams.has(skill.name);
+        selectedSkills[skill.name] = isChecked;
+      });
+    });
+
+    setSelectedCheckboxes(selectedSkills);
+  }, [categories, router.query.skills]);
 
   const parentCheckboxes = categories.map((category) => {
     const childCheckboxes = category.skills.map((skill) => {
@@ -82,11 +100,10 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
       )
     );
   }
-
   return (
     <Container className='mt-24 p-5 grid grid-cols-[1fr_4fr] gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
-      <section className=' border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow'>
-        <h2 className='font-medium text-lg text-center p-2 rounded-t-lg  bg-blue-500 text-white'>
+      <section className=' border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow relative'>
+        <h2 className='font-medium text-lg text-center p-2 rounded-t-lg  bg-blue-500 text-white sticky top-0'>
           Filter Jobs
         </h2>
         {parentCheckboxes}

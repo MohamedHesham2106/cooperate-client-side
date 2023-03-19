@@ -64,7 +64,7 @@ const ModalManager: FC<IModalManager> = ({
 ModalManager.propTypes = {
   Type: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   jobId: PropTypes.string,
   isSameRole: PropTypes.bool,
   isFreelancer: PropTypes.oneOf(['freelancer', 'client']),

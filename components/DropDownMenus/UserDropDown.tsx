@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { AiFillWechat } from 'react-icons/ai';
 import { BiUserCircle } from 'react-icons/bi';
 import { ImUser } from 'react-icons/im';
 import { SlLogout, SlSettings } from 'react-icons/sl';
@@ -73,6 +74,15 @@ const UserDropDown: FC = () => {
               <SlSettings size={20} />
             </span>
             <span>Settings</span>
+          </Link>
+          <Link
+            href='/chat'
+            className='cursor-pointer flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+          >
+            <span className='pt-1'>
+              <AiFillWechat size={25} />
+            </span>
+            <span>Chat</span>
           </Link>
           <Link
             href='/'

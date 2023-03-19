@@ -64,7 +64,6 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
   const removeImage = () => {
     setImage(null);
   };
-  const router = useRouter();
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData();

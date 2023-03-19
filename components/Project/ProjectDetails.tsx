@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
   FC,
   Fragment,
@@ -7,6 +8,7 @@ import {
   useState,
 } from 'react';
 import toast from 'react-hot-toast';
+import { BsChat } from 'react-icons/bs';
 import { HiOutlineDownload } from 'react-icons/hi';
 import { ImCross } from 'react-icons/im';
 
@@ -14,6 +16,7 @@ import MilestoneList from '../Milestones/MilestoneList';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import { AuthContext } from '../../context/AuthContext';
+import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
 
@@ -94,11 +97,36 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   const { refreshToken } = useContext(AuthContext);
   const role = getPayloadFromToken(refreshToken).role;
   const [createdAt, setCreatedAt] = useState<string | undefined>();
+  const router = useRouter();
   useEffect(() => {
     if (project) {
       setCreatedAt(getTimeDifference(new Date(project.createdAt).getTime()));
     }
   }, [project, project?.createdAt]);
+
+  const createChatHandler = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    await axiosInstance
+      .post('/api/conversation', {
+        Freelancer_id: project?.Freelancer_id,
+        client_id: project?.client_id,
+      })
+      .then((response) =>
+        router.push(`/chat?cid=${response.data.conversation._id}`)
+      )
+      .catch((error) => {
+        const err = error as IError;
+        const { message } = err.response.data;
+        toast.error(message, {
+          style: {
+            border: '1px solid #ce1500',
+            padding: '16px',
+          },
+        });
+      });
+  };
 
   return (
     <Fragment>
@@ -108,7 +136,25 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
           className='p-2 flex flex-col gap-5 justify-between'
           tall={true}
         >
-          <span className='text-xs text-gray-400'>Started {createdAt}</span>
+          <div className='grid grid-cols-2 items-center'>
+            <span className='text-xs text-gray-400'>Started {createdAt}</span>
+            <div className='flex justify-end'>
+              <Button
+                onClick={createChatHandler}
+                type='button'
+                className='relative w-2/5 inline-flex items-center justify-center p-4 px-5 py-1 overflow-hidden font-medium text-blue-600 transition duration-300 ease-out border-2 border-blue-500 rounded-full shadow-md group'
+              >
+                <span className='absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-500 group-hover:translate-x-0 ease'>
+                  <BsChat size={15} />
+                </span>
+                <span className='absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease'>
+                  Chat
+                </span>
+                <span className='relative invisible'>Chat</span>
+              </Button>
+            </div>
+          </div>
+
           <section className='shadow-md flex items-center justify-between p-5 rounded-md bg-blue-200'>
             <div className='flex items-center gap-2'>
               <h4 className='text-base'>Status:</h4>

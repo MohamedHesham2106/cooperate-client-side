@@ -7,7 +7,6 @@ import Container from '../UI/Container';
 
 interface IProps {
   jobs: IUser['jobs'];
-  user?: IUser;
   isSameRole?: boolean;
   isFreelancer?: 'freelancer' | 'client';
   isOwnProfile?: boolean;
@@ -15,7 +14,6 @@ interface IProps {
 
 const JobList: FC<IProps> = ({
   jobs,
-  user,
   isFreelancer,
   isOwnProfile,
   isSameRole,
@@ -92,7 +90,6 @@ const JobList: FC<IProps> = ({
       {showModal && (
         <ModalManager
           Type={modalType}
-          user={user}
           jobId={selectedJobId}
           onClose={hideModalHandler}
           isSameRole={isSameRole}

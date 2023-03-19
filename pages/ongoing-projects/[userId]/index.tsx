@@ -15,7 +15,9 @@ interface IProps {
 const OngoingProjects: NextPage<IProps> = ({ user, projects }) => {
   return (
     <Container className='md:w-11/12 p-5 w-full mx-auto my-24 flex flex-col border shadow-md items-center rounded-md justify-center gap-10'>
-      <h1 className='text-3xl font-bold bg-blue-500 w-full text-center p-5 text-white rounded-xl'>OnGoing Projects</h1>
+      <h1 className='text-3xl font-bold bg-blue-500 w-full text-center p-5 text-white rounded-xl'>
+        OnGoing Projects
+      </h1>
       <ProjectList projects={projects} user={user} />
     </Container>
   );

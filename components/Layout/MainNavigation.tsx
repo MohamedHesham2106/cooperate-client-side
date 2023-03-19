@@ -16,11 +16,8 @@ import {
 const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
 };
-interface IProps {
-  font: string;
-}
 
-const MainNavigation: FC<IProps> = ({ font }) => {
+const MainNavigation: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [role, setRole] = useState<string>();
@@ -63,7 +60,7 @@ const MainNavigation: FC<IProps> = ({ font }) => {
     <header
       className={classNames(
         scrollPosition > 0 ? 'shadow' : 'shadow-none',
-        `transition-shadow fixed top-0 left-0 z-10 w-full bg-white ${font}`
+        `transition-shadow fixed top-0 left-0 z-10 w-full bg-white`
       )}
     >
       <nav className='w-full bg-white max-h-16'>
