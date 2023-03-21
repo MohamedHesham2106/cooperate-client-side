@@ -21,12 +21,12 @@ const FloatingActionButton: FC = () => {
   return (
     <button
       title='Scroll Up'
-      className={`fixed z-90 bottom-10 right-8 bg-orange-400 p-2 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-orange-600 hover:drop-shadow-2xl ${
+      className={`fixed z-90 bottom-10 right-8 bg-blue-500 p-2 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-orange-600 hover:drop-shadow-2xl ${
         showButton ? '' : 'hidden'
       }`}
       onClick={handleClick}
     >
-      <HiArrowUp size={25} />
+      <HiArrowUp size={20} />
     </button>
   );
 };

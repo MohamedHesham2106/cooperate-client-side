@@ -24,6 +24,9 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
   const [userCategories, setUserCategories] = useState<string[]>(
     categories?.map((category) => category.name) || []
   );
+  const [checkedCategories, setCheckedCategories] =
+    useState<string[]>(userCategories);
+
   const router = useRouter();
   const { query } = router;
   const page_number = query.page_number
@@ -52,9 +55,22 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
     const { value, checked } = event.target;
     if (checked) {
       setUserCategories([...userCategories, value]);
+      setCheckedCategories([...checkedCategories, value]);
     } else {
       setUserCategories(
         userCategories.filter((category) => category !== value)
+      );
+      setCheckedCategories(
+        checkedCategories.filter((category) => category !== value)
+      );
+      setSelectedSkills((prevState) =>
+        prevState.filter(
+          (skill) =>
+            !currentCategories
+              .find((cat: ICategory) => cat.name === value)
+              ?.skills?.map((s: ISkill) => s.name)
+              .includes(skill)
+        )
       );
     }
   };
@@ -102,9 +118,9 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
   const renderCategories = () => {
     return (
       <ul
-        className={`w-full ${
+        className={`w-full  ${
           currentCategories || currentCategories?.length === 0
-            ? 'grid gap-6 grid-cols-1'
+            ? 'grid gap-6 grid-cols-1   md:grid-cols-2 '
             : 'flex items-center justify-center'
         }`}
       >
@@ -132,27 +148,32 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
                 />
                 <label
                   htmlFor={category._id}
-                  className='inline-flex items-center w-full p-2 text-black bg-white border-2 rounded-lg cursor-pointer  peer-checked:border-blue-500 hover:text-gray-600  peer-checked:text-white peer-checked:bg-blue-500 hover:bg-gray-50 '
+                  className='shadow inline-flex items-center justify-center w-full p-2 text-black bg-white border rounded-2xl cursor-pointer  peer-checked:border-blue-500 hover:text-gray-600  peer-checked:text-white peer-checked:bg-blue-500 hover:bg-gray-50 '
                 >
                   <div className='block'>
-                    <div className='w-full text-lg font-semibold'>
+                    <div className='w-full md:text-lg font-semibold'>
                       {category.name}
                     </div>
                   </div>
                 </label>
 
-                <div className='mt-2'>
-                  <Multiselect
-                    id={category._id}
-                    isObject={false}
-                    options={skills}
-                    selectedValues={user_skills}
-                    onSelect={handleSelect}
-                    onRemove={handleRemove}
-                    placeholder={`${category.name} Skills`}
-                    avoidHighlightFirstOption={true}
-                  />
-                </div>
+                <Multiselect
+                  id={category._id}
+                  className='mt-2'
+                  disable={!checkedCategories.includes(category.name)}
+                  isObject={false}
+                  options={skills}
+                  selectionLimit={7}
+                  selectedValues={user_skills}
+                  onSelect={handleSelect}
+                  onRemove={handleRemove}
+                  placeholder={
+                    user_skills && user_skills?.length > 0
+                      ? ''
+                      : `${category.name} Skills`
+                  }
+                  avoidHighlightFirstOption={true}
+                />
               </li>
             );
           })}
@@ -188,7 +209,7 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
                 },
               }}
               scroll={false}
-              className={`px-3 py-1 border border-gray-500 mx-1 rounded-full ${
+              className={`px-2 py-1 border-2 mx-1 text-xs rounded-full ${
                 number === currentPage
                   ? 'bg-blue-500 text-white'
                   : 'bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-100'
@@ -204,8 +225,10 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
 
   return (
     <div className='p-1 flex flex-col gap-2'>
-      <h2 className='text-2xl font-semibold'>Skills &amp; Categories</h2>
-      <span className='w-1/2 border-t-2 border-black my-2 '></span>
+      <h2 className='text-2xl font-semibold w-full text-center md:text-start'>
+        Skills &amp; Categories
+      </h2>
+      <span className='md:w-1/2 border-t-2 border-black my-2 '></span>
       <p>
         Hi {first_name}, please select the skills and category that best
         describe you.

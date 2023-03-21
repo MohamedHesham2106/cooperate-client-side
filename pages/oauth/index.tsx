@@ -5,6 +5,7 @@ import type {
   NextPage,
   Redirect,
 } from 'next';
+import Head from 'next/head';
 import React, { Fragment } from 'react';
 
 import Login from '../../components/Forms/Login';
@@ -12,6 +13,15 @@ import Login from '../../components/Forms/Login';
 const LogIn: NextPage = () => {
   return (
     <Fragment>
+      <Head>
+        <title>COO/RATE | Freelance Login</title>
+        <meta
+          name='description'
+          content='Login to COO/RATE and start working as a freelancer today. Get access to high-quality clients and projects in your field.'
+        />
+        <meta name='keywords' content='COO/RATE, freelance, login' />
+        <meta name='robots' content='noindex, nofollow' />
+      </Head>
       <Login />
     </Fragment>
   );

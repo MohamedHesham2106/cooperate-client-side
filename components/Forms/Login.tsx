@@ -40,7 +40,7 @@ const Login: FC = () => {
 
   return (
     <Container className='max-w-xl mx-auto bg-white px-12 pt-8 my-20 border shadow rounded-md'>
-      <h1 className='text-3xl text-center font-semibold'>
+      <h1 className='text-3xl text-center font-semibold font-serif'>
         Login to Coo<span className='text-orange-400 font-bold'>/</span>Rate
       </h1>
       <span className='h-[1px] my-10 bg-gray-300 block'></span>

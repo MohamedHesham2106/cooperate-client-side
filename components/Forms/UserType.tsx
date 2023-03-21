@@ -30,7 +30,7 @@ const UserType = ({ roleFetch }: Props) => {
   }
   return (
     <Container className='max-w-xl mx-auto py-12 my-28 flex items-center justify-between flex-col border-2 shadow-sm rounded-md font-semibold text-md text-center'>
-      <h1 className='text-3xl'>Join as a client or freelancer</h1>
+      <h1 className='text-3xl font-serif'>Join as a client or freelancer</h1>
       <div className='w-full flex flex-col p-3 md:flex-row items-center justify-evenly gap-2 my-4 sm:gap-4'>
         <label
           className='cursor-pointer w-full md:w-auto'

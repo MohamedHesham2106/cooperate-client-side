@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
-import { MouseEvent, useState } from 'react';
+import { Fragment, MouseEvent, useState } from 'react';
 
 import ModalManager from '../../../components/Forms/Modal Forms/ModalManager';
 import FreelancerDetails from '../../../components/Profile/FreelancerDetails';
@@ -36,23 +37,43 @@ const Freelancer: NextPage<IProps> = ({
     setShowModal(false);
   };
   return (
-    <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
-      {showModal && (
-        <ModalManager Type={modalType} onClose={hideModalHandler} user={user} />
-      )}
-      <Profile
-        isOwnProfile={isOwnProfile}
-        isSameRole={isSameRole}
-        isFreelancer={isFreelancer}
-        user={user}
-        ModalHandler={showModalHandler}
-      />
-      <FreelancerDetails
-        isOwnProfile={isOwnProfile}
-        user={user}
-        ModalHandler={showModalHandler}
-      />
-    </Container>
+    <Fragment>
+      <Head>
+        <title>
+          COO/RATE | Freelancer Profile - Showcase Your Skills and Get Hired
+          Today
+        </title>
+        <meta
+          name='description'
+          content='Create your freelancer profile on COO/RATE and showcase your skills to potential clients. Bid on projects, communicate with clients, and get hired for your expertise. Build your reputation as a trusted and skilled professional in the freelancing industry.'
+        />
+        <meta
+          name='keywords'
+          content='COO/RATE, freelancer profile, showcase skills, bid on projects, communicate with clients, get hired, build reputation'
+        />
+      </Head>
+      <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
+        {showModal && (
+          <ModalManager
+            Type={modalType}
+            onClose={hideModalHandler}
+            user={user}
+          />
+        )}
+        <Profile
+          isOwnProfile={isOwnProfile}
+          isSameRole={isSameRole}
+          isFreelancer={isFreelancer}
+          user={user}
+          ModalHandler={showModalHandler}
+        />
+        <FreelancerDetails
+          isOwnProfile={isOwnProfile}
+          user={user}
+          ModalHandler={showModalHandler}
+        />
+      </Container>
+    </Fragment>
   );
 };
 

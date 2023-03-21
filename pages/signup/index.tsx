@@ -5,6 +5,7 @@ import type {
   NextPage,
   Redirect,
 } from 'next';
+import Head from 'next/head';
 import React, { Fragment, useState } from 'react';
 
 import Register from '../../components/Forms/Register';
@@ -17,8 +18,16 @@ const SignUp: NextPage = () => {
     setRole(UserType);
     // console.log(type);
   };
+  const titleRole = `${role.charAt(0).toUpperCase()}${role.slice(1)}`;
   return (
     <Fragment>
+      <Head>
+        <title>{titleRole} Sign Up | COO/RATE</title>
+        <meta
+          name='description'
+          content='Join our community of freelancers and find your next project. Sign up now and start working.'
+        />
+      </Head>
       {!role && <UserType roleFetch={userType} />}
       {role && <Register role={role} />}
     </Fragment>

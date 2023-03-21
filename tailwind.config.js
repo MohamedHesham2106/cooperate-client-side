@@ -8,9 +8,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        primary: ['var(--opensans-font)'],
-        serif: ['var(--opensans-font)'],
-        sans: ['var(--opensans-font)'],
+        primary: ['var(--muli-font)'],
+        serif: ['var(--philosopher-font)'],
+        sans: ['var(--muli-font)'],
       },
     },
   },

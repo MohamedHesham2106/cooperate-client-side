@@ -17,8 +17,9 @@ import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import { AuthContext } from '../../context/AuthContext';
 import axiosInstance from '../../utils/axios';
-import { getPayloadFromToken } from '../../utils/cookie';
+import { getCookie, getPayloadFromToken } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
+import { IoIosArrowForward } from 'react-icons/io';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
@@ -127,7 +128,30 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         });
       });
   };
-
+  const handleCompletion = async (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    try {
+      const userId = getPayloadFromToken(getCookie('jwt_refresh')).sub;
+      await axiosInstance.put(`/api/project/${userId}`, {
+        projectId: project?._id,
+      });
+      toast.success('Incredible! Project have been completed.');
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
+    } catch (error) {
+      const err = error as IError;
+      const { message } = err.response.data;
+      toast.error(message, {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
+      });
+    }
+  };
   return (
     <Fragment>
       {project && (
@@ -136,7 +160,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
           className='p-2 flex flex-col gap-5 justify-between'
           tall={true}
         >
-          <div className='grid grid-cols-2 items-center'>
+          <div className='grid grid-cols-[9fr_9fr_1fr] gap-2 items-center'>
             <span className='text-xs text-gray-400'>Started {createdAt}</span>
             <div className='flex justify-end'>
               <Button
@@ -153,6 +177,13 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                 <span className='relative invisible'>Chat</span>
               </Button>
             </div>
+            <button
+              onClick={onClose}
+              type='button'
+              className='bg-transparent rounded-md p-2 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none'
+            >
+              <IoIosArrowForward size={25} />
+            </button>
           </div>
 
           <section className='shadow-md flex items-center justify-between p-5 rounded-md bg-blue-200'>
@@ -162,14 +193,17 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                 {project.project_status}
               </div>
             </div>
-            <div>
-              <Button
-                type='button'
-                className='text-orange-500 bg-orange-200 hover:bg-orange-400 hover:text-white focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-5 py-2.5 text-center'
-              >
-                Mark as Complete
-              </Button>
-            </div>
+            {project.project_status === 'In progress' && role === 'client' && (
+              <div>
+                <Button
+                  type='button'
+                  onClick={handleCompletion}
+                  className='text-orange-500 bg-orange-200 hover:bg-orange-400 hover:text-white focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-5 py-2.5 text-center'
+                >
+                  Mark as Complete
+                </Button>
+              </div>
+            )}
           </section>
           <section className='shadow-md flex flex-col gap-5 justify-between p-5 rounded-md bg-blue-200'>
             <div className='flex flex-col gap-2'>
@@ -198,7 +232,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                 {project.job.skills?.map((skill: ISkill) => (
                   <span
                     key={skill._id}
-                    className='px-4 py-2 shadow  text-xs rounded-3xl text-orange-500 font-semibold bg-orange-200 '
+                    className='px-4 py-2 flex text-center shadow text-xs rounded-3xl text-orange-500 font-semibold bg-orange-200 '
                   >
                     {skill.name}
                   </span>

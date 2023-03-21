@@ -89,7 +89,9 @@ const Register: React.FC<IRegister> = ({ role }) => {
 
   return (
     <Container className='max-w-xl mx-auto bg-white px-12 pt-8 my-20 border shadow rounded-md'>
-      <h1 className='text-3xl text-center font-semibold'>{Greeting}</h1>
+      <h1 className='text-3xl text-center font-semibold font-serif'>
+        {Greeting}
+      </h1>
       <span className='h-[1px] my-10 bg-gray-300 block'></span>
       {error && <Error message={error} icon={<FaWindowClose />} />}
       <Form OnSubmit={submitHandler}>

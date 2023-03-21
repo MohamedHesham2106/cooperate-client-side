@@ -1,6 +1,6 @@
 import Multiselect from 'multiselect-react-dropdown';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { BiCalendar } from 'react-icons/bi';
 import { BsPaypal } from 'react-icons/bs';
 import useSWR from 'swr';
@@ -10,6 +10,8 @@ import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
 import axiosInstance from '../../../utils/axios';
+import { motion } from 'framer-motion';
+import { fadeIn } from '../../../utils/variants';
 
 type IProps = {
   user: IUser;
@@ -129,9 +131,15 @@ const JobForm: FC<IProps> = ({ user }) => {
       })
       .catch((error) => console.log(error));
   };
-
+  const variants = useMemo(() => fadeIn('down', 0.5), []);
   return (
-    <div className='flex flex-col gap-5'>
+    <motion.div
+      variants={variants}
+      initial='hidden'
+      whileInView='show'
+      viewport={{ once: false, amount: 0.1 }}
+      className='flex flex-col gap-5'
+    >
       <h1 className='text-center text-2xl font-bold'>
         Tell us what you need done
       </h1>
@@ -403,7 +411,7 @@ const JobForm: FC<IProps> = ({ user }) => {
           </Button>
         </div>
       </Form>
-    </div>
+    </motion.div>
   );
 };
 export default JobForm;

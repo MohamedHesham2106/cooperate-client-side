@@ -1,5 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
+import { Fragment } from 'react';
 
 import JobForm from '../../../../components/Forms/Job Forms/JobForm';
 import Container from '../../../../components/UI/Container';
@@ -10,9 +12,26 @@ interface IProps {
 }
 const JobPost: NextPage<IProps> = ({ user }) => {
   return (
-    <Container className='md:w-9/12 w-11/12 mx-auto my-24 p-5 '>
-      <JobForm user={user} />
-    </Container>
+    <Fragment>
+      <Head>
+        <title>
+          COO/RATE Job Posting | Post Your Job and Get Matched with Top
+          Freelancers
+        </title>
+        <meta
+          name='description'
+          content='COO/RATE Job Posting allows you to post your job and get matched with top freelancers. Describe your project and requirements, set a budget, and receive proposals from qualified freelancers. Sign up for free today!'
+        />
+        <meta
+          name='keywords'
+          content='COO/RATE Job Posting, post a job, job description, job requirements, budget, proposals, freelancers'
+        />
+      </Head>
+
+      <Container className='md:w-9/12 w-11/12 mx-auto my-24 p-5 '>
+        <JobForm user={user} />
+      </Container>
+    </Fragment>
   );
 };
 export const getServerSideProps: GetServerSideProps = async ({

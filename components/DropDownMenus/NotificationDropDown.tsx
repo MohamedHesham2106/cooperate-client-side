@@ -22,7 +22,7 @@ const NotificationDropDown: FC = () => {
   return (
     <div className='relative' ref={menuRef}>
       <div
-        className=' w-12 h-12 flex items-center justify-center rounded cursor-pointer'
+        className=' p-0.5 flex items-center justify-center rounded-full cursor-pointer hover:ring-2 hover:ring-gray-200 focus:outline-none focus:shadow-outline'
         onClick={() => setShowDropDown(!showDropDown)}
       >
         <HiOutlineBell size={30} />

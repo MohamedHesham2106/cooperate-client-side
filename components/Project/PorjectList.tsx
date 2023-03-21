@@ -32,7 +32,7 @@ const ProjectList: FC<IProps> = ({ projects, user }) => {
   });
 
   return (
-    <Container className='flex flex-wrap md:w-4/6'>
+    <Container className='flex flex-wrap w-full lg:w-5/6'>
       {sortedProjects &&
         sortedProjects.length > 0 &&
         sortedProjects.map((project: IProject) => (

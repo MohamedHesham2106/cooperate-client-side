@@ -26,8 +26,8 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
   }, [router.query]);
 
   return (
-    <div className='grid grid-cols-[2fr_5fr] p-1'>
-      <ul className='flex flex-col'>
+    <div className='grid grid-cols-1 w-full md:grid-cols-[2fr_5fr] p-1'>
+      <ul className='md:flex md:flex-col grid grid-cols-3 gap-1 p-2 '>
         <li>
           <Link
             href={{
@@ -38,7 +38,7 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             scroll={false}
             className={` ${
               openTab === 1 ? 'bg-blue-500 text-white' : 'text-black'
-            } inline-block px-4 py-2  shadow  w-full cursor-pointer hover:bg-blue-500 hover:text-white`}
+            } inline-block px-4 py-2 text-sm md:text-base  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white`}
           >
             Contact Information
           </Link>
@@ -53,7 +53,7 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             scroll={false}
             className={` ${
               openTab === 2 ? 'bg-blue-500 text-white' : 'text-black'
-            } inline-block px-4 py-2  shadow  w-full cursor-pointer hover:bg-blue-500 hover:text-white`}
+            } inline-block px-4 py-2  shadow text-sm md:text-base  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white`}
           >
             Password &amp; Security
           </Link>
@@ -68,13 +68,13 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             prefetch={false}
             className={` ${
               openTab === 3 ? 'bg-blue-500 text-white' : 'text-black'
-            } inline-block px-4 py-2  shadow  w-full cursor-pointer hover:bg-blue-500 hover:text-white`}
+            } inline-block px-4 py-2  shadow text-sm md:text-base  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white`}
           >
             Skills &amp; Categories
           </Link>
         </li>
       </ul>
-      <div className='p-3 bg-white border-l'>
+      <div className='p-3 bg-white md:border-l'>
         <div className={openTab === 1 ? 'block' : 'hidden'}>
           <ContactInfo user={user} />
         </div>

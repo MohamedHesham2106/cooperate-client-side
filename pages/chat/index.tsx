@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
-import { useState } from 'react';
+import Head from 'next/head';
+import { Fragment, useState } from 'react';
 
 import Chat from '../../components/Chat/Chat';
 import ChatNameList from '../../components/Chat/ChatNameList';
@@ -33,26 +34,40 @@ const Conversation: NextPage<IProps> = ({
   );
 
   return (
-    <Container className='h-[85vh] w-full px-5 mx-auto my-24 rounded-l-3xl shadow grid md:grid-cols-[2fr_5fr] grid-cols-[1fr_5fr]'>
-      <div className='border-y border-l rounded-l-3xl '>
-        {receiverIds && (
-          <ChatNameList receiverIds={receiverIds} onClick={handleNameClick} />
-        )}
-      </div>
-
-      {conversationToRender ? (
-        <Chat
-          chats={conversationToRender.chat}
-          conversation={conversationToRender}
-          senderId={senderId}
-          receiverId={clickedNameId}
+    <Fragment>
+      <Head>
+        <title>
+          COO/RATE Chat | Connect with Freelancers and Clients in Real-Time
+        </title>
+        <meta
+          name='description'
+          content='COO/RATE Chat is a powerful communication tool that allows freelancers and clients to collaborate in real-time. Stay connected with your team and get your work done faster. Sign up for free today!'
         />
-      ) : (
-        <div className='text-center text-gray-400 py-5 px-2 border border-l-0'>
-          Select a conversation to start chatting
+        <meta
+          name='keywords'
+          content='COO/RATE Chat, freelancing communication tool, real-time chat, collaboration tool, team communication, project management'
+        />
+      </Head>
+      <Container className='h-[85vh] w-full px-5 mx-auto my-24 rounded-l-3xl shadow grid md:grid-cols-[2fr_5fr] grid-cols-[1fr_5fr]'>
+        <div className='border-y border-l rounded-l-3xl '>
+          {receiverIds && (
+            <ChatNameList receiverIds={receiverIds} onClick={handleNameClick} />
+          )}
         </div>
-      )}
-    </Container>
+
+        {conversationToRender ? (
+          <Chat
+            conversation={conversationToRender}
+            senderId={senderId}
+            receiverId={clickedNameId}
+          />
+        ) : (
+          <div className='text-center text-gray-400 py-5 px-2 border border-l-0'>
+            Select a conversation to start chatting
+          </div>
+        )}
+      </Container>
+    </Fragment>
   );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {

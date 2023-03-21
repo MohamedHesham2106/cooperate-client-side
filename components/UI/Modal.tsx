@@ -47,8 +47,8 @@ const Overlay: FC<IOverlay> = ({ children, className, tall }) => {
     <div
       className={` ${
         tall
-          ? 'top-0 min-h-screen max-h-screen right-0 overflow-y-auto fixed bg-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-50 animate-[slide-down_300ms_ease-out_forwards] p-4 rounded-tl-lg rounded-bl-lg md:w-[45rem] '
-          : 'top-[20vh] max-h-screen overflow-y-auto fixed w-[90%] bg-[white] shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-50 animate-[slide-down_300ms_ease-out_forwards] p-4 rounded-lg left-[5%] md:w-[45rem] md:left-[calc(50%_-_22.5rem)]'
+          ? 'top-0 min-h-screen max-h-screen right-0 overflow-y-auto fixed bg-white shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-50 animate-[slide-right_200ms_ease-out_forwards]   p-4 lg:rounded-tl-lg rounded-bl-lg lg:w-[45rem] w-full '
+          : 'top-[20vh] max-h-screen overflow-y-auto fixed w-[90%] bg-[white] shadow-[0_2px_8px_rgba(0,0,0,0.25)] z-50 animate-[slide-down_200ms_ease-out_forwards] p-4 rounded-lg left-[5%] md:w-[45rem] md:left-[calc(50%_-_22.5rem)]'
       }  `}
       onClick={(e) => e.stopPropagation()}
     >

@@ -1,6 +1,6 @@
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { FaRegSmile } from 'react-icons/fa';
 
 import ChatBubbles from './ChatBubbles';
@@ -9,23 +9,29 @@ import Form from '../UI/Form';
 import Input from '../UI/Input';
 import { useSocket } from '../../context/SocketContext';
 import axiosInstance from '../../utils/axios';
+
 interface IProps {
-  chats: IChat[];
   senderId: string;
   receiverId: string;
   conversation: IConversation;
 }
-const Chat: FC<IProps> = ({ chats, senderId, receiverId, conversation }) => {
+
+const Chat: FC<IProps> = ({ senderId, receiverId, conversation }) => {
   const [sender, setSender] = useState<IUser>();
   const [receiver, setReceiver] = useState<IUser>();
   const [message, setMessage] = useState<string>('');
-  const [chat, setChat] = useState<IChat[]>(
-    chats && chats.filter((chat) => chat.message)
-  );
+  const [chat, setChat] = useState<IChat[]>([]);
   const { socket } = useSocket();
   const [showPicker, setShowPicker] = useState(false);
   const chatBubbleRef = useRef<HTMLDivElement>(null);
   const conversationId = conversation?._id;
+
+  const fetchMessages = useCallback(async () => {
+    const chats = (await axiosInstance.get(`/api/chat/${conversationId}`)).data
+      .messages;
+    chats && setChat(chats.filter((chat: IChat) => chat.message));
+  }, [conversationId]);
+
   useEffect(() => {
     console.log('Component mounted');
 
@@ -35,9 +41,15 @@ const Chat: FC<IProps> = ({ chats, senderId, receiverId, conversation }) => {
     }
 
     const handleNewMessage = (data: IChat) => {
-      //console.log('Received new message', data);
+      console.log('Received new message', data);
       setChat((prevChat) => [...prevChat, data]);
     };
+
+    socket &&
+      socket.on('connect', () => {
+        console.log('Socket connected');
+        fetchMessages();
+      });
 
     socket && socket.on('newMessage', handleNewMessage);
 
@@ -45,7 +57,8 @@ const Chat: FC<IProps> = ({ chats, senderId, receiverId, conversation }) => {
       socket?.emit('leaveRoom', `conversation-${conversationId}`);
       socket?.off('newMessage', handleNewMessage);
     };
-  }, [conversationId, socket]);
+  }, [conversationId, fetchMessages, socket]);
+
   useEffect(() => {
     const getUsers = async () => {
       const [senderRes, receiverRes] = await Promise.all([
@@ -55,8 +68,9 @@ const Chat: FC<IProps> = ({ chats, senderId, receiverId, conversation }) => {
       setSender(senderRes.data.user);
       setReceiver(receiverRes.data.user);
     };
+    fetchMessages();
     getUsers();
-  }, [receiverId, senderId]);
+  }, [conversationId, fetchMessages, receiverId, senderId]);
 
   useEffect(() => {
     if (chatBubbleRef.current !== null) {
@@ -75,12 +89,8 @@ const Chat: FC<IProps> = ({ chats, senderId, receiverId, conversation }) => {
     event.preventDefault();
 
     try {
-      const response = await axiosInstance.post(`/api/chat/${conversationId}`, {
-        sender_id: senderId,
-        message: message,
-      });
+      socket?.emit('sendMessage', { conversationId, message, senderId });
       clearChange();
-      setChat([...chat, response.data.chat]);
       chatBubbleRef.current?.scrollTo(0, chatBubbleRef.current?.scrollHeight);
     } catch (error) {
       console.error(error);

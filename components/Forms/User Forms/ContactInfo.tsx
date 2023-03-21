@@ -102,7 +102,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
 
   return (
     <div className='p-1 flex flex-col gap-2'>
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-2 items-center justify-center md:justify-start pl-8 md:pl-0  w-full'>
         <h2 className='text-2xl font-semibold'>Contact Information</h2>
         <span
           className={`px-4 py-1 font-bold mt-1  text-sm rounded-full ${
@@ -115,7 +115,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         </span>
       </div>
 
-      <span className='w-1/2 border-t-2 border-black my-2 '></span>
+      <span className='md:w-1/2 w-full border-t-2 border-black my-2 '></span>
       <Form OnSubmit={submitHandler}>
         <div className='grid gap-6 mb-6 lg:grid-cols-2'>
           <div className='flex flex-col gap-1'>
@@ -232,8 +232,8 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           </div>
         )}
 
-        <div className='flex justify-end'>
-          <Button type='submit' width='w-1/3'>
+        <div className='flex justify-end '>
+          <Button type='submit' width='md:w-1/3 w-full'>
             Update Information
           </Button>
         </div>

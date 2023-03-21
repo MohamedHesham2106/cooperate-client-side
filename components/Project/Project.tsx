@@ -1,9 +1,11 @@
-import { FC, MouseEvent, useEffect, useState } from 'react';
+import { FC, MouseEvent, useEffect, useMemo, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
 import 'react-circular-progressbar/dist/styles.css';
 
 import { getTimeDifference } from '../../utils/date';
+import { fadeIn } from '../../utils/variants';
+import { motion } from 'framer-motion';
 
 interface IProps {
   project: IProject;
@@ -26,9 +28,13 @@ const Project: FC<IProps> = ({ project, onClick, ModalHandler }) => {
     (project.milestone.filter((m) => m.status === 'Complete').length /
       project.milestone.length) *
     100;
-
+  const variants = useMemo(() => fadeIn('up', 0.5), []);
   return (
-    <div
+    <motion.div
+      variants={variants}
+      initial='hidden'
+      whileInView='show'
+      viewport={{ once: false, amount: 0.3 }}
       className='flex flex-col w-full my-3 p-4 gap-3 border border-gray-200 rounded-3xl shadow-md cursor-pointer'
       onClick={handleClick}
       onMouseDown={showModalHandler}
@@ -45,7 +51,7 @@ const Project: FC<IProps> = ({ project, onClick, ModalHandler }) => {
               styles={{
                 path: { stroke: '#3b82f6' },
                 text: {
-                  fontSize: '1.5rem',
+                  fontSize: '1.2rem',
                   fill: '#000',
                   fontWeight: '600',
                 },
@@ -83,7 +89,7 @@ const Project: FC<IProps> = ({ project, onClick, ModalHandler }) => {
 
         <span className='text-gray-400 text-xs'>{createdAt}</span>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

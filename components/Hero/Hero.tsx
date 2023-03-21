@@ -1,44 +1,59 @@
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
-import Button from '../UI/Button';
-import Container from '../UI/Container';
+import { fadeIn } from '../../utils/variants';
 
 const Hero: FC = () => {
+  const variants = useMemo(() => fadeIn('down', 0.5), []);
   return (
-    <Container className='relative h-[90vh] mt-16 p-6 flex items-center overflow-hidden bg-gray-900'>
-      <div className=' relative flex px-6 pt-12'>
-        <div className='relative flex flex-col w-full'>
-          <h1 className='flex flex-col text-3xl font-semibold leading-none text-white uppercase font-bebas-neue sm:text-5xl '>
-            <span>Hire the best freelancers for any job, online.</span>
-          </h1>
-          <span className='w-24 h-1.5 my-5 sm:my-8 bg-orange-400 sm:block'></span>
-          <p className='text-sm mt-2 text-white lg:text-lg'>
-            Discover the Talent You Need, Today Find and hire top-quality
-            freelancers for your next project with ease. you'll find the
-            expertise you need to get the job done right.
-          </p>
-          <Button className='flex mt-8'>
-            <Link
-              href='/signup'
-              className='text-xs font-medium sm:text-base px-4 py-2 mr-4 text-white uppercase bg-blue-500 border-2 border-transparent rounded-full text-md hover:bg-blue-400'
-            >
-              Get Started
-            </Link>
-          </Button>
-        </div>
-        <div className='relative hidden sm:hidden xs:flex lg:flex lg:justify-end'>
-          <Image
-            src='/images/sapiens.svg'
-            width={750}
-            height={750}
-            alt='Cooperate Hero'
-            priority
-          />
+    <motion.div
+      variants={variants}
+      initial='hidden'
+      whileInView='show'
+      viewport={{ once: false, amount: 0.5 }}
+      className='bg-white'
+    >
+      <div className='relative px-6  lg:px-8'>
+        <div className='flex items-center w-full pt-48 pb-16 px-2'>
+          <div className='text-start'>
+            <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl font-serif'>
+              Hire the best freelancers for any job, online
+            </h1>
+            <p className='mt-6 text-lg leading-8 text-gray-600'>
+              Discover the Talent You Need, Today Find and hire top-quality
+              freelancers for your next project with ease. you'll find the
+              expertise you need to get the job done right.
+            </p>
+            <div className='mt-10 flex items-center justify-start gap-x-6'>
+              <Link
+                href='/signup'
+                className='rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500'
+              >
+                Get started
+              </Link>
+              <Link
+                href='#'
+                className='text-sm font-semibold leading-6 text-gray-900'
+              >
+                Learn more <span aria-hidden='true'>→</span>
+              </Link>
+            </div>
+          </div>
+          <div className='relative hidden sm:hidden xs:flex lg:flex lg:justify-end'>
+            <Image
+              src='/images/sapiens.svg'
+              width={750}
+              height={750}
+              alt='Cooperate Hero'
+              priority
+              className='relative'
+            />
+          </div>
         </div>
       </div>
-    </Container>
+    </motion.div>
   );
 };
 

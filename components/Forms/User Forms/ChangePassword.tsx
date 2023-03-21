@@ -83,9 +83,11 @@ const ChangePassword: FC<IProps> = ({ user }) => {
 
   return (
     <div className='p-1 flex flex-col gap-2'>
-      <h2 className='text-2xl font-semibold'>Change Password</h2>
+      <h2 className='text-2xl font-semibold w-full text-center md:text-start'>
+        Change Password
+      </h2>
 
-      <span className='w-1/2 border-t-2 border-black my-2 '></span>
+      <span className='md:w-1/2 w-full border-t-2 border-black my-2 '></span>
       <Form OnSubmit={submitHandler}>
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label

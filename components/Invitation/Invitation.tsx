@@ -9,20 +9,25 @@ import { getTimeDifference } from '../../utils/date';
 import { fadeIn } from '../../utils/variants';
 
 interface IProps {
-  proposal: IProposal['proposal'];
-  onClick: (proposal: IProposal['proposal']) => void;
+  invitation: IInvitation['invitation'];
+  onClick: (proposal: IInvitation['invitation']) => void;
   ModalHandler: (event: MouseEvent<HTMLDivElement>) => void;
   offset: string;
 }
-const Proposal: FC<IProps> = ({ proposal, offset, onClick, ModalHandler }) => {
+const Invitation: FC<IProps> = ({
+  invitation,
+  onClick,
+  ModalHandler,
+  offset,
+}) => {
   const [createdAt, setCreatedAt] = useState<string | undefined>();
   const variants = useMemo(() => fadeIn('right', Number(offset)), [offset]);
   useEffect(() => {
-    setCreatedAt(getTimeDifference(new Date(proposal.createdAt).getTime()));
-  }, [proposal.createdAt]);
+    setCreatedAt(getTimeDifference(new Date(invitation.createdAt).getTime()));
+  }, [invitation.createdAt]);
 
   const handleClick = () => {
-    onClick(proposal);
+    onClick(invitation);
   };
   const showModalHandler = (event: MouseEvent<HTMLDivElement>) => {
     ModalHandler(event);
@@ -35,7 +40,7 @@ const Proposal: FC<IProps> = ({ proposal, offset, onClick, ModalHandler }) => {
       .then((res) => res.data);
 
   const { data, isLoading } = useSWR(
-    `/api/user/${proposal.freelancer_id}`,
+    `/api/user/${invitation.client_id}`,
     fetcher
   );
   return (
@@ -49,10 +54,10 @@ const Proposal: FC<IProps> = ({ proposal, offset, onClick, ModalHandler }) => {
           className='flex items-center p-4 bg-white hover:bg-blue-50  rounded-sm  shadow-md border cursor-pointer relative'
           onClick={handleClick}
           onMouseDown={showModalHandler}
-          data-modal-type='proposal'
+          data-modal-type='invitation'
         >
           <span className='text-xs font-bold uppercase px-2 mt-2 mr-2 text-blue-900 bg-blue-200 border rounded-full absolute top-0 right-0'>
-            {proposal.job_id?.title}
+            {invitation.job_id?.title}
           </span>
           <span className='text-xs font-semibold uppercase m-1 py-1 mr-3 text-gray-500 absolute bottom-0 right-0'>
             {createdAt}
@@ -62,7 +67,7 @@ const Proposal: FC<IProps> = ({ proposal, offset, onClick, ModalHandler }) => {
             <h4 className='text-lg font-semibold leading-tight text-gray-900 flex items-center gap-2'>
               <SlEnvolopeLetter /> {data.user.first_name} {data.user.last_name}
             </h4>
-            <p className='text-sm text-gray-600'>sent you a proposal!</p>
+            <p className='text-sm text-gray-600'>sent you an invitation!</p>
           </div>
         </motion.div>
       )}
@@ -70,4 +75,4 @@ const Proposal: FC<IProps> = ({ proposal, offset, onClick, ModalHandler }) => {
   );
 };
 
-export default Proposal;
+export default Invitation;

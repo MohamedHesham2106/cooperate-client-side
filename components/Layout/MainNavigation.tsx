@@ -1,8 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, Fragment, useContext, useEffect, useState } from 'react';
-import { ImUser } from 'react-icons/im';
-import { SlLogout, SlSettings } from 'react-icons/sl';
+import { FC, useContext, useEffect, useState } from 'react';
 
 import NotificationDropDown from '../DropDownMenus/NotificationDropDown';
 import UserDropDown from '../DropDownMenus/UserDropDown';
@@ -55,19 +53,20 @@ const MainNavigation: FC = () => {
         : undefined
     );
   }, []);
-
   return (
     <header
       className={classNames(
-        scrollPosition > 0 ? 'shadow' : 'shadow-none',
-        `transition-shadow fixed top-0 left-0 z-10 w-full bg-white`
+        scrollPosition > 0
+          ? 'shadow bg-white'
+          : 'shadow-none md:bg-transparent bg-white',
+        `transition-shadow fixed top-0 left-0 z-10 w-full `
       )}
     >
-      <nav className='w-full bg-white max-h-16'>
+      <nav className='w-full  max-h-16'>
         <div className='justify-between mx-auto max-w-full md:items-center md:flex md:px-8'>
           <div>
-            <div className='flex items-center h-16 justify-between py-3 md:py-5 md:block'>
-              <div className=' pt-2 h-full flex items-center'>
+            <div className='flex items-center h-16 justify-between py-3 md:py-5 md:block '>
+              <div className=' pt-2 h-full flex items-center '>
                 <Link href='/'>
                   <Image
                     src='/logo.png'
@@ -118,7 +117,7 @@ const MainNavigation: FC = () => {
           </div>
           <div>
             <div
-              className={`flex-1 justify-self-center bg-white pb-3  md:block md:pb-0 md:mt-0  ${
+              className={`flex-1 justify-self-center md:bg-transparent bg-white pb-3  md:block md:pb-0 md:mt-0  ${
                 isOpen ? 'block p-6 shadow-xl' : 'hidden'
               }`}
             >
@@ -139,7 +138,9 @@ const MainNavigation: FC = () => {
                   )}
                   {role === 'freelancer' && (
                     <li className='text-gray-900 hover:text-blue-500 text-center'>
-                      <Link href='#'>Invitations</Link>
+                      <Link href={`/invitation/received/~${tokenPayload?.sub}`}>
+                        Invitations
+                      </Link>
                     </li>
                   )}
                   <li className='text-gray-900 hover:text-blue-500 text-center'>
@@ -166,30 +167,27 @@ const MainNavigation: FC = () => {
                   </Link>
                 )}
                 {isAuth && (
-                  <Fragment>
+                  <div className='pt-6  w-full flex flex-col space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base '>
                     <Link
                       href={userURL}
-                      className='flex items-center justify-center gap-2 text-lg w-full  px-4 py-2 text-center text-white bg-gray-600 rounded-md shadow hover:bg-gray-800'
+                      className='text-gray-900 hover:text-blue-500 text-center'
                     >
-                      <ImUser size={20} className='mb-1' />
                       Profile
                     </Link>
                     <Link
                       href={`${userURL}/settings`}
-                      className='flex items-center justify-center gap-2 text-lg w-full  px-4 py-2 text-center text-white bg-gray-600 rounded-md shadow hover:bg-gray-800'
+                      className='text-gray-900 hover:text-blue-500 text-center'
                     >
-                      <SlSettings />
                       Settings
                     </Link>
                     <Link
                       href='/'
                       onClick={logOutHandler}
-                      className='flex items-center justify-center gap-2 text-lg w-full  px-4 py-2 text-center text-white bg-gray-600 rounded-md shadow hover:bg-gray-800'
+                      className='text-gray-900 hover:text-blue-500 text-center'
                     >
-                      <SlLogout />
                       LogOut
                     </Link>
-                  </Fragment>
+                  </div>
                 )}
                 {!isAuth && (
                   <Link
@@ -212,7 +210,7 @@ const MainNavigation: FC = () => {
               </Link>
             )}
             {isAuth && (
-              <div className='flex md:pr-5 items-center'>
+              <div className='flex md:pr-5 gap-2 items-center'>
                 <NotificationDropDown />
                 <UserDropDown />
               </div>

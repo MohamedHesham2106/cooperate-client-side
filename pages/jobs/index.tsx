@@ -1,11 +1,14 @@
+import { motion } from 'framer-motion';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import JobList from '../../components/Jobs/JobList';
 import Container from '../../components/UI/Container';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
+import { fadeIn } from '../../utils/variants';
 
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];
@@ -65,7 +68,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
       const isChecked = selectedCheckboxes[skill.name];
       return (
         <div key={skill.name} className='ml-5 '>
-          <label className='text-sm flex gap-2'>
+          <label className='md:text-sm text-xs flex gap-2'>
             <input
               type='checkbox'
               checked={isChecked}
@@ -78,8 +81,11 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
     });
 
     return (
-      <div key={category.name} className='flex flex-col p-3'>
-        <label className='text-center font-medium text bg-orange-400 rounded-md p-2 mb-4 text-white'>
+      <div
+        key={category.name}
+        className='flex flex-col p-3 lg:text-base text-sm'
+      >
+        <label className='text-center font-medium text bg-orange-400 rounded-md md:p-2 p-1 mb-4 text-white'>
           {category.name}
         </label>
         {childCheckboxes}
@@ -100,18 +106,47 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
       )
     );
   }
+  const Fvariants = useMemo(() => fadeIn('right', 0.5), []);
+  const Svariants = useMemo(() => fadeIn('left', 0.5), []);
   return (
-    <Container className='mt-24 p-5 grid grid-cols-[1fr_4fr] gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
-      <section className=' border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow relative'>
-        <h2 className='font-medium text-lg text-center p-2 rounded-t-lg  bg-blue-500 text-white sticky top-0'>
-          Filter Jobs
-        </h2>
-        {parentCheckboxes}
-      </section>
-      <section className='border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'>
-        <JobList jobs={filteredJobs} isFreelancer={isFreelancer} />
-      </section>
-    </Container>
+    <Fragment>
+      <Head>
+        <title>
+          COO/RATE | All Jobs Posted - Freelance Projects in Your Field
+        </title>
+        <meta
+          name='description'
+          content='Find the latest freelance projects in your field on COO/RATE. Browse all jobs posted by high-quality clients and start working on your next project today.'
+        />
+        <meta
+          name='keywords'
+          content='COO/RATE, freelance, jobs, projects, clients'
+        />
+      </Head>
+      <Container className='mt-24 md:p-5 p-1 grid md:grid-cols-[1fr_4fr] grid-cols-[2fr_4fr] gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
+        <motion.section
+          variants={Fvariants}
+          initial='hidden'
+          whileInView='show'
+          viewport={{ once: false, amount: 0.3 }}
+          className=' border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow relative'
+        >
+          <h2 className='font-medium text-sm md:text-lg text-center p-2 rounded-t-lg  bg-blue-500 shadow-md text-white sticky top-0'>
+            Filter Jobs
+          </h2>
+          {parentCheckboxes}
+        </motion.section>
+        <motion.section
+          variants={Svariants}
+          initial='hidden'
+          whileInView='show'
+          viewport={{ once: false, amount: 0.3 }}
+          className='border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
+        >
+          <JobList jobs={filteredJobs} isFreelancer={isFreelancer} />
+        </motion.section>
+      </Container>
+    </Fragment>
   );
 };
 

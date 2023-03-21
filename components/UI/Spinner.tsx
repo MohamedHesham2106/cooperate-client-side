@@ -16,7 +16,7 @@ const Spinner: FC = () => {
         <circle className='back' cx='17' cy='17' r='14'></circle>
         <circle className='front' cx='17' cy='17' r='14'></circle>
       </svg>
-      <div className='text' data-text='COO/RATE'></div>
+      <div className='text' data-text='Loading...'></div>
     </div>
   );
 };
