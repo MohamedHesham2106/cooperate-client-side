@@ -1,7 +1,7 @@
 export const fadeIn = (direction: string, delay: number) => {
   let x = 0;
   let y = 0;
-  
+
   switch (direction) {
     case 'up':
       y = 80;
@@ -16,7 +16,7 @@ export const fadeIn = (direction: string, delay: number) => {
       x = -20;
       break;
   }
-  
+
   return {
     hidden: {
       x,

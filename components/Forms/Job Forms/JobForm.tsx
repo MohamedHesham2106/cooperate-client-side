@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import Multiselect from 'multiselect-react-dropdown';
 import { useRouter } from 'next/router';
 import { FC, useMemo, useState } from 'react';
@@ -10,7 +11,6 @@ import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
 import axiosInstance from '../../../utils/axios';
-import { motion } from 'framer-motion';
 import { fadeIn } from '../../../utils/variants';
 
 type IProps = {
@@ -361,7 +361,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               Payment&apos;s Method
             </h3>
             <div className=' flex gap-2 mt-3'>
-              <div className='w-1/5'>
+              <div className='w-1/5 '>
                 <input
                   className='hidden'
                   type='radio'
@@ -371,7 +371,7 @@ const JobForm: FC<IProps> = ({ user }) => {
                   onChange={handleChange}
                 />
                 <label
-                  className='flex flex-col items-center p-4 border-2 border-gray-400 cursor-pointer'
+                  className='flex flex-col items-center p-4 border-2 rounded-xl border-gray-400 cursor-pointer'
                   htmlFor='paypal'
                 >
                   <BsPaypal size={50} className=' p-2' />
@@ -388,7 +388,7 @@ const JobForm: FC<IProps> = ({ user }) => {
                   onChange={handleChange}
                 />
                 <label
-                  className='flex flex-col p-4 border-2 items-center border-gray-400 cursor-pointer'
+                  className='flex flex-col p-4 border-2 rounded-xl items-center border-gray-400 cursor-pointer'
                   htmlFor='Fawry'
                 >
                   <FawryIcon />

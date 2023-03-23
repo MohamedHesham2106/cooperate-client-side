@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useMemo } from 'react';
 
+import Blob from '../SVG/Blob';
 import { fadeIn } from '../../utils/variants';
 
 const Hero: FC = () => {
@@ -13,15 +14,18 @@ const Hero: FC = () => {
       initial='hidden'
       whileInView='show'
       viewport={{ once: false, amount: 0.5 }}
-      className='bg-white'
+      className='bg-transparent'
     >
-      <div className='relative px-6  lg:px-8'>
-        <div className='flex items-center w-full pt-48 pb-16 px-2'>
+      <div className='relative px-6 pt- lg:px-8'>
+        <div className='absolute right-0 top-0 z-[-1] hidden md:block'>
+          <Blob />
+        </div>
+        <div className='flex items-center w-full pt-44 pb-16 px-2 z-10'>
           <div className='text-start'>
             <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl font-serif'>
               Hire the best freelancers for any job, online
             </h1>
-            <p className='mt-6 text-lg leading-8 text-gray-600'>
+            <p className='mt-6 text-lg leading-8 text-gray-600 '>
               Discover the Talent You Need, Today Find and hire top-quality
               freelancers for your next project with ease. you'll find the
               expertise you need to get the job done right.

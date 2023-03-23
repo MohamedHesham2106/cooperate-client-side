@@ -16,9 +16,15 @@ interface IProps {
   role: 'freelancer' | 'client';
   projectId: string;
   milestones: IMilestone[];
+  isComplete: boolean;
 }
 
-const MilestoneList: FC<IProps> = ({ projectId, milestones = [], role }) => {
+const MilestoneList: FC<IProps> = ({
+  projectId,
+  milestones = [],
+  role,
+  isComplete,
+}) => {
   const [showForm, setShowForm] = useState(false);
   const [newMilestones, setNewMilestones] = useState<IMilestoneInput[]>([]);
   const router = useRouter();
@@ -70,7 +76,7 @@ const MilestoneList: FC<IProps> = ({ projectId, milestones = [], role }) => {
         <div
           className={`grid ${
             role === 'freelancer' ? 'grid-cols-4' : 'grid-cols-3'
-          } items-center justify-between text-center bg-blue-600 font-semibold text-white p-2 capitalize rounded-t-md shadow`}
+          } items-center justify-between text-center bg-gray-800 font-semibold text-white p-2 capitalize rounded-md shadow`}
         >
           <span>Title</span>
           <span>Status</span>
@@ -104,23 +110,27 @@ const MilestoneList: FC<IProps> = ({ projectId, milestones = [], role }) => {
                 </div>
               </div>
             ))}
-          <div className='flex gap-5 justify-between items-center mt-5'>
-            <Button onClick={addMilestone}>Add New Milestone</Button>
-            {newMilestones.length > 0 && (
-              <Button
-                onClick={handleSave}
-                className=' w-full relative inline-flex items-center justify-center p-4 px-6 py-2 overflow-hidden font-medium text-blue-600 transition duration-300 ease-out border-2 border-blue-500 rounded-full shadow-md group'
-              >
-                <span className='absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-500 group-hover:translate-x-0 ease'>
-                  <TiTick size={30} />
-                </span>
-                <span className='absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease'>
-                  Save New Milestones
-                </span>
-                <span className='relative invisible'>Save New Milestones</span>
-              </Button>
-            )}
-          </div>
+          {!isComplete && (
+            <div className='flex gap-5 justify-between items-center mt-5'>
+              <Button onClick={addMilestone}>Add New Milestone</Button>
+              {newMilestones.length > 0 && (
+                <Button
+                  onClick={handleSave}
+                  className=' w-full relative inline-flex items-center justify-center p-4 px-6 py-2 overflow-hidden font-medium text-blue-600 transition duration-300 ease-out border-2 border-blue-500 rounded-full shadow-md group'
+                >
+                  <span className='absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-500 group-hover:translate-x-0 ease'>
+                    <TiTick size={30} />
+                  </span>
+                  <span className='absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease'>
+                    Save New Milestones
+                  </span>
+                  <span className='relative invisible'>
+                    Save New Milestones
+                  </span>
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

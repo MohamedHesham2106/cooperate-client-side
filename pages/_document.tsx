@@ -12,7 +12,6 @@ export default function Document() {
           name='keywords'
           content='freelancing, web development, design, digital marketing, services'
         />
-       
       </Head>
       <body>
         <div id='overlay'></div>

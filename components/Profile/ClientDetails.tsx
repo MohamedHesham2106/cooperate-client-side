@@ -102,7 +102,6 @@ const ClientDetails: FC<IProps> = ({
           ) : (
             <JobList
               jobs={jobs}
-              user={user}
               isSameRole={isSameRole}
               isOwnProfile={isOwnProfile}
               isFreelancer={isFreelancer}

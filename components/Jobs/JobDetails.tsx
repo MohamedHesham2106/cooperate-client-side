@@ -87,7 +87,9 @@ const JobDetails: FC<IProps> = ({
           <Container className='flex flex-col min-h-[85vh] justify-between'>
             <div className='flex flex-col gap-2'>
               <div className='flex items-center justify-between'>
-                <h1 className='font-normal text-3xl'>{data?.job.title}</h1>
+                <h1 className='font-normal text-3xl capitalize'>
+                  {data?.job.title}
+                </h1>
                 <button
                   onClick={onClose}
                   type='button'
@@ -144,7 +146,7 @@ const JobDetails: FC<IProps> = ({
                       <span
                         key={skill._id}
                         title={skill.name}
-                        className='px-4 py-2  text-sm rounded-3xl text-blue-600 font-medium bg-blue-200 '
+                        className='px-4 py-2  text-sm rounded-3xl text-blue-600 shadow font-medium bg-blue-200 '
                       >
                         {skill.name}
                       </span>

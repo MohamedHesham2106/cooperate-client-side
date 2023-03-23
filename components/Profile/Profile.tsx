@@ -4,7 +4,6 @@ import { FC, MouseEvent, ReactNode } from 'react';
 import { BiMap } from 'react-icons/bi';
 import { BsBuilding } from 'react-icons/bs';
 
-import Rating from './Rating';
 import Button from '../UI/Button';
 interface IProps {
   isOwnProfile: boolean;
@@ -64,24 +63,35 @@ const Profile: FC<IProps> = ({
         }  `}
       >
         <div>
-          <div className='w-24 h-24 bg-indigo-100 ring-offset-base-100 ring-offset-4 ring ring-blue-500  rounded-full shadow-2xl  inset-x-0   flex items-center justify-center text-indigo-500'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-20 w-20'
-              viewBox='0 0 20 20'
-              fill='currentColor'
-            >
-              <path
-                fillRule='evenodd'
-                d='M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z'
-                clipRule='evenodd'
+          <div className='h-32 w-32 mb-4 lg:mb-0 mr-4 bg-indigo-100 ring-offset-base-100 ring-offset-4 ring ring-blue-500  rounded-full shadow-2xl  inset-x-0   flex items-center justify-center text-indigo-500'>
+            {!user.imageUrl ? (
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-full w-full rounded-full overflow-hidden shadow'
+                viewBox='0 0 20 20'
+                fill='currentColor'
+              >
+                <path
+                  fillRule='evenodd'
+                  d='M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z'
+                  clipRule='evenodd'
+                />
+              </svg>
+            ) : (
+              <Image
+                height={300}
+                width={300}
+                alt='profile'
+                className='h-full w-full rounded-full overflow-hidden shadow'
+                src={user.imageUrl}
               />
-            </svg>
+            )}
+
             {isOwnProfile && (
               <button
                 onClick={ModalHandler}
                 data-modal-type='profile'
-                className='w-24 h-24 group  hover:bg-gray-200 opacity-70 rounded-full absolute flex justify-center items-center cursor-pointer transition duration-500'
+                className='h-32 w-32 rounded-full overflow-hidden shadow group  hover:bg-gray-200 opacity-70  absolute flex justify-center items-center cursor-pointer transition duration-500'
               >
                 <Image
                   className='hidden group-hover:block w-10'
@@ -96,7 +106,7 @@ const Profile: FC<IProps> = ({
         </div>
         <div className={nameStyle}>
           <div className='capitalize text-2xl font-normal '>
-            {first_name} {last_name}
+            {first_name} {last_name?.charAt(0)}.
           </div>
           <div className='flex gap-2 justify-center md:justify-start'>
             {company_name && <BsBuilding />}
@@ -126,7 +136,7 @@ const Profile: FC<IProps> = ({
             </span>
           </div>
           <div className='flex items-center justify-center md:justify-start last:'>
-            <Rating />
+            {/* <Rating /> */}
           </div>
         </div>
         {!isOwnProfile && !isSameRole && isFreelancer === 'client' && (

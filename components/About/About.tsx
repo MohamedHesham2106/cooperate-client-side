@@ -8,7 +8,7 @@ import { fadeIn } from '../../utils/variants';
 const About: FC = () => {
   const variants = useMemo(() => fadeIn('down', 0.7), []);
   return (
-    <Container className='relative w-full  p-4 px-12 mx-auto  bg-white  sm:px-6 lg:px-8 mb-5  md:drop-shadow-xl'>
+    <Container className='relative w-full  p-4 px-12 mx-auto  bg-white  sm:px-6 lg:px-8 mb-5'>
       <motion.div
         variants={variants}
         initial='hidden'

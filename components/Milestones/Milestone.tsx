@@ -41,7 +41,7 @@ const Milestone: FC<IProps> = ({ milestone, role }) => {
     <div
       className={`grid ${
         role === 'freelancer' ? 'grid-cols-4' : 'grid-cols-3'
-      } text-sm capitalize items-center justify-between text-center bg-blue-300 p-2  rounded-md shadow `}
+      } text-sm capitalize items-center justify-between text-center bg-blue-400 text-white p-2  rounded-lg shadow `}
     >
       <span>{milestone.title}</span>
       <span>{milestone.status}</span>

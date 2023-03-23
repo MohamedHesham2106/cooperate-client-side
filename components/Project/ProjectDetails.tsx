@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
   FC,
@@ -11,6 +12,7 @@ import toast from 'react-hot-toast';
 import { BsChat } from 'react-icons/bs';
 import { HiOutlineDownload } from 'react-icons/hi';
 import { ImCross } from 'react-icons/im';
+import { IoIosArrowForward } from 'react-icons/io';
 
 import MilestoneList from '../Milestones/MilestoneList';
 import Button from '../UI/Button';
@@ -19,7 +21,6 @@ import { AuthContext } from '../../context/AuthContext';
 import axiosInstance from '../../utils/axios';
 import { getCookie, getPayloadFromToken } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
-import { IoIosArrowForward } from 'react-icons/io';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
@@ -166,12 +167,12 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               <Button
                 onClick={createChatHandler}
                 type='button'
-                className='relative w-2/5 inline-flex items-center justify-center p-4 px-5 py-1 overflow-hidden font-medium text-blue-600 transition duration-300 ease-out border-2 border-blue-500 rounded-full shadow-md group'
+                className='relative w-2/5 inline-flex items-center justify-center p-4 px-5 py-1 overflow-hidden font-medium text-blue-600 transition duration-300 ease-out border-2 border-blue-400 rounded-full shadow-md group'
               >
-                <span className='absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-500 group-hover:translate-x-0 ease'>
+                <span className='absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-400 group-hover:translate-x-0 ease'>
                   <BsChat size={15} />
                 </span>
-                <span className='absolute flex items-center justify-center w-full h-full text-blue-500 transition-all duration-300 transform group-hover:translate-x-full ease'>
+                <span className='absolute flex items-center justify-center w-full h-full text-blue-400 transition-all duration-300 transform group-hover:translate-x-full ease'>
                   Chat
                 </span>
                 <span className='relative invisible'>Chat</span>
@@ -186,10 +187,16 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
             </button>
           </div>
 
-          <section className='shadow-md flex items-center justify-between p-5 rounded-md bg-blue-200'>
+          <section className='shadow-md flex items-center justify-between p-5 rounded-md border-2 text-gray-700'>
             <div className='flex items-center gap-2'>
-              <h4 className='text-base'>Status:</h4>
-              <div className='rounded-full border text-sm bg-white py-1 px-2 shadow border-orange-400'>
+              <h4 className='text-lg font-bold'>Status:</h4>
+              <div
+                className={`rounded-full border text-sm text-white py-1 px-2 shadow font-bold ${
+                  project.project_status === 'Complete'
+                    ? 'bg-green-400 '
+                    : 'bg-blue-500'
+                }`}
+              >
                 {project.project_status}
               </div>
             </div>
@@ -198,16 +205,16 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                 <Button
                   type='button'
                   onClick={handleCompletion}
-                  className='text-orange-500 bg-orange-200 hover:bg-orange-400 hover:text-white focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-5 py-2.5 text-center'
+                  className='text-white bg-blue-400 hover:bg-blue-600  focus:outline-none focus:ring-4  font-medium rounded-full text-sm px-5 py-2.5 text-center'
                 >
                   Mark as Complete
                 </Button>
               </div>
             )}
           </section>
-          <section className='shadow-md flex flex-col gap-5 justify-between p-5 rounded-md bg-blue-200'>
+          <section className='shadow-md flex flex-col gap-5 justify-between p-5 rounded-md border-2'>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-lg font-semibold'>Description</h3>
+              <h3 className='text-2xl text-gray-700 font-bold'>Description</h3>
               <p className='whitespace-pre-wrap'>
                 {showFullDescription
                   ? project.job.description
@@ -215,7 +222,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                 {shouldShowMore && (
                   <Button
                     type='button'
-                    className='text-orange-500 hover:text-orange-700 focus:outline-none'
+                    className='text-blue-500 hover:text-blue-700 focus:outline-none'
                     onClick={toggleDescription}
                   >
                     {showFullDescription ? ' Show less' : ' Show more'}
@@ -225,14 +232,14 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
             </div>
 
             <div className='flex flex-col gap-2'>
-              <h3 className='text-base font-semibold'>
+              <h3 className='text-xl text-gray-700  font-bold'>
                 Skills &amp; Expertise
               </h3>
               <div className='flex gap-2 items-center'>
                 {project.job.skills?.map((skill: ISkill) => (
                   <span
                     key={skill._id}
-                    className='px-4 py-2 flex text-center shadow text-xs rounded-3xl text-orange-500 font-semibold bg-orange-200 '
+                    className='px-4 py-2 flex text-center shadow text-xs rounded-md text-white font-semibold bg-blue-500 '
                   >
                     {skill.name}
                   </span>
@@ -240,13 +247,13 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               </div>
             </div>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-lg font-semibold'>Attachments</h3>
+              <h3 className='text-lg font-bold text-gray-800 '>Attachments</h3>
               {role && role === 'freelancer' && (
                 <div className='mt-5 rounded-sm flex items-center flex-col justify-center'>
                   <div
                     onDragOver={handleOndragOver}
                     onDrop={handleOndrop}
-                    className='h-24 w-4/5 bg-white overflow-hidden relative border-2 items-center rounded-sm cursor-pointer   border-orange-300 border-dotted'
+                    className='h-24 w-4/5 bg-white overflow-hidden relative border-2 items-center rounded-sm cursor-pointer   border-gray-300 border-dotted'
                   >
                     <input
                       type='file'
@@ -281,13 +288,15 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                   </div>
                   <div className='flex flex-wrap gap-2 mt-2 w-4/5'>
                     {file && (
-                      <div className='w-full h-16 flex items-center justify-between rounded p-3 bg-orange-200 shadow'>
+                      <div className='w-full h-16 flex items-center justify-between rounded p-3 bg-gray-700 shadow'>
                         <div className='flex flex-row items-center gap-2'>
-                          <span className='truncate w-44'>{file.name}</span>
+                          <span className='truncate w-44 text-white'>
+                            {file.name}
+                          </span>
                         </div>
                         <div
                           onClick={removeImage}
-                          className='h-6 w-6 bg-red-500 flex items-center cursor-pointer justify-center rounded-sm'
+                          className='h-6 w-6 bg-red-500 hover:bg-red-700 flex items-center cursor-pointer justify-center rounded-sm'
                         >
                           <ImCross color='#fff' />
                         </div>
@@ -300,7 +309,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               {role === 'client' && (
                 <Button
                   type='button'
-                  className='text-white bg-orange-600 focus:outline-none focus:ring-4  font-medium rounded-md text-sm px-5 py-2.5 text-center'
+                  className='text-white bg-gray-800 focus:outline-none focus:ring-4  font-medium rounded-md text-sm px-5 py-2.5 text-center'
                   disabled={!file}
                 >
                   {file ? (
@@ -318,15 +327,25 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               )}
             </div>
           </section>
-          <section className='shadow-md flex flex-col gap-5  p-5 rounded-md bg-blue-200'>
-            <h3 className='text-lg font-semibold'>Milestone</h3>
+          <section className='shadow-md flex flex-col gap-5  p-5 rounded-md border-2 '>
+            <h3 className='text-xl font-bold'>Milestone</h3>
 
             <MilestoneList
+              isComplete={project.project_status === 'Complete'}
               role={role}
               milestones={project.milestone}
               projectId={project._id}
             />
           </section>
+          {project?.project_status === 'Complete' && (
+            <Link
+              href={`/feedback/~${project._id}`}
+              className='rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-orange-600 active:shadow-none shadow-lg bg-gradient-to-tr from-orange-600 to-orange-500 border-orange-700 text-white'
+            >
+              <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-full group-hover:h-32 opacity-10'></span>
+              <span className='relative'>Give Feedback</span>
+            </Link>
+          )}
         </Modal>
       )}
     </Fragment>

@@ -3,13 +3,15 @@ import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import { GoSettings } from 'react-icons/go';
 
 import JobList from '../../components/Jobs/JobList';
+import Button from '../../components/UI/Button';
 import Container from '../../components/UI/Container';
+import Modal from '../../components/UI/Modal';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 import { fadeIn } from '../../utils/variants';
-
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];
 }
@@ -38,6 +40,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
         {}
       )
     );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   const handleCheckboxChange = (skill: string) => {
@@ -68,7 +71,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
       const isChecked = selectedCheckboxes[skill.name];
       return (
         <div key={skill.name} className='ml-5 '>
-          <label className='md:text-sm text-xs flex gap-2'>
+          <label className='flex gap-2 text-sm '>
             <input
               type='checkbox'
               checked={isChecked}
@@ -81,14 +84,11 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
     });
 
     return (
-      <div
-        key={category.name}
-        className='flex flex-col p-3 lg:text-base text-sm'
-      >
-        <label className='text-center font-medium text bg-orange-400 rounded-md md:p-2 p-1 mb-4 text-white'>
+      <div key={category.name} className='flex flex-col p-3'>
+        <label className='text-center font-bold text bg-blue-200 rounded-sm md:p-2 p-1 mb-4 text-black'>
           {category.name}
         </label>
-        {childCheckboxes}
+        <div className='grid grid-cols-3'>{childCheckboxes}</div>
       </div>
     );
   });
@@ -106,8 +106,13 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
       )
     );
   }
-  const Fvariants = useMemo(() => fadeIn('right', 0.5), []);
-  const Svariants = useMemo(() => fadeIn('left', 0.5), []);
+  const openModalHandler = () => {
+    setIsModalOpen(true);
+  };
+  const closeModalHandler = () => {
+    setIsModalOpen(false);
+  };
+  const variants = useMemo(() => fadeIn('down', 0.5), []);
   return (
     <Fragment>
       <Head>
@@ -123,21 +128,29 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
           content='COO/RATE, freelance, jobs, projects, clients'
         />
       </Head>
-      <Container className='mt-24 md:p-5 p-1 grid md:grid-cols-[1fr_4fr] grid-cols-[2fr_4fr] gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
-        <motion.section
-          variants={Fvariants}
-          initial='hidden'
-          whileInView='show'
-          viewport={{ once: false, amount: 0.3 }}
-          className=' border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow relative'
-        >
-          <h2 className='font-medium text-sm md:text-lg text-center p-2 rounded-t-lg  bg-blue-500 shadow-md text-white sticky top-0'>
+      {isModalOpen && (
+        <Modal onClose={closeModalHandler} className='' tall>
+          <h2 className='font-black text-sm md:text-3xl text-center p-2 rounded-sm bg-gradient-to-r from-blue-500 to-blue-400 shadow-md text-white'>
             Filter Jobs
           </h2>
           {parentCheckboxes}
-        </motion.section>
+        </Modal>
+      )}
+      <Container className='mt-24 md:p-5 p-1 flex flex-col gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
+        <div className='flex justify-end'>
+          <Button
+            onClick={openModalHandler}
+            className='rounded relative inline-flex font-bold group items-center justify-center px-10 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 border-blue-700 text-white'
+          >
+            <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10'></span>
+            <span className='relative flex gap-2 items-center'>
+              <GoSettings size={20} /> Filter
+            </span>
+          </Button>
+        </div>
+
         <motion.section
-          variants={Svariants}
+          variants={variants}
           initial='hidden'
           whileInView='show'
           viewport={{ once: false, amount: 0.3 }}
@@ -158,6 +171,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       (await axiosInstance.get('/api/category')).data,
     ]);
     const payload = getPayloadFromToken(jwt_refresh);
+    if (!payload) {
+      return {
+        props: { jobs: jobs.jobs, categories: categories.categories },
+      };
+    }
     return {
       props: {
         jobs: jobs.jobs,

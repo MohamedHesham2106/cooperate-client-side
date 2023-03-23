@@ -1,9 +1,10 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { Fragment } from 'react';
 
 import About from '../components/About/About';
 import Hero from '../components/Hero/Hero';
-import Head from 'next/head';
+import SkillsList from '../components/Skills/SkillsList';
 const Home: NextPage = () => {
   return (
     <Fragment>
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
       </Head>
       <Hero />
       <About />
+      <SkillsList />
     </Fragment>
   );
 };

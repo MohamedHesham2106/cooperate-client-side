@@ -64,6 +64,7 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
   const removeImage = () => {
     setImage(null);
   };
+  const router = useRouter();
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData();
@@ -82,6 +83,9 @@ const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
               padding: '16px',
             },
           });
+          setTimeout(() => {
+            router.reload();
+          }, 2000);
         })
         .catch((error) => {
           const err = error as IError;

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
@@ -26,7 +27,16 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
   }, [router.query]);
 
   return (
-    <div className='grid grid-cols-1 w-full md:grid-cols-[2fr_5fr] p-1'>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.7 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        duration: 0.6,
+        delay: 0.5,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+      className='grid grid-cols-1 w-full md:grid-cols-[2fr_5fr] p-1'
+    >
       <ul className='md:flex md:flex-col grid grid-cols-3 gap-1 p-2 '>
         <li>
           <Link
@@ -85,7 +95,7 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
           <SkillsAndCategory user={user} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

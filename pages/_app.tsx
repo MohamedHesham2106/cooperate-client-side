@@ -1,5 +1,6 @@
 import { Mulish, Philosopher } from '@next/font/google';
 import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import Router from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -10,7 +11,6 @@ import Layout from '../components/Layout/Layout';
 import Spinner from '../components/UI/Spinner';
 import AuthProvider from '../context/AuthProvider';
 import { SocketProvider } from '../context/SocketContext';
-import Head from 'next/head';
 
 const philosopher = Philosopher({
   subsets: ['latin'],
@@ -19,7 +19,7 @@ const philosopher = Philosopher({
 });
 const muli = Mulish({
   subsets: ['latin'],
-  weight: ['200', '300', '600', '500'],
+  weight: ['200', '300', '600', '500', '600', '700', '800', '900'],
   display: 'swap',
 });
 function MyApp({ Component, pageProps }: AppProps) {

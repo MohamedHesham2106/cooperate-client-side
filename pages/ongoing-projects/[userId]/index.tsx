@@ -31,8 +31,11 @@ const OngoingProjects: NextPage<IProps> = ({ user, projects }) => {
           content='COO/RATE, freelance, ongoing projects, current projects, manage projects, milestones, communication'
         />
       </Head>
-      <Container className='w-full p-5 my-24 flex flex-col  shadow-md items-center rounded-md justify-center gap-10'>
-        <h1 className='text-5xl font-bold  w-full text-center p-5 text-white rounded-md from-blue-600 shadow-md to-blue-400 bg-gradient-to-r font-serif '>
+      <Container className='w-11/12 mx-auto px-4 py-2 my-24 flex flex-col  shadow-md  rounded-md justify-center gap-10 relative'>
+        <h1
+          className='text-5xl bg-size  w-full text-center p-5 bg-cover bg-center text-white rounded-md shadow-md font-black  '
+          style={{ backgroundImage: "url('/images/RectLight.svg')" }}
+        >
           Current Projects
         </h1>
         <ProjectList projects={projects} user={user} />
