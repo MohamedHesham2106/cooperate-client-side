@@ -2,13 +2,14 @@ import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { FaRegSmile } from 'react-icons/fa';
+import useSWR from 'swr';
 
 import ChatBubbles from './ChatBubbles';
 import Button from '../UI/Button';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
 import { useSocket } from '../../context/SocketContext';
-import axiosInstance from '../../utils/axios';
+import axiosInstance, { fetcher } from '../../utils/axios';
 
 interface IProps {
   senderId: string;
@@ -17,60 +18,39 @@ interface IProps {
 }
 
 const Chat: FC<IProps> = ({ senderId, receiverId, conversation }) => {
-  const [sender, setSender] = useState<IUser>();
-  const [receiver, setReceiver] = useState<IUser>();
   const [message, setMessage] = useState<string>('');
   const [chat, setChat] = useState<IChat[]>([]);
   const { socket } = useSocket();
   const [showPicker, setShowPicker] = useState(false);
   const chatBubbleRef = useRef<HTMLDivElement>(null);
-  const conversationId = conversation?._id;
+  const conversationId = conversation._id;
 
   const fetchMessages = useCallback(async () => {
     const chats = (await axiosInstance.get(`/api/chat/${conversationId}`)).data
       .messages;
-    chats && setChat(chats.filter((chat: IChat) => chat.message));
+    chats && setChat(chats.filter((chat: IChat) => chat));
   }, [conversationId]);
 
   useEffect(() => {
-    console.log('Component mounted');
-
     if (conversationId) {
-      console.log(`Joining room conversation-${conversationId}`);
-      socket && socket.emit('joinRoom', `conversation-${conversationId}`);
+      fetchMessages();
+      if (socket) {
+        socket.emit('joinRoom', { conversationId });
+      }
     }
-
-    const handleNewMessage = (data: IChat) => {
-      console.log('Received new message', data);
-      setChat((prevChat) => [...prevChat, data]);
-    };
-
-    socket &&
-      socket.on('connect', () => {
-        console.log('Socket connected');
-        fetchMessages();
-      });
-
-    socket && socket.on('newMessage', handleNewMessage);
-
     return () => {
       socket?.emit('leaveRoom', `conversation-${conversationId}`);
-      socket?.off('newMessage', handleNewMessage);
     };
-  }, [conversationId, fetchMessages, socket]);
+  }, [conversationId, fetchMessages, message, socket]);
 
   useEffect(() => {
-    const getUsers = async () => {
-      const [senderRes, receiverRes] = await Promise.all([
-        axiosInstance.get(`/api/user/${senderId}`),
-        axiosInstance.get(`/api/user/${receiverId}`),
-      ]);
-      setSender(senderRes.data.user);
-      setReceiver(receiverRes.data.user);
-    };
-    fetchMessages();
-    getUsers();
-  }, [conversationId, fetchMessages, receiverId, senderId]);
+    if (socket) {
+      socket.on('newMessage', (data: IChat) => setChat([...chat, data]));
+    }
+  }, [socket, chat]);
+
+  const { data: sender } = useSWR(`/api/user/${senderId}`, fetcher);
+  const { data: receiver } = useSWR(`/api/user/${receiverId}`, fetcher);
 
   useEffect(() => {
     if (chatBubbleRef.current !== null) {
@@ -106,18 +86,18 @@ const Chat: FC<IProps> = ({ senderId, receiverId, conversation }) => {
         >
           {sender &&
             receiver &&
-            chat?.map((message: IChat) => (
+            chat.map((message: IChat) => (
               <ChatBubbles
                 key={message._id}
                 message={message.message}
                 name={
                   message.sender_id === senderId
-                    ? `${sender?.first_name?.charAt(
+                    ? `${sender.user?.first_name?.charAt(
                         0
-                      )}${sender?.last_name?.charAt(0)}`
-                    : `${receiver?.first_name?.charAt(
+                      )}${sender.user?.last_name?.charAt(0)}`
+                    : `${receiver.user?.first_name?.charAt(
                         0
-                      )}${receiver?.last_name?.charAt(0)}`
+                      )}${receiver.user?.last_name?.charAt(0)}`
                 }
                 isOwn={message.sender_id === senderId}
                 createdAt={message.createdAt}
