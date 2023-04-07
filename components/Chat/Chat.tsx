@@ -1,72 +1,63 @@
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import { AiOutlineSend } from 'react-icons/ai';
 import { FaRegSmile } from 'react-icons/fa';
 import useSWR from 'swr';
 
 import ChatBubbles from './ChatBubbles';
-import Button from '../UI/Button';
-import Form from '../UI/Form';
-import Input from '../UI/Input';
 import { useSocket } from '../../context/SocketContext';
-import axiosInstance, { fetcher } from '../../utils/axios';
+import { fetcher } from '../../utils/axios';
 
 interface IProps {
-  senderId: string;
-  receiverId: string;
+  sender: IUser;
   conversation: IConversation;
+  chats: IChat[];
+  receiverId?: string;
 }
 
-const Chat: FC<IProps> = ({ senderId, receiverId, conversation }) => {
+const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
   const [message, setMessage] = useState<string>('');
-  const [chat, setChat] = useState<IChat[]>([]);
+
   const { socket } = useSocket();
   const [showPicker, setShowPicker] = useState(false);
   const chatBubbleRef = useRef<HTMLDivElement>(null);
   const conversationId = conversation._id;
+  const senderId = sender._id;
 
-  const fetchMessages = useCallback(async () => {
-    const chats = (await axiosInstance.get(`/api/chat/${conversationId}`)).data
-      .messages;
-    chats && setChat(chats.filter((chat: IChat) => chat));
-  }, [conversationId]);
-
-  useEffect(() => {
-    if (conversationId) {
-      fetchMessages();
-      if (socket) {
-        socket.emit('joinRoom', { conversationId });
-      }
-    }
-    return () => {
-      socket?.emit('leaveRoom', `conversation-${conversationId}`);
-    };
-  }, [conversationId, fetchMessages, message, socket]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('newMessage', (data: IChat) => setChat([...chat, data]));
-    }
-  }, [socket, chat]);
-
-  const { data: sender } = useSWR(`/api/user/${senderId}`, fetcher);
   const { data: receiver } = useSWR(`/api/user/${receiverId}`, fetcher);
 
   useEffect(() => {
     if (chatBubbleRef.current !== null) {
       chatBubbleRef.current.scrollTop = chatBubbleRef.current.scrollHeight;
     }
-  }, [chat]);
+  }, [chats]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setMessage(value);
   };
-  const clearChange = () => {
-    setMessage('');
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      if (message === '') {
+        return;
+      }
+
+      try {
+        socket?.emit('sendMessage', { conversationId, message, senderId });
+        clearChange();
+        chatBubbleRef.current?.scrollTo(0, chatBubbleRef.current?.scrollHeight);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
-  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSendMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (message === '') {
+      return;
+    }
 
     try {
       socket?.emit('sendMessage', { conversationId, message, senderId });
@@ -76,36 +67,40 @@ const Chat: FC<IProps> = ({ senderId, receiverId, conversation }) => {
       console.error(error);
     }
   };
+  const clearChange = () => {
+    setMessage('');
+  };
 
   return (
-    <div className='border border-l-0 flex flex-col  justify-between  '>
+    <div className='  flex flex-col  justify-between border border-t-0 lg:border-t '>
       <div className='h-[70vh]  relative '>
         <div
-          className='overflow-y-auto h-full p-2 grid grid-cols-12 gap-y-1'
+          className='overflow-y-auto h-full p-2 grid grid-cols-12 gap-y-1 '
           ref={chatBubbleRef}
         >
           {sender &&
             receiver &&
-            chat.map((message: IChat) => (
-              <ChatBubbles
-                key={message._id}
-                message={message.message}
-                name={
-                  message.sender_id === senderId
-                    ? `${sender.user?.first_name?.charAt(
-                        0
-                      )}${sender.user?.last_name?.charAt(0)}`
-                    : `${receiver.user?.first_name?.charAt(
-                        0
-                      )}${receiver.user?.last_name?.charAt(0)}`
-                }
-                isOwn={message.sender_id === senderId}
-                createdAt={message.createdAt}
-              />
-            ))}
+            chats.map((message) => {
+              const isSender = message.sender_id === senderId;
+              const { first_name, last_name, imageUrl } = isSender
+                ? sender
+                : receiver.user;
+              const name = `${first_name?.charAt(0)}${last_name?.charAt(0)}`;
+
+              return (
+                <ChatBubbles
+                  key={message._id}
+                  message={message.message}
+                  name={name}
+                  imageUrl={imageUrl}
+                  isOwn={isSender}
+                  createdAt={message.createdAt}
+                />
+              );
+            })}
         </div>
         {showPicker && (
-          <div className='absolute bottom-0 right-32'>
+          <div className='absolute bottom-0 left-0'>
             <Picker
               data={data}
               onEmojiSelect={(emoji: any) => setMessage(message + emoji.native)}
@@ -115,37 +110,26 @@ const Chat: FC<IProps> = ({ senderId, receiverId, conversation }) => {
           </div>
         )}
       </div>
-      <Form
-        OnSubmit={submitHandler}
-        className='grid grid-cols-[9fr_1fr] gap-3 items-center bg-blue-500 p-3'
-      >
-        <div className='flex-grow relative'>
-          <div className='relative w-full'>
-            <Input
-              type='text'
-              name='message'
-              value={message}
-              onChange={handleChange}
-            />
+      <section className='flex items-center justify-between gap-2 w-full p-3 border-t border-gray-300'>
+        <button onClick={() => setShowPicker(!showPicker)}>
+          <FaRegSmile />
+        </button>
+        <input
+          value={message}
+          onKeyDown={handleKeyDown}
+          onChange={handleChange}
+          placeholder='Message'
+          className='block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700'
+          name='message'
+        />
 
-            <Button
-              type='button'
-              onClick={() => setShowPicker(!showPicker)}
-              className='absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600'
-            >
-              <FaRegSmile />
-            </Button>
-          </div>
-        </div>
-
-        <Button
-          type='submit'
-          className='flex items-center justify-center bg-orange-400 shadow hover:bg-orange-500 rounded-lg text-white px-4 py-2 flex-shrink-0'
+        <button
+          onClick={handleSendMessage}
+          className='hover:bg-blue-400 py-2 px-4 rounded-md'
         >
-          <span>Send</span>
-          <span className='ml-2'></span>
-        </Button>
-      </Form>
+          <AiOutlineSend />
+        </button>
+      </section>
     </div>
   );
 };

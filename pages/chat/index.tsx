@@ -1,11 +1,13 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 import Chat from '../../components/Chat/Chat';
 import ChatNameList from '../../components/Chat/ChatNameList';
 import Container from '../../components/UI/Container';
-import axiosInstance from '../../utils/axios';
+import { useSocket } from '../../context/SocketContext';
+import axiosInstance, { fetcher } from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 
 interface IProps {
@@ -18,10 +20,18 @@ const Conversation: NextPage<IProps> = ({
   senderId,
   receiverIds,
 }) => {
-  const [clickedNameId, setClickedNameId] = useState<string>('');
-  const handleNameClick = (id: string) => {
-    setClickedNameId(id);
-  };
+  const [clickedNameId, setClickedNameId] = useState<string | undefined>();
+  const [chat, setChat] = useState<IChat[]>([]);
+  const { socket } = useSocket();
+  const [latestMessages, setLatestMessages] = useState<IChat[]>(() => {
+    return (
+      conversations?.map((conversation: IConversation) => {
+        const messages = conversation.chat;
+        return messages[messages.length - 1];
+      }) ?? []
+    );
+  });
+
   const conversationToRender = conversations?.find(
     (conversation: IConversation) => {
       if (
@@ -32,6 +42,60 @@ const Conversation: NextPage<IProps> = ({
       }
     }
   );
+
+  const conversationId = conversationToRender?._id;
+
+  const fetchMessages = useCallback(async () => {
+    const chats = (await axiosInstance.get(`/api/chat/${conversationId}`)).data
+      .messages;
+    chats && setChat(chats.filter((chat: IChat) => chat));
+  }, [conversationId]);
+  const { data: sender } = useSWR(`/api/user/${senderId}`, fetcher);
+
+  const handleNameClick = (id: string | undefined) => {
+    setClickedNameId(id);
+  };
+
+  useEffect(() => {
+    if (conversationId) {
+      fetchMessages();
+      if (socket) {
+        socket.emit('joinRoom', { conversationId });
+      }
+    }
+    return () => {
+      socket?.emit('leaveRoom', `conversation-${conversationId}`);
+    };
+  }, [conversationId, fetchMessages, socket]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('newMessage', (data: IChat) => {
+        setChat([...chat, data]);
+
+        // Find the conversation that the new message belongs to
+        const conversation = conversations?.find(
+          (conv) => conv._id === data.conversation_id
+        );
+
+        // If the conversation is found, update the latest message in the conversation
+        if (conversation && latestMessages) {
+          setLatestMessages((prevLatestMessages) => {
+            const newLatestMessages = [...prevLatestMessages];
+            const index = newLatestMessages.findIndex(
+              (latestMsg) => latestMsg.conversation_id === data.conversation_id
+            );
+            if (index >= 0) {
+              newLatestMessages[index] = data;
+            } else {
+              newLatestMessages.push(data);
+            }
+            return newLatestMessages;
+          });
+        }
+      });
+    }
+  }, [socket, chat, conversations]);
 
   return (
     <Fragment>
@@ -48,24 +112,31 @@ const Conversation: NextPage<IProps> = ({
           content='COO/RATE Chat, freelancing communication tool, real-time chat, collaboration tool, team communication, project management'
         />
       </Head>
-      <Container className='h-[85vh] w-full px-5 mx-auto my-24 rounded-l-3xl shadow grid md:grid-cols-[2fr_5fr] grid-cols-[1fr_5fr]'>
-        <div className='border-y border-l rounded-l-3xl '>
-          {receiverIds && (
-            <ChatNameList receiverIds={receiverIds} onClick={handleNameClick} />
+      <Container className='container mx-auto my-24 px-5'>
+        <div className='min-w-full rounded lg:grid lg:grid-cols-[1fr_3fr]'>
+          <div>
+            {receiverIds && (
+              <ChatNameList
+                latestMessages={latestMessages}
+                receiverIds={receiverIds}
+                onClick={handleNameClick}
+              />
+            )}
+          </div>
+
+          {conversationToRender ? (
+            <Chat
+              chats={chat}
+              conversation={conversationToRender}
+              sender={sender.user}
+              receiverId={clickedNameId}
+            />
+          ) : (
+            <div className='text-center text-gray-400 py-5 px-2 border'>
+              Select a conversation to start chatting
+            </div>
           )}
         </div>
-
-        {conversationToRender ? (
-          <Chat
-            conversation={conversationToRender}
-            senderId={senderId}
-            receiverId={clickedNameId}
-          />
-        ) : (
-          <div className='text-center text-gray-400 py-5 px-2 border border-l-0'>
-            Select a conversation to start chatting
-          </div>
-        )}
       </Container>
     </Fragment>
   );

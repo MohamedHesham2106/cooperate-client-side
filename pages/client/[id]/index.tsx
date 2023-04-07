@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 import { Fragment, MouseEvent, useState } from 'react';
 
@@ -8,7 +9,6 @@ import Profile from '../../../components/Profile/Profile';
 import Container from '../../../components/UI/Container';
 import { getPayloadFromToken } from '../../../utils/cookie';
 import { getUserData } from '../../../utils/user';
-import Head from 'next/head';
 interface IProps {
   user: IUser;
   isOwnProfile: boolean;

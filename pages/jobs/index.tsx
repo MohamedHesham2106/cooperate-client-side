@@ -12,6 +12,7 @@ import Modal from '../../components/UI/Modal';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 import { fadeIn } from '../../utils/variants';
+
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];
 }
@@ -166,25 +167,28 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { jwt_refresh } = req.cookies;
   try {
-    const [jobs, categories] = await Promise.all([
-      (await axiosInstance.get('/api/job')).data,
-      (await axiosInstance.get('/api/category')).data,
+    const [{ data: jobs }, { data: categories }] = await Promise.all([
+      axiosInstance.get('/api/job'),
+      axiosInstance.get('/api/category'),
     ]);
     const payload = getPayloadFromToken(jwt_refresh);
-    if (!payload) {
-      return {
-        props: { jobs: jobs.jobs, categories: categories.categories },
-      };
-    }
+    const isFreelancer =
+      payload?.role === 'freelancer' ? 'freelancer' : 'client';
     return {
       props: {
         jobs: jobs.jobs,
         categories: categories.categories,
-        isFreelancer: payload.role === 'freelancer' ? 'freelancer' : 'client',
+        isFreelancer,
       },
     };
   } catch {
-    return { redirect: { destination: '/404', permanent: false } };
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
   }
 };
+
 export default Jobs;

@@ -1,15 +1,23 @@
+import Image from 'next/image';
 import { FC, useEffect, useState } from 'react';
 
-import { getTimeDifference } from '../../utils/date';
+import { formatDateForChat } from '../../utils/date';
 
 interface Props {
   isOwn: boolean;
   message: string;
   name: string;
   createdAt: string;
+  imageUrl?: string;
 }
 
-const ChatBubbles: FC<Props> = ({ isOwn, message, name, createdAt }) => {
+const ChatBubbles: FC<Props> = ({
+  isOwn,
+  message,
+  name,
+  createdAt,
+  imageUrl,
+}) => {
   const bubbleContainer = isOwn
     ? 'col-start-6 col-end-13 p-3 rounded-lg'
     : 'col-start-1 col-end-8 p-3 rounded-lg';
@@ -18,8 +26,7 @@ const ChatBubbles: FC<Props> = ({ isOwn, message, name, createdAt }) => {
   const bubbleBg = isOwn ? 'bg-blue-200' : 'bg-white border';
   const [date, setDate] = useState<string | undefined>();
   useEffect(() => {
-    // console.log('useEffect called with createdAt =', createdAt);
-    setDate(getTimeDifference(new Date(createdAt).getTime()));
+    setDate(formatDateForChat(new Date(createdAt)));
   }, [createdAt]);
   return (
     <div className={bubbleContainer}>
@@ -29,11 +36,21 @@ const ChatBubbles: FC<Props> = ({ isOwn, message, name, createdAt }) => {
             isOwn ? 'flex-row-reverse' : ''
           }`}
         >
-          <div
-            className={`flex items-center justify-center h-10 w-10 rounded-full ${bubbleHead} flex-shrink-0`}
-          >
-            {isOwn ? 'Me' : name}
-          </div>
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              width={40}
+              height={40}
+              alt={name}
+              className='rounded-full'
+            />
+          ) : (
+            <div
+              className={`flex items-center justify-center h-10 w-10 rounded-full ${bubbleHead} flex-shrink-0`}
+            >
+              {isOwn ? 'Me' : name}
+            </div>
+          )}
           <div
             className={`relative  text-sm ${bubbleBg} py-2 px-4 shadow rounded-xl`}
           >

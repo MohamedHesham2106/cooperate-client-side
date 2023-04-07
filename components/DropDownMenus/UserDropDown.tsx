@@ -1,25 +1,40 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { AiFillWechat } from 'react-icons/ai';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { ImUser } from 'react-icons/im';
 import { SlLogout, SlSettings } from 'react-icons/sl';
+import useSWR from 'swr';
 
 import { AuthContext } from '../../context/AuthContext';
+import { fetcher } from '../../utils/axios';
 import { getCookie, getPayloadFromToken } from '../../utils/cookie';
+
+const tokenPayload = getPayloadFromToken(getCookie('jwt_access'));
 
 const UserDropDown: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { SignOut } = useContext(AuthContext);
+  const [image, setImage] = useState<string | undefined>();
+
+  const userURL = `/${tokenPayload?.role}/~${tokenPayload?.sub}`;
+
+  const { data } = useSWR(`/api/user/${tokenPayload?.sub}`, fetcher, {
+    refreshInterval: 1000,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setImage(data.user.imageUrl);
+    }
+  }, [data]);
 
   const logOutHandler = () => {
     SignOut();
   };
 
   const menuRef = useRef(null);
-
-  const tokenPayload = getPayloadFromToken(getCookie('jwt_access'));
-  const userURL = `/${tokenPayload?.role}/~${tokenPayload?.sub}`;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,7 +58,17 @@ const UserDropDown: FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         className='flex flex-row items-center w-full text-sm text-left bg-transparent rounded-full md:w-auto md:mt-0 md:ml-2 hover:ring-2 hover:ring-gray-200 focus:outline-none focus:shadow-outline'
       >
-        <HiOutlineUserCircle size={35} />
+        {image ? (
+          <Image
+            src={image}
+            width={35}
+            height={35}
+            className='rounded-full'
+            alt={image}
+          />
+        ) : (
+          <HiOutlineUserCircle size={35} />
+        )}
       </button>
 
       <div
