@@ -84,7 +84,11 @@ const Project: FC<IProps> = ({ project, onClick, ModalHandler }) => {
                   value={percentage}
                   text={`${percentage.toFixed(1)}%`}
                   styles={{
-                    path: { stroke: '#3b82f6' },
+                    path: { stroke: '#3b82f6', strokeLinecap: 'round' },
+                    trail: {
+                      stroke: '#d6d6d6',
+                      strokeLinecap: 'round',
+                    },
                     text: {
                       fontSize: '1.2rem',
                       fill: '#000',

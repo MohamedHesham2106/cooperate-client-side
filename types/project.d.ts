@@ -7,7 +7,20 @@ interface IProject {
   milestone: IMilestone[];
   createdAt: string;
   updatedAt: string;
+  rating?: IReviews[];
 }
+interface IReviews {
+  _id: string;
+  user: string;
+  rated_user: Partial<IUser>;
+  job_id: string;
+  value: number;
+  feedback: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 interface IMilestone {
   _id: string;
   title: string;

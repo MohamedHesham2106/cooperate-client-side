@@ -9,7 +9,6 @@ import {
   useState,
 } from 'react';
 import toast from 'react-hot-toast';
-import { HiOutlineX } from 'react-icons/hi';
 import { MdOutlineDescription } from 'react-icons/md';
 
 import Button from '../UI/Button';
@@ -90,13 +89,6 @@ const JobDetails: FC<IProps> = ({
                 <h1 className='font-normal text-3xl capitalize'>
                   {data?.job.title}
                 </h1>
-                <button
-                  onClick={onClose}
-                  type='button'
-                  className='bg-transparent rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset'
-                >
-                  <HiOutlineX size={25} />
-                </button>
               </div>
               <h4 className='text-md px-1 mt-1 font-semibold text-blue-500'>
                 {data?.job.category.name}

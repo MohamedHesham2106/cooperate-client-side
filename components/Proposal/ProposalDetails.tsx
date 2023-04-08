@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { FC, Fragment, MouseEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AiOutlineLink } from 'react-icons/ai';
-import { IoIosArrowForward } from 'react-icons/io';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 
 import Button from '../UI/Button';
@@ -93,13 +92,6 @@ const ProposalDetails: FC<IProps> = ({ proposal, onClose }) => {
               >
                 View Freelancer Profile
               </Link>
-              <button
-                onClick={onClose}
-                type='button'
-                className='absolute top-0 right-0 bg-transparent rounded-md p-2 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset'
-              >
-                <IoIosArrowForward size={25} />
-              </button>
             </div>
             <time className='text-sm text-gray-400'>{createdAt}</time>
           </section>

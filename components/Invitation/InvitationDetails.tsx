@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { FC, Fragment, MouseEvent, useEffect, useState } from 'react';
-import { IoIosArrowForward } from 'react-icons/io';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 
 import Modal from '../UI/Modal';
@@ -39,13 +38,6 @@ const InvitationDetails: FC<IProps> = ({ invitation, onClose }) => {
               >
                 View Client Profile
               </Link>
-              <button
-                onClick={onClose}
-                type='button'
-                className='absolute top-0 right-0 bg-transparent rounded-md p-2 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none '
-              >
-                <IoIosArrowForward size={25} />
-              </button>
             </div>
             <time className='text-sm text-gray-400'>{createdAt}</time>
           </section>

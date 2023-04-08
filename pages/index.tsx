@@ -1,10 +1,11 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { Fragment } from 'react';
 
 import About from '../components/About/About';
 import Hero from '../components/Hero/Hero';
 import SkillsList from '../components/Skills/SkillsList';
+import { getPayloadFromToken } from '../utils/cookie';
 const Home: NextPage = () => {
   return (
     <Fragment>
@@ -26,4 +27,20 @@ const Home: NextPage = () => {
   );
 };
 
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { jwt_refresh } = req.cookies;
+
+  const role = getPayloadFromToken(jwt_refresh)?.role;
+  if (role && role === 'admin') {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: true,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 export default Home;

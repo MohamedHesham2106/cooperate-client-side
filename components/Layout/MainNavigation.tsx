@@ -11,6 +11,7 @@ import {
   getPayloadFromToken,
   isAuthenticated,
 } from '../../utils/cookie';
+import { getRole } from '../../utils/user';
 const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
 };
@@ -18,7 +19,7 @@ const classNames = (...classes: string[]) => {
 const MainNavigation: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [role, setRole] = useState<string>();
+  const [role, setRole] = useState<string | undefined>(getRole() || undefined);
 
   const scrollPosition = useScrollPosition();
   const checkAuthentication = isAuthenticated();
@@ -29,7 +30,7 @@ const MainNavigation: FC = () => {
   };
 
   const tokenPayload = getPayloadFromToken(getCookie('jwt_refresh'));
-  const userURL = `/${tokenPayload?.role}/~${tokenPayload?.sub}`;
+  const userURL = `/${role}/~${tokenPayload?.sub}`;
   useEffect(() => {
     setIsAuth(checkAuthentication);
   }, [checkAuthentication]);
@@ -46,13 +47,6 @@ const MainNavigation: FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    setRole(
-      isAuthenticated()
-        ? getPayloadFromToken(getCookie('jwt_refresh')).role
-        : undefined
-    );
-  }, []);
   return (
     <header
       className={classNames(
@@ -173,6 +167,12 @@ const MainNavigation: FC = () => {
                       className='text-gray-900 hover:text-blue-500 text-center'
                     >
                       Profile
+                    </Link>
+                    <Link
+                      href='/chat'
+                      className='text-gray-900 hover:text-blue-500 text-center'
+                    >
+                      Chat
                     </Link>
                     <Link
                       href={`${userURL}/settings`}

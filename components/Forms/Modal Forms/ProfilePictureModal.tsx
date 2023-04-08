@@ -16,7 +16,7 @@ interface IProps {
 
 const ProfilePictureModal: FC<IProps> = ({ onClose, userId }) => {
   const [formSubmitted, _setFormSubmitted] = useState<boolean>(false);
-  console.log(userId);
+  //console.log(userId);
   const [image, setImage] = useState<File | null>(null);
 
   const handleFile = (event: ChangeEvent<HTMLInputElement>) => {

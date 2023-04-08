@@ -136,7 +136,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
             action === 'remove'
               ? 'bg-gray-700 text-white '
               : 'bg-gray-50 text-gray-900 border'
-          } text-gray-900 text-sm rounded-lg text-center font-medium focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+          } text-sm rounded-lg text-center font-medium focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
         >
           Remove Language
         </Button>

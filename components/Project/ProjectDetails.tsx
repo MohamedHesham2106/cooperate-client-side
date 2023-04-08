@@ -12,7 +12,6 @@ import toast from 'react-hot-toast';
 import { BsChat } from 'react-icons/bs';
 import { HiOutlineDownload } from 'react-icons/hi';
 import { ImCross } from 'react-icons/im';
-import { IoIosArrowForward } from 'react-icons/io';
 
 import MilestoneList from '../Milestones/MilestoneList';
 import Button from '../UI/Button';
@@ -178,13 +177,6 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                 <span className='relative invisible'>Chat</span>
               </Button>
             </div>
-            <button
-              onClick={onClose}
-              type='button'
-              className='bg-transparent rounded-md p-2 flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none'
-            >
-              <IoIosArrowForward size={25} />
-            </button>
           </div>
 
           <section className='shadow-md flex items-center justify-between p-5 rounded-md border-2 text-gray-700'>

@@ -38,10 +38,11 @@ function AuthProvider({ children }: Props) {
         setCookie('jwt_refresh', refreshToken, REFRESH_TOKEN_EXPIRE);
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        await Router.push('/');
+        window.location.href = 'http://localhost:3000/';
       } catch (error) {
         const err = error as IError;
         const { message } = err.response.data;
+        toast.error('Invalid email or password.');
         console.log(message);
       }
       if (isFirstMounted) {
@@ -62,7 +63,7 @@ function AuthProvider({ children }: Props) {
           headers: { Authorization: `Bearer ${access}` },
           data: { refreshToken: refresh },
         }),
-        await Router.push('/'),
+        (window.location.href = 'http://localhost:3000/oauth'),
       ]);
     }
   }, []);
@@ -86,6 +87,7 @@ function AuthProvider({ children }: Props) {
         if (accessToken !== access) {
           setAccessToken(accessToken);
         }
+        window.location.reload();
       } catch (error) {
         const err = error as IError;
         const { message } = err.response.data;

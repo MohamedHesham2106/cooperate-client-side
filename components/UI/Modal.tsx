@@ -7,6 +7,8 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { HiOutlineX } from 'react-icons/hi';
+import { IoIosArrowForward } from 'react-icons/io';
 
 interface IBackdrop {
   onClose: (event: MouseEvent<HTMLDivElement>) => void;
@@ -23,6 +25,7 @@ interface IOverlay {
   children: ReactNode;
   className: string;
   tall: boolean;
+  onClose: (event: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
 }
 
 const Backdrop: FC<IBackdrop> = ({ onClose }) => {
@@ -34,15 +37,14 @@ const Backdrop: FC<IBackdrop> = ({ onClose }) => {
   );
 };
 
-const Overlay: FC<IOverlay> = ({ children, className, tall }) => {
+const Overlay: FC<IOverlay> = ({ children, className, tall, onClose }) => {
   useEffect(() => {
-    if (tall) {
-      document.body.style.overflow = 'hidden';
-    }
+    document.body.style.overflow = 'hidden';
+
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [tall]);
+  }, []);
   return (
     <div
       className={` ${
@@ -52,6 +54,13 @@ const Overlay: FC<IOverlay> = ({ children, className, tall }) => {
       }  `}
       onClick={(e) => e.stopPropagation()}
     >
+      <button
+        onClick={onClose}
+        type='button'
+        className='absolute right-[3%] top-[3%] cursor-pointer z-50 bg-transparent rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none '
+      >
+        {tall ? <IoIosArrowForward size={25} /> : <HiOutlineX size={25} />}
+      </button>
       <div className={className}>{children}</div>
     </div>
   );
@@ -71,7 +80,7 @@ const Modal: FC<IModal> = ({ onClose, children, className, tall = false }) => {
         createPortal(<Backdrop onClose={onClose} />, portalElement)}
       {portalElement &&
         createPortal(
-          <Overlay className={className} tall={tall}>
+          <Overlay className={className} tall={tall} onClose={onClose}>
             {children}
           </Overlay>,
           portalElement

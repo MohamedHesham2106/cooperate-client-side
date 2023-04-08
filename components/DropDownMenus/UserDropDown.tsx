@@ -1,15 +1,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { AiFillWechat } from 'react-icons/ai';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { ImUser } from 'react-icons/im';
 import { SlLogout, SlSettings } from 'react-icons/sl';
-import useSWR from 'swr';
 
 import { AuthContext } from '../../context/AuthContext';
-import { fetcher } from '../../utils/axios';
 import { getCookie, getPayloadFromToken } from '../../utils/cookie';
+import { getRole, getUserData } from '../../utils/user';
 
 const tokenPayload = getPayloadFromToken(getCookie('jwt_access'));
 
@@ -17,18 +23,29 @@ const UserDropDown: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { SignOut } = useContext(AuthContext);
   const [image, setImage] = useState<string | undefined>();
-
-  const userURL = `/${tokenPayload?.role}/~${tokenPayload?.sub}`;
-
-  const { data } = useSWR(`/api/user/${tokenPayload?.sub}`, fetcher, {
-    refreshInterval: 1000,
-  });
+  const [profileUrl, setProfileUrl] = useState<string>('');
+  const role = useRef(getRole());
 
   useEffect(() => {
-    if (data) {
-      setImage(data.user.imageUrl);
+    const fetchUserImage = async () => {
+      const user = await getUserData(
+        tokenPayload?.sub,
+        getCookie('jwt_access')
+      );
+      if (user) {
+        setImage(user.imageUrl);
+      }
+    };
+    if (tokenPayload) {
+      setProfileUrl(`/${role.current}/~${tokenPayload.sub}`);
+
+      fetchUserImage();
     }
-  }, [data]);
+    return () => {
+      setImage(undefined);
+      setProfileUrl('');
+    };
+  }, [SignOut]);
 
   const logOutHandler = () => {
     SignOut();
@@ -84,7 +101,7 @@ const UserDropDown: FC = () => {
         <div className='px-2 py-2 bg-white rounded-md shadow-sm border'>
           <Link
             className='flex rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent  text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
-            href={userURL}
+            href={profileUrl}
           >
             <span>
               <ImUser size={20} />
@@ -93,7 +110,7 @@ const UserDropDown: FC = () => {
           </Link>
           <Link
             className='flex  rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
-            href={`${userURL}/settings`}
+            href={`${profileUrl}/settings`}
           >
             <span className='pt-1'>
               <SlSettings size={20} />

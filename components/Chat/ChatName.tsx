@@ -35,15 +35,15 @@ const ChatName: FC<IProps> = ({ user, onClick, latestMessage }) => {
             alt={`${user._id}`}
           />
         ) : (
-          <div className='flex items-center text-sm justify-center px-2 py-2.5 bg-orange-200 rounded-full'>
-            {user?.first_name?.charAt(0)}
-            {user?.last_name?.charAt(0)}
+          <div className='flex items-center text-sm justify-center px-2 py-2 bg-orange-200 rounded-full'>
+            {user?.first_name?.charAt(0).toUpperCase()}
+            {user?.last_name?.charAt(0).toUpperCase()}
           </div>
         )}
 
         <div className='w-full pb-2'>
           <div className='flex items-center justify-between'>
-            <span className='block ml-2 font-semibold text-gray-600 text-base'>
+            <span className='block ml-2 font-semibold capitalize text-gray-600 text-base'>
               {user?.first_name} {user?.last_name}
             </span>
           </div>
