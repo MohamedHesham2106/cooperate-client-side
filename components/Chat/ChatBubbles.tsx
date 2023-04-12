@@ -39,10 +39,10 @@ const ChatBubbles: FC<Props> = ({
           {imageUrl ? (
             <Image
               src={imageUrl}
-              width={40}
-              height={40}
+              width={36}
+              height={36}
               alt={name}
-              className='rounded-full'
+              className='rounded-full w-9 h-9 object-cover'
             />
           ) : (
             <div

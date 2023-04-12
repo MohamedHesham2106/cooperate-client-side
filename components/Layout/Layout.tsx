@@ -39,7 +39,6 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children }) => {
         <Sidebar isOpen={handleOpen} />
         <main>{children}</main>
       </div>
-      <FloatingActionButton />
     </Fragment>
   );
 };

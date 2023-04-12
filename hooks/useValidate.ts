@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface IErrors {
   firstname?: string;
@@ -35,57 +35,95 @@ export const useValidate = (
     setUserInfo((prevUserInfo) => ({ ...prevUserInfo, [name]: value }));
   };
 
+  const validateField = (
+    name: string | undefined,
+    fieldName: string | undefined
+  ): string => {
+    if (!name?.trim()) {
+      return `Please enter your ${fieldName}.`;
+    }
+    return '';
+  };
+
+  const validateEmail = (email: string | undefined): string => {
+    if (!email?.trim()) {
+      return 'Please enter your email address.';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      return 'Please enter a valid email address.';
+    }
+    return '';
+  };
+
+  const validatePassword = (password: string | undefined): string => {
+    if (!password?.trim()) {
+      return 'Please enter a password.';
+    } else if (password.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    } else if (!/\d/.test(password)) {
+      return 'Password must contain at least one digit.';
+    } else if (!/[!@#$%^&*]/.test(password)) {
+      return 'Password must contain at least one special character';
+    }
+    return '';
+  };
+
+  const validateRepeatPassword = (
+    password: string | undefined,
+    repeatPassword: string | undefined
+  ): string => {
+    if (!repeatPassword?.trim()) {
+      return 'Please repeat your password.';
+    } else if (password !== repeatPassword) {
+      return 'Passwords do not match.';
+    }
+    return '';
+  };
+
+  const validate = useCallback((): boolean => {
+    const newErrors: IErrors = {};
+
+    if (touched.firstname) {
+      newErrors.firstname = validateField(userInfo.firstname, 'first name');
+    }
+    if (touched.lastname) {
+      newErrors.lastname = validateField(userInfo.lastname, 'last name');
+    }
+    if (touched.username) {
+      newErrors.username = validateField(userInfo.username, 'username');
+    }
+    if (touched.email) {
+      newErrors.email = validateEmail(userInfo.email);
+    }
+    if (touched.password) {
+      newErrors.password = validatePassword(userInfo.password);
+    }
+    if (touched.repeat_password) {
+      newErrors.repeat_password = validateRepeatPassword(
+        userInfo.password,
+        userInfo.repeat_password
+      );
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [
+    touched.email,
+    touched.firstname,
+    touched.lastname,
+    touched.password,
+    touched.repeat_password,
+    touched.username,
+    userInfo.email,
+    userInfo.firstname,
+    userInfo.lastname,
+    userInfo.password,
+    userInfo.repeat_password,
+    userInfo.username,
+  ]);
   // Use useEffect to validate the form whenever user info or touch events change
   useEffect(() => {
-    // Define a function to validate the user info and set errors
-    const validate = (): boolean => {
-      const newErrors: IErrors = {};
-
-      if (touched.firstname && !userInfo.firstname?.trim()) {
-        newErrors.firstname = 'Please enter your first name.';
-      }
-      if (touched.lastname && !userInfo.lastname?.trim()) {
-        newErrors.lastname = 'Please enter your last name.';
-      }
-      if (touched.username && !userInfo.username?.trim()) {
-        newErrors.username = 'Please enter a username.';
-      }
-      if (touched.email && !userInfo.email?.trim()) {
-        newErrors.email = 'Please enter your email address.';
-      } else if (
-        touched.email &&
-        !/\S+@\S+\.\S+/.test(userInfo.email as string)
-      ) {
-        newErrors.email = 'Please enter a valid email address.';
-      }
-      if (touched.password && !userInfo.password?.trim()) {
-        newErrors.password = 'Please enter a password.';
-      } else if (touched.password && Number(userInfo.password?.length) < 8) {
-        newErrors.password = 'Password must be at least 8 characters long.';
-      } else if (touched.password && !/\d/.test(userInfo.password as string)) {
-        newErrors.password = 'Password must contain at least one digit.';
-      } else if (
-        touched.password &&
-        !/[!@#$%^&*]/.test(userInfo.password as string)
-      ) {
-        newErrors.password =
-          'Password must contain at least one special character';
-      }
-      if (touched.repeat_password && !userInfo.repeat_password?.trim()) {
-        newErrors.repeat_password = 'Please repeat your password.';
-      } else if (
-        touched.repeat_password &&
-        userInfo.password !== userInfo.repeat_password
-      ) {
-        newErrors.repeat_password = 'Passwords do not match.';
-      }
-
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
-    };
-
     setIsValid(validate());
-  }, [userInfo, touched]);
+  }, [userInfo, touched, validate]);
 
   return [
     userInfo,

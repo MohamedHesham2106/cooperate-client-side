@@ -10,6 +10,7 @@ import '../styles/globals.css';
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/UI/Spinner';
 import AuthProvider from '../context/AuthProvider';
+import { ModalManagerProvider } from '../context/ModalManager';
 import { SocketProvider } from '../context/SocketContext';
 
 const philosopher = Philosopher({
@@ -64,9 +65,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       ) : (
         <AuthProvider>
           <SocketProvider url='http://localhost:8080/'>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <ModalManagerProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </ModalManagerProvider>
           </SocketProvider>
         </AuthProvider>
       )}

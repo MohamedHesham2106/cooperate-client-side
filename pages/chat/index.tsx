@@ -83,7 +83,7 @@ const Conversation: NextPage<IProps> = ({
           setLatestMessages((prevLatestMessages) => {
             const newLatestMessages = [...prevLatestMessages];
             const index = newLatestMessages.findIndex(
-              (latestMsg) => latestMsg.conversation_id === data.conversation_id
+              (latestMsg) => latestMsg?.conversation_id === data.conversation_id
             );
             if (index >= 0) {
               newLatestMessages[index] = data;

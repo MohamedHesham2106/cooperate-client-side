@@ -44,20 +44,34 @@ const NotificationDropDown: FC = () => {
             </h4>
           </div>
           <div className='rounded-b-lg'>
-            <a href='#' className='flex px-4 py-3 hover:bg-gray-100  '>
-              <div className='w-full'>
-                <div className='text-gray-500 text-sm mb-1.5 '>
-                  You've Received Proposal From
-                  <span className='font-semibold text-gray-900 '>
-                    {' '}
-                    Mohamed Hesham
-                  </span>
-                </div>
-                <div className='flex justify-end'>
-                  <div className='text-xs text-blue-600'>a few moments ago</div>
-                </div>
-              </div>
-            </a>
+            <div className='py-2'>
+              <a href='#' className='flex items-center px-4 py-3 border-b'>
+                <p className='text-gray-600 text-sm mx-2'>
+                  <span className='font-bold'>Sara Salah</span> replied on the{' '}
+                  <span className='font-bold text-blue-500'>Upload Image</span>{' '}
+                  artical . 2m
+                </p>
+              </a>
+              <a href='#' className='flex items-center px-4 py-3 border-b  '>
+                <p className='text-gray-600 text-sm mx-2'>
+                  <span className='font-bold'>Slick Net</span> start following
+                  you . 45m
+                </p>
+              </a>
+              <a href='#' className='flex items-center px-4 py-3 border-b '>
+                <p className='text-gray-600 text-sm mx-2'>
+                  <span className='font-bold'>Jane Doe</span> Like Your reply on{' '}
+                  <span className='font-bold text-blue-500'>Test with TDD</span>{' '}
+                  artical . 1h
+                </p>
+              </a>
+              <a href='#' className='flex items-center px-4 py-3 '>
+                <p className='text-gray-600 text-sm mx-2'>
+                  <span className='font-bold'>Abigail Bennett</span> start
+                  following you . 3h
+                </p>
+              </a>
+            </div>
           </div>
         </div>
       </div>

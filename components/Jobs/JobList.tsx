@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import { FC, MouseEvent, useState } from 'react';
+import { FC, useState } from 'react';
 
 import Job from './Job';
-import ModalManager from '../Forms/Modal Forms/ModalManager';
 import Container from '../UI/Container';
 
 interface IProps {
@@ -19,24 +18,11 @@ const JobList: FC<IProps> = ({
   isSameRole,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedJobId, setSelectedJobId] = useState<string | undefined>();
-  const [modalType, setModalType] = useState<string>();
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const showModalHandler = (event: MouseEvent<HTMLDivElement>) => {
-    const type = event.currentTarget.getAttribute('data-modal-type');
-    setModalType(type ? type : undefined);
-    setShowModal(true);
-  };
-  const hideModalHandler = () => {
-    setSelectedJobId(undefined);
-    setShowModal(false);
-  };
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
-  const handleJobClick = (jobId: string) => {
-    setSelectedJobId(jobId);
-  };
+
   const filteredJobs = jobs?.filter((job) =>
     job.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -71,8 +57,9 @@ const JobList: FC<IProps> = ({
           <Job
             key={job._id}
             job={job}
-            onClick={handleJobClick}
-            ModalHandler={showModalHandler}
+            isSameRole={isSameRole}
+            isOwnProfile={isOwnProfile}
+            isFreelancer={isFreelancer}
           />
         ))
       ) : (
@@ -88,16 +75,14 @@ const JobList: FC<IProps> = ({
           />
         </div>
       )}
-      {showModal && (
+      {/* {showModal && (
         <ModalManager
           Type={modalType}
           jobId={selectedJobId}
           onClose={hideModalHandler}
-          isSameRole={isSameRole}
-          isOwnProfile={isOwnProfile}
-          isFreelancer={isFreelancer}
+         
         />
-      )}
+      )} */}
     </Container>
   );
 };

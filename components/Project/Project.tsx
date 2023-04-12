@@ -1,22 +1,21 @@
 import { motion } from 'framer-motion';
-import { FC, MouseEvent, useEffect, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
 import 'react-circular-progressbar/dist/styles.css';
 
+import { ModalManagerContext } from '../../context/ModalManager';
 import { getTimeDifference } from '../../utils/date';
 
 interface IProps {
   project: IProject;
-  onClick: (project: IProject) => void;
-  ModalHandler: (event: MouseEvent<HTMLDivElement>) => void;
 }
-const Project: FC<IProps> = ({ project, onClick, ModalHandler }) => {
-  const handleClick = () => {
-    onClick(project);
-  };
-  const showModalHandler = (event: MouseEvent<HTMLDivElement>) => {
-    ModalHandler(event);
+const Project: FC<IProps> = ({ project }) => {
+  const { displayModal } = useContext(ModalManagerContext);
+  const showModalHandler = () => {
+    displayModal('project', {
+      project,
+    });
   };
   const [createdAt, setCreatedAt] = useState<string | undefined>();
   useEffect(() => {
@@ -37,9 +36,7 @@ const Project: FC<IProps> = ({ project, onClick, ModalHandler }) => {
         ease: [0, 0.71, 0.2, 1.01],
       }}
       className='flex flex-col bg-white w-full my-3 p-4 gap-3 border border-gray-200 rounded-2xl shadow-md cursor-pointer'
-      onClick={handleClick}
-      onMouseDown={showModalHandler}
-      data-modal-type='project'
+      onClick={showModalHandler}
     >
       <div className='flex flex-col min-w-full lg:flex-row mx-auto bg-white rounded'>
         <div className='w-full lg:w-1/2 px-10 flex flex-col justify-between py-10'>

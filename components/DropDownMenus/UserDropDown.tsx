@@ -1,13 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { AiFillWechat } from 'react-icons/ai';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { ImUser } from 'react-icons/im';
@@ -73,14 +66,14 @@ const UserDropDown: FC = () => {
     <div className='relative' ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className='flex flex-row items-center w-full text-sm text-left bg-transparent rounded-full md:w-auto md:mt-0 md:ml-2 hover:ring-2 hover:ring-gray-200 focus:outline-none focus:shadow-outline'
+        className='flex flex-row items-center w-auto text-sm text-left bg-transparent rounded-full  md:mt-0 md:ml-2 hover:ring-2 hover:ring-gray-200 focus:outline-none focus:shadow-outline'
       >
         {image ? (
           <Image
             src={image}
             width={35}
             height={35}
-            className='rounded-full'
+            className='rounded-full w-[35px] h-[35px] object-cover'
             alt={image}
           />
         ) : (

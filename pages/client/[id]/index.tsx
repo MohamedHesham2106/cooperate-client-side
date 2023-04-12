@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 import { Fragment, MouseEvent, useState } from 'react';
 
-import ModalManager from '../../../components/Forms/Modal Forms/ModalManager';
 import ClientDetails from '../../../components/Profile/ClientDetails';
 import Profile from '../../../components/Profile/Profile';
 import Container from '../../../components/UI/Container';
@@ -21,19 +20,6 @@ const Client: NextPage<IProps> = ({
   isSameRole,
   isFreelancer,
 }) => {
-  const [modalType, setModalType] = useState<string>();
-  const [showModal, setShowModal] = useState<boolean>(false);
-
-  const showModalHandler = (
-    event: MouseEvent<SVGAElement | HTMLDivElement | HTMLButtonElement>
-  ) => {
-    const type = event.currentTarget.getAttribute('data-modal-type');
-    setModalType(type ? type : undefined);
-    setShowModal(true);
-  };
-  const hideModalHandler = () => {
-    setShowModal(false);
-  };
   return (
     <Fragment>
       <Head>
@@ -51,26 +37,17 @@ const Client: NextPage<IProps> = ({
       </Head>
 
       <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
-        {showModal && (
-          <ModalManager
-            Type={modalType}
-            onClose={hideModalHandler}
-            user={user}
-          />
-        )}
         <Profile
           isOwnProfile={isOwnProfile}
           isSameRole={isSameRole}
           isFreelancer={isFreelancer}
           user={user}
-          ModalHandler={showModalHandler}
         />
         <ClientDetails
           isOwnProfile={isOwnProfile}
           isSameRole={isSameRole}
           isFreelancer={isFreelancer}
           user={user}
-          ModalHandler={showModalHandler}
         />
       </Container>
     </Fragment>

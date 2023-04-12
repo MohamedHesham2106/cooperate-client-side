@@ -38,7 +38,7 @@ const Feedback: NextPage<IProps> = ({ project, userId, targetId }) => {
       return;
     }
     try {
-      const response = await axiosInstance.post(`/api/rating/${userId}`, {
+      await axiosInstance.post(`/api/rating/${userId}`, {
         rated_user: targetId,
         value: rating,
         job_id: project.job.toString(),

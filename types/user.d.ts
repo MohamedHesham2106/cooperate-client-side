@@ -23,4 +23,6 @@ type IUser = {
   personal_projects?: { _id: string; title: string; url: string }[];
   jobs?: IJobs[];
   status?: 'online' | 'offline';
+  createdAt?: string;
+  updatedAt?: string;
 };

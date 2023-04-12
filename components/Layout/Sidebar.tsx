@@ -47,7 +47,7 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
 
   const menus = [
     { name: 'Dashboard', link: '/dashboard', icon: MdOutlineDashboard },
-    { name: 'User', link: '/dashboard/user', icon: AiOutlineUser },
+    { name: 'User', link: '/dashboard/manage-users', icon: AiOutlineUser },
     {
       name: 'Analytics',
       link: '/dashboard/analytics',

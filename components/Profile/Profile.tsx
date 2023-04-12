@@ -1,18 +1,16 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FC, MouseEvent, ReactNode } from 'react';
+import { FC, MouseEvent, ReactNode, useContext } from 'react';
 import { BiMap } from 'react-icons/bi';
 import { BsBuilding } from 'react-icons/bs';
 
 import Button from '../UI/Button';
+import { ModalManagerContext } from '../../context/ModalManager';
 interface IProps {
   isOwnProfile: boolean;
   isSameRole: boolean;
   user: IUser;
   isFreelancer: 'freelancer' | 'client';
-  ModalHandler?: (
-    event: MouseEvent<SVGAElement | HTMLDivElement | HTMLButtonElement>
-  ) => void;
 }
 interface IProfileButton {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -41,7 +39,6 @@ const Profile: FC<IProps> = ({
   user,
   isSameRole,
   isFreelancer,
-  ModalHandler,
 }) => {
   const { first_name, last_name, country, address, categories, company_name } =
     user;
@@ -54,7 +51,13 @@ const Profile: FC<IProps> = ({
     router.push(`/invitation/~${user._id}`);
   };
   const router = useRouter();
+  const { displayModal } = useContext(ModalManagerContext);
 
+  const handleModal = () => {
+    displayModal('profile', {
+      userId: user._id,
+    });
+  };
   return (
     <div className='p-6 bg-white rounded-t-md '>
       <div
@@ -89,7 +92,7 @@ const Profile: FC<IProps> = ({
 
             {isOwnProfile && (
               <button
-                onClick={ModalHandler}
+                onClick={handleModal}
                 data-modal-type='profile'
                 className='h-32 w-32 rounded-full overflow-hidden shadow group  hover:bg-gray-200 opacity-70  absolute flex justify-center items-center cursor-pointer transition duration-500'
               >

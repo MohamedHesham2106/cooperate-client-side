@@ -19,7 +19,7 @@ const classNames = (...classes: string[]) => {
 const MainNavigation: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [role, setRole] = useState<string | undefined>(getRole() || undefined);
+  const [role] = useState<string | undefined>(getRole() || undefined);
 
   const scrollPosition = useScrollPosition();
   const checkAuthentication = isAuthenticated();

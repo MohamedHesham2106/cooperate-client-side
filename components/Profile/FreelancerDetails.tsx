@@ -3,7 +3,7 @@ import React, {
   ChangeEvent,
   FC,
   Fragment,
-  MouseEvent,
+  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -14,12 +14,12 @@ import { GrLanguage } from 'react-icons/gr';
 import { IoIosPaper } from 'react-icons/io';
 import { MdEdit } from 'react-icons/md';
 
+import { ModalManagerContext } from '../../context/ModalManager';
 import axiosInstance from '../../utils/axios';
 
 interface IProps {
   isOwnProfile: boolean;
   user: IUser;
-  ModalHandler?: (event: MouseEvent<SVGAElement | HTMLDivElement>) => void;
 }
 interface IModal {
   show: boolean;
@@ -60,11 +60,7 @@ const ConfirmationModal: FC<IModal> = ({ show, onClose }) => {
   );
 };
 
-const FreelancerDetails: FC<IProps> = ({
-  isOwnProfile,
-  user,
-  ModalHandler,
-}) => {
+const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user }) => {
   const {
     language = [],
     education = '',
@@ -81,6 +77,7 @@ const FreelancerDetails: FC<IProps> = ({
     setSelectedFile(currFile);
     setShowModal(true);
   };
+
   const handleCloseModal = async (confirmed: boolean) => {
     if (confirmed && selectedFile) {
       // console.log(confirmed)
@@ -90,6 +87,18 @@ const FreelancerDetails: FC<IProps> = ({
     }
 
     setShowModal(false);
+  };
+  const { displayModal } = useContext(ModalManagerContext);
+  const handleLanguageModal = () => {
+    displayModal('language', {
+      userId: user._id,
+    });
+  };
+  const handleBioModal = () => {
+    displayModal('bio', {
+      userId: user._id,
+      bio: biography,
+    });
   };
   const renderLanguages = () => (
     <div className='flex justify-center flex-col w-1/2 mt-3'>
@@ -174,8 +183,7 @@ const FreelancerDetails: FC<IProps> = ({
               {isOwnProfile && (
                 <div
                   className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'
-                  onClick={ModalHandler}
-                  data-modal-type='language'
+                  onClick={handleLanguageModal}
                 >
                   <MdEdit size={12} />
                 </div>
@@ -250,8 +258,7 @@ const FreelancerDetails: FC<IProps> = ({
                 {isOwnProfile && (
                   <div
                     className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'
-                    onClick={ModalHandler}
-                    data-modal-type='bio'
+                    onClick={handleBioModal}
                   >
                     <MdEdit size={12} />
                   </div>

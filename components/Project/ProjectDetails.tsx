@@ -114,18 +114,9 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         Freelancer_id: project?.Freelancer_id,
         client_id: project?.client_id,
       })
-      .then((response) =>
-        router.push(`/chat?cid=${response.data.conversation._id}`)
-      )
-      .catch((error) => {
-        const err = error as IError;
-        const { message } = err.response.data;
-        toast.error(message, {
-          style: {
-            border: '1px solid #ce1500',
-            padding: '16px',
-          },
-        });
+      .then((_response) => router.push(`/chat`))
+      .catch((_error) => {
+        router.push(`/chat`);
       });
   };
   const handleCompletion = async (

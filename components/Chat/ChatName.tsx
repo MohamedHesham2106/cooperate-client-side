@@ -31,7 +31,7 @@ const ChatName: FC<IProps> = ({ user, onClick, latestMessage }) => {
             src={user.imageUrl}
             width={35}
             height={35}
-            className='rounded-full'
+            className='rounded-full w-[35px] h-[35px] object-cover'
             alt={`${user._id}`}
           />
         ) : (

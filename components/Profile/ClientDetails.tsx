@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FC, MouseEvent } from 'react';
+import { FC, useContext } from 'react';
 import { FaGraduationCap } from 'react-icons/fa';
 import { GrLanguage } from 'react-icons/gr';
 import { MdEdit } from 'react-icons/md';
@@ -9,26 +9,24 @@ import useSWR from 'swr';
 import Review from './Review';
 import JobList from '../Jobs/JobList';
 import Button from '../UI/Button';
+import { ModalManagerContext } from '../../context/ModalManager';
 import { fetcher } from '../../utils/axios';
-
 
 interface IProps {
   isOwnProfile: boolean;
   user: IUser;
   isSameRole: boolean;
   isFreelancer: 'freelancer' | 'client';
-  ModalHandler?: (event: MouseEvent<SVGAElement | HTMLDivElement>) => void;
 }
 const ClientDetails: FC<IProps> = ({
   isFreelancer,
   isSameRole,
   isOwnProfile,
   user,
-  ModalHandler,
 }) => {
   const { language, education, jobs, _id } = user;
   const { data: reviews } = useSWR(`/api/rating/${_id}`, fetcher);
-  // console.log(reviews);
+  console.log(reviews);
   const router = useRouter();
   const renderLanguages = () => (
     <div className='flex justify-center flex-col w-1/2 mt-3'>
@@ -45,6 +43,12 @@ const ClientDetails: FC<IProps> = ({
   const renderEducation = () => (
     <div className='flex justify-center flex-col mt-3'>{education}</div>
   );
+  const { displayModal } = useContext(ModalManagerContext);
+  const handleLanguageModal = () => {
+    displayModal('language', {
+      userId: user._id,
+    });
+  };
 
   return (
     <div className=' bg-white flex flex-col md:flex-row justify-between rounded-b-md px-3 my-8 border-t-2'>
@@ -56,7 +60,7 @@ const ClientDetails: FC<IProps> = ({
             {isOwnProfile && (
               <div
                 className='cursor-pointer border-2 rounded-full p-[0.3rem] border-blue-500'
-                onClick={ModalHandler}
+                onClick={handleLanguageModal}
                 data-modal-type='language'
               >
                 <MdEdit size={12} />

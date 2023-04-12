@@ -1,32 +1,35 @@
-import { FC, MouseEvent, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 
+import { ModalManagerContext } from '../../context/ModalManager';
 interface IProps {
   job: IJobs;
-  onClick: (id: string) => void;
-  ModalHandler: (event: MouseEvent<HTMLDivElement>) => void;
+  isSameRole?: boolean;
+  isFreelancer?: 'freelancer' | 'client';
+  isOwnProfile?: boolean;
 }
-const Job: FC<IProps> = ({ job, onClick, ModalHandler }) => {
-  const [showFullDescription, setShowFullDescription] = useState(false);
 
+const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const { displayModal } = useContext(ModalManagerContext);
   const date = new Date(job.project_length).toLocaleString('en-GB', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   });
-  const handleClick = () => {
-    onClick(job._id);
-  };
-  const showModalHandler = (event: MouseEvent<HTMLDivElement>) => {
-    ModalHandler(event);
+  const showModalHandler = () => {
+    displayModal('job', {
+      jobId: job._id,
+      isFreelancer,
+      isOwnProfile,
+      isSameRole,
+    });
   };
   const truncatedDescription = job.description.slice(0, 200);
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
   return (
     <div
       className='flex flex-col w-full my-3 p-4 gap-3 border rounded-lg shadow-md cursor-pointer'
-      onClick={handleClick}
-      onMouseDown={showModalHandler}
-      data-modal-type='job'
+      onClick={showModalHandler}
     >
       <div className='font-semibold capitalize'>{job.title}</div>
       <div className='text-gray-400 text-sm capitalize'>
