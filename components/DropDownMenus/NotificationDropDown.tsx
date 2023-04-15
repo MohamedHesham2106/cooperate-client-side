@@ -20,10 +20,13 @@ const NotificationDropDown: FC = () => {
   const [visibleNotifications, setVisibleNotifications] = useState<
     INotification[] | undefined
   >();
-
+  const [unRead, setUnRead] = useState<number>(0);
   useEffect(() => {
     if (notifications) {
       setVisibleNotifications(sortNotifications(notifications).slice(0, 3));
+      setUnRead(
+        notifications.filter((notification) => !notification.read).length
+      );
     }
   }, [notifications]);
 
@@ -57,16 +60,21 @@ const NotificationDropDown: FC = () => {
   return (
     <div className='relative' ref={menuRef}>
       <div
-        className='p-1 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:shadow-outline'
+        className='p-1 relative flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:shadow-outline'
         onClick={() => {
           setShowDropDown(!showDropDown);
           handleShowMore(false);
         }}
       >
+        {unRead > 0 && (
+          <span className='absolute top-0 right-0 text-[11px] bg-blue-500 px-1.5 rounded-full text-white'>
+            {unRead > 9 ? '9+' : unRead}
+          </span>
+        )}
         <HiOutlineBell size={30} />
       </div>
       <div
-        className='top-10 md:right-9 right-0 absolute w-auto max-w-lg min-w-[400px]  flex flex-col bg-white shadow rounded-lg box-border'
+        className='top-10 md:right-9 right-0 absolute w-auto max-w-lg min-w-[400px]  flex flex-col bg-white shadow rounded-lg box-border border border-white'
         style={{
           opacity: !showDropDown ? '0' : '1',
           transition: '0.3s ease',
@@ -82,7 +90,7 @@ const NotificationDropDown: FC = () => {
             </h4>
           </div>
           <div className='rounded-b-lg max-h-[450px] overflow-y-scroll scrollbar-hide'>
-            <div className='py-2'>
+            <div className=''>
               {visibleNotifications && visibleNotifications.length > 0 ? (
                 visibleNotifications?.map((notify, index) => (
                   <Notify
@@ -92,14 +100,16 @@ const NotificationDropDown: FC = () => {
                   />
                 ))
               ) : (
-                <h1 className='text-black text-center p-2'>No Notifications Right Now.</h1>
+                <h1 className='text-black text-center p-2'>
+                  No Notifications Right Now.
+                </h1>
               )}
             </div>
             {visibleNotifications &&
               notifications.length > 3 &&
               visibleNotifications.length < notifications.length && (
                 <button
-                  className='p-2 w-full bg-blue-200 text-center text-blue-500 hover:bg-blue-300 hover:text-blue-500 rounded-b-md'
+                  className='p-2 w-full bg-blue-300 text-center text-blue-700 hover:bg-blue-300 hover:text-blue-500 rounded-b-md dark:text-white dark:bg-gray-700 dark:hover:bg-gray-600'
                   onClick={() => handleShowMore(true)}
                 >
                   Show more

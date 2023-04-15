@@ -167,16 +167,14 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
                   options={skills}
                   style={{
                     searchBox: {
-                      padding:'0.75rem',
+                      padding: '0.75rem',
                       border: `${theme === 'dark' ? ' rgb(17,24,39)' : '#000'}`,
                       background: `${
                         theme === 'dark' ? ' rgb(17,24,39)' : '#fff'
                       }`,
                     },
                     multiselectContainer: {
-                      color: ` ${
-                        theme === 'dark' ? 'rgb(17,24,39)' : '#000'
-                      }`,
+                      color: ` ${theme === 'dark' ? 'rgb(17,24,39)' : '#000'}`,
                     },
                   }}
                   selectionLimit={7}

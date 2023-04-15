@@ -24,7 +24,7 @@ const Button: FC<IButton> = ({
     <button
       className={
         !className
-          ? `text-white bg-blue-500 dark:bg-gray-800 dark:hover:bg-gray-900 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-sm text-base ${currWidth}  px-5 py-2.5 text-center`
+          ? `text-white bg-blue-500  hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-2xl text-base ${currWidth}  px-5 py-2.5 text-center`
           : className
       }
       value={value}

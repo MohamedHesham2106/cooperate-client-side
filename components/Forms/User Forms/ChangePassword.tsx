@@ -92,7 +92,7 @@ const ChangePassword: FC<IProps> = ({ user }) => {
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label
             htmlFor='OldPassword'
-            className='text-sm font-medium text-gray-600'
+            className='text-sm font-medium text-gray-600 dark:text-white'
           >
             Current Password
           </label>
@@ -107,7 +107,7 @@ const ChangePassword: FC<IProps> = ({ user }) => {
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label
             htmlFor='newPassword'
-            className='text-sm font-medium text-gray-600'
+            className='text-sm font-medium text-gray-600 dark:text-white'
           >
             New Password
           </label>
@@ -122,7 +122,7 @@ const ChangePassword: FC<IProps> = ({ user }) => {
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label
             htmlFor='confirmPassword'
-            className='text-sm font-medium text-gray-600'
+            className='text-sm font-medium text-gray-600 dark:text-white'
           >
             Confirm New Password
           </label>

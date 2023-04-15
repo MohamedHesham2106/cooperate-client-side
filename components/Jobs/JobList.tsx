@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { FC, useState } from 'react';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 import Job from './Job';
 import Container from '../UI/Container';
-import { AiOutlineSearch } from 'react-icons/ai';
 
 interface IProps {
   jobs: IUser['jobs'];

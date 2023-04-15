@@ -10,6 +10,13 @@ interface IProps {
 }
 
 const ChatName: FC<IProps> = ({ user, onClick, latestMessage }) => {
+  const [lastMessage, setLastMessage] = useState<string>('');
+  useEffect(() => {
+    // console.log(latestMessage);
+    if (latestMessage?.message) {
+      setLastMessage(latestMessage?.message);
+    }
+  }, [latestMessage, latestMessage?.message]);
   const handleClick = () => {
     onClick(user._id);
   };
@@ -24,7 +31,7 @@ const ChatName: FC<IProps> = ({ user, onClick, latestMessage }) => {
     <li>
       <div
         onClick={handleClick}
-        className='flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none'
+        className='dark:bg-gray-700 dark:border-gray-900 shadow flex items-center px-3 py-2 text-sm transition duration-150 ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none'
       >
         {user?.imageUrl ? (
           <Image
@@ -43,15 +50,17 @@ const ChatName: FC<IProps> = ({ user, onClick, latestMessage }) => {
 
         <div className='w-full pb-2'>
           <div className='flex items-center justify-between'>
-            <span className='block ml-2 font-semibold capitalize text-gray-600 text-base'>
+            <span className='block ml-2 font-semibold capitalize text-gray-600 text-base dark:text-white'>
               {user?.first_name} {user?.last_name}
             </span>
           </div>
           <div className='flex gap-2 ml-2  items-center'>
-            <span className='text-sm text-gray-600'>
-              {latestMessage?.message}
+            <span className='text-sm text-gray-600 dark:text-white'>
+              {lastMessage}
             </span>
-            <span className=' text-xs pt-1  text-gray-400'>{date}</span>
+            <span className=' text-xs pt-1  text-gray-400 dark:text-white'>
+              {date}
+            </span>
           </div>
         </div>
       </div>

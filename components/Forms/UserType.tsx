@@ -29,7 +29,7 @@ const UserType = ({ roleFetch }: Props) => {
     buttonStatement = 'Apply as a Freelancer';
   }
   return (
-    <Container className='max-w-xl mx-auto py-12 my-28 flex items-center justify-between flex-col border-2 shadow-sm rounded-md font-semibold text-md text-center'>
+    <Container className='max-w-xl mx-auto py-12 my-28 flex items-center dark:bg-gray-700 dark:border-gray-900 justify-between flex-col border-2 shadow-sm rounded-md font-semibold text-md text-center'>
       <h1 className='text-3xl font-serif'>Join as a client or freelancer</h1>
       <div className='w-full flex flex-col p-3 md:flex-row items-center justify-evenly gap-2 my-4 sm:gap-4'>
         <label
@@ -44,7 +44,7 @@ const UserType = ({ roleFetch }: Props) => {
             value='client'
             id='client'
           />
-          <div className='md:w-60 rounded-md bg-slate-100 p-5 text-gray-600 ring-2 ring-transparent transition-all hover:shadow peer-checked:text-sky-600 peer-checked:ring-blue-400 peer-checked:ring-offset-2'>
+          <div className='md:w-60 rounded-md bg-slate-100 dark:bg-gray-800 dark:text-white dark:peer-checked:text-white dark:peer-checked:ring-blue-400  p-5 text-gray-600 ring-2 ring-transparent transition-all hover:shadow peer-checked:text-sky-600 peer-checked:ring-blue-400 peer-checked:ring-offset-1'>
             <div className='flex flex-col gap-1'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>
@@ -95,7 +95,7 @@ const UserType = ({ roleFetch }: Props) => {
             id='freelancer'
             value='freelancer'
           />
-          <div className='w-full md:w-60 rounded-md bg-slate-100 p-5 text-gray-600 ring-2 ring-transparent transition-all hover:shadow peer-checked:text-sky-600 peer-checked:ring-blue-400 peer-checked:ring-offset-2'>
+          <div className='w-full md:w-60 rounded-md bg-slate-100 dark:bg-gray-800 dark:text-white dark:peer-checked:text-white dark:peer-checked:ring-blue-400 p-5 text-gray-600 ring-2 ring-transparent transition-all hover:shadow peer-checked:text-sky-600 peer-checked:ring-blue-400 peer-checked:ring-offset-1'>
             <div className='flex flex-col gap-1'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center'>

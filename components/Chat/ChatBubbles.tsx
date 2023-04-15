@@ -23,7 +23,9 @@ const ChatBubbles: FC<Props> = ({
     : 'col-start-1 col-end-8 p-3 rounded-lg';
 
   const bubbleHead = isOwn ? 'bg-green-400' : 'bg-red-300';
-  const bubbleBg = isOwn ? 'bg-blue-200' : 'bg-white border';
+  const bubbleBg = isOwn
+    ? 'bg-blue-200 dark:bg-blue-500'
+    : 'bg-white dark:bg-gray-900';
   const [date, setDate] = useState<string | undefined>();
   useEffect(() => {
     setDate(formatDateForChat(new Date(createdAt)));

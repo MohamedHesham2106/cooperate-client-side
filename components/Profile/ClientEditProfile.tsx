@@ -44,7 +44,9 @@ const ClientEditProfile: FC<IProps> = ({ user }) => {
             prefetch={false}
             scroll={false}
             className={` ${
-              openTab === 1 ? 'bg-blue-500 text-white' : 'text-black dark:text-white dark:bg-gray-700 '
+              openTab === 1
+                ? 'bg-blue-500 text-white'
+                : 'text-black dark:text-white dark:bg-gray-700 '
             }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 `}
           >
             Contact Information
@@ -59,7 +61,9 @@ const ClientEditProfile: FC<IProps> = ({ user }) => {
             prefetch={false}
             scroll={false}
             className={` ${
-              openTab === 2 ? 'bg-blue-500 text-white' : 'text-black dark:text-white dark:bg-gray-700'
+              openTab === 2
+                ? 'bg-blue-500 text-white'
+                : 'text-black dark:text-white dark:bg-gray-700'
             }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500`}
           >
             Password &amp; Security

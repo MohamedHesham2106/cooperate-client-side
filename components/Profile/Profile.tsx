@@ -108,7 +108,7 @@ const Profile: FC<IProps> = ({
           </div>
         </div>
         <div className={nameStyle}>
-          <div className='capitalize text-2xl font-normal '>
+          <div className='capitalize text-2xl md:text-start text-center font-normal '>
             {first_name} {last_name?.charAt(0)}.
           </div>
           <div className='flex gap-2 justify-center md:justify-start'>

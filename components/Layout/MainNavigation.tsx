@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC, useContext, useEffect, useState } from 'react';
 import { HiMenuAlt3 } from 'react-icons/hi';
 import { IoCloseOutline } from 'react-icons/io5';
@@ -18,6 +19,8 @@ const classNames = (...classes: string[]) => {
 };
 
 const MainNavigation: FC = () => {
+  const router = useRouter();
+  console.log(router.pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [role] = useState<string | undefined>(getRole() || undefined);
@@ -46,7 +49,6 @@ const MainNavigation: FC = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   return (
     <header
       className={classNames(
@@ -93,26 +95,92 @@ const MainNavigation: FC = () => {
             >
               {isAuth && (
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base'>
-                  <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
-                    <Link href='/'>Home</Link>
+                  <li
+                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                      router.pathname === '/'
+                        ? 'text-blue-500 dark:text-blue-500'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Link
+                      href='/'
+                      onClick={(e) => {
+                        router.pathname === '/' && e.preventDefault();
+                      }}
+                    >
+                      Home
+                    </Link>
                   </li>
-                  <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
-                    <Link href='/jobs'>Jobs</Link>
+                  <li
+                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                      router.pathname === '/jobs'
+                        ? 'text-blue-500 dark:text-blue-500'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Link
+                      href='/jobs'
+                      onClick={(e) => {
+                        router.pathname === '/jobs' && e.preventDefault();
+                      }}
+                    >
+                      Jobs
+                    </Link>
                   </li>
                   {role === 'client' && (
-                    <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
-                      <Link href={`/proposals/~${uuid}`}>Proposals</Link>
+                    <li
+                      className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                        router.pathname.includes('/proposals/')
+                          ? 'text-blue-500 dark:text-blue-500'
+                          : 'text-gray-900 dark:text-white'
+                      }`}
+                    >
+                      <Link
+                        href={`/proposals/~${uuid}`}
+                        onClick={(e) => {
+                          router.pathname.includes('/proposals/') &&
+                            e.preventDefault();
+                        }}
+                      >
+                        Proposals
+                      </Link>
                     </li>
                   )}
                   {role === 'freelancer' && (
-                    <li className='text-gray-900 hover:text-blue-500  dark:hover:text-blue-500 text-center dark:text-white'>
-                      <Link href={`/invitation/received/~${uuid}`}>
+                    <li
+                      className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                        router.pathname.includes('/invitation/received/')
+                          ? 'text-blue-500 dark:text-blue-500'
+                          : 'text-gray-900 dark:text-white'
+                      }`}
+                    >
+                      <Link
+                        href={`/invitation/received/~${uuid}`}
+                        onClick={(e) => {
+                          router.pathname.includes('/invitation/received/') &&
+                            e.preventDefault();
+                        }}
+                      >
                         Invitations
                       </Link>
                     </li>
                   )}
-                  <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
-                    <Link href={`/ongoing-projects/~${uuid}`}>Projects</Link>
+                  <li
+                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                      router.pathname.includes('/ongoing-projects/')
+                        ? 'text-blue-500 dark:text-blue-500'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Link
+                      href={`/ongoing-projects/~${uuid}`}
+                      onClick={(e) => {
+                        router.pathname.includes('/ongoing-projects/') &&
+                          e.preventDefault();
+                      }}
+                    >
+                      Projects
+                    </Link>
                   </li>
                 </ul>
               )}

@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
@@ -23,7 +24,7 @@ const Conversation: NextPage<IProps> = ({
   const [clickedNameId, setClickedNameId] = useState<string | undefined>();
   const [chat, setChat] = useState<IChat[]>([]);
   const { socket } = useSocket();
-  const [latestMessages, setLatestMessages] = useState<IChat[]>(() => {
+  const [latestMessages, setLatestMessages] = useState<IChat[] | []>(() => {
     return (
       conversations?.map((conversation: IConversation) => {
         const messages = conversation.chat;
@@ -79,7 +80,7 @@ const Conversation: NextPage<IProps> = ({
         );
 
         // If the conversation is found, update the latest message in the conversation
-        if (conversation && latestMessages) {
+        if (conversation) {
           setLatestMessages((prevLatestMessages) => {
             const newLatestMessages = [...prevLatestMessages];
             const index = newLatestMessages.findIndex(
@@ -90,13 +91,20 @@ const Conversation: NextPage<IProps> = ({
             } else {
               newLatestMessages.push(data);
             }
-            return newLatestMessages;
+            return newLatestMessages.filter(Boolean);
           });
         }
       });
     }
   }, [socket, chat, conversations, latestMessages]);
 
+  const router = useRouter();
+  useEffect(() => {
+    const query = router.query.conversation;
+    if (query) {
+      setClickedNameId(query as string);
+    }
+  }, [clickedNameId, router.query]);
   return (
     <Fragment>
       <Head>
@@ -124,7 +132,7 @@ const Conversation: NextPage<IProps> = ({
             )}
           </div>
 
-          {conversationToRender ? (
+          {conversationToRender && sender ? (
             <Chat
               chats={chat}
               conversation={conversationToRender}
@@ -132,7 +140,7 @@ const Conversation: NextPage<IProps> = ({
               receiverId={clickedNameId}
             />
           ) : (
-            <div className='text-center text-gray-400 py-5 px-2 border'>
+            <div className='text-center text-gray-400 py-5 px-2 border dark:border-gray-800'>
               Select a conversation to start chatting
             </div>
           )}

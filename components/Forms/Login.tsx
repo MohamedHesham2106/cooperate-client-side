@@ -39,7 +39,7 @@ const Login: FC = () => {
   };
 
   return (
-    <Container className='max-w-xl mx-auto bg-white px-12 pt-8 my-20 border shadow rounded-md'>
+    <Container className='max-w-xl mx-auto bg-white dark:bg-gray-700 dark:border-gray-600 px-12 pt-8 my-20 border shadow rounded-md'>
       <h1 className='text-3xl text-center font-semibold font-serif'>
         Login to Coo<span className='text-orange-400 font-bold'>/</span>Rate
       </h1>
@@ -56,11 +56,11 @@ const Login: FC = () => {
           placeholder='Email'
         />
 
-        <div className='bg-gray-50 mb-6 flex border border-gray-300 border-r-0 rounded-lg '>
+        <div className='bg-gray-50 mb-6 flex border border-gray-300 dark:bg-gray-900 dark:border-gray-900 dark:text-white border-r-0 rounded-lg '>
           <Input
             type={passwordType}
             name='password'
-            className=' border text-gray-600 bg-gray-50 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500  block w-full p-2.5 border-r-0 outline-none'
+            className=' border text-gray-600 bg-gray-50 text-sm rounded-l-lg  ock w-full p-2.5 border-r-0 outline-none dark:bg-gray-900 dark:border-gray-900 dark:text-white '
             value={userInfo.password}
             required={true}
             onChange={(e) => InputHandler(e)}
@@ -69,7 +69,7 @@ const Login: FC = () => {
           />
           <Button
             type='button'
-            className='pr-2 border rounded-r-lg px-2'
+            className='pr-2 border rounded-r-lg px-2 dark:border-gray-900 dark:bg-gray-800'
             onClick={togglePassword}
           >
             {passwordType === 'password' ? <FiEyeOff /> : <FiEye />}

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTheme } from 'next-themes';
 import { FC, useContext, useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
@@ -6,7 +7,6 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import { ModalManagerContext } from '../../context/ModalManager';
 import { getTimeDifference } from '../../utils/date';
-import { useTheme } from 'next-themes';
 interface IProps {
   project: IProject;
 }

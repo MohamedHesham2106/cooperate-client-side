@@ -30,7 +30,7 @@ const Proposal: NextPage<IProps> = ({ userId, job }) => {
           content='COO/RATE, freelance, proposals, jobs, projects, talent'
         />
       </Head>
-      <Container className='md:w-10/12 w-11/12 mx-auto my-24 border border-gray-300 rounded shadow-lg'>
+      <Container className='md:w-10/12 w-11/12 mx-auto my-24 border border-gray-300 dark:border-gray-800 dark:shadow-gray-900 rounded shadow-lg'>
         <ProposalForm userId={userId} job={job} />
       </Container>
     </Fragment>

@@ -7,7 +7,7 @@ import axiosInstance from '../../utils/axios';
 interface IProps {
   receiverIds: string[];
   onClick: (id: string | undefined) => void;
-  latestMessages?: IChat[];
+  latestMessages: IChat[];
 }
 const ChatNameList: FC<IProps> = ({ receiverIds, onClick, latestMessages }) => {
   const [users, setUsers] = useState<IUser[] | undefined>();
@@ -35,15 +35,21 @@ const ChatNameList: FC<IProps> = ({ receiverIds, onClick, latestMessages }) => {
   }, [receiverIds]);
 
   return (
-    <div className=' border lg:col-span-1'>
+    <div className=' border lg:col-span-1 dark:border-gray-800  dark:bg-gray-800'>
+      <h2 className='text-3xl font-bold text-white text-center p-5 dark:bg-gray-800 bg-blue-500'>
+        Chats
+      </h2>
       <div className='mx-3 my-3'>
-        <div className='relative text-gray-600'>
+        <div className='relative text-gray-600 dark:text-white'>
           <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
-            <AiOutlineSearch className='text-gray-300' size={20} />
+            <AiOutlineSearch
+              className='text-gray-300 dark:text-white'
+              size={20}
+            />
           </span>
           <input
             type='text'
-            className='block w-full py-2 pl-10 bg-gray-100 rounded outline-none'
+            className='block w-full py-2 pl-10 bg-gray-100 rounded outline-none dark:bg-gray-900  dark:text-white'
             name='search'
             placeholder='Search'
             value={searchValue}
@@ -54,7 +60,6 @@ const ChatNameList: FC<IProps> = ({ receiverIds, onClick, latestMessages }) => {
       </div>
 
       <ul className='overflow-auto lg:h-[33rem]'>
-        <h2 className='my-2 mb-2 ml-2 text-lg text-gray-600'>Chats</h2>
         {latestMessages &&
           filteredUsers &&
           filteredUsers.map((user: IUser, index) => (

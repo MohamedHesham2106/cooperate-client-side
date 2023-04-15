@@ -151,7 +151,10 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           </div>
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='email' className='text-sm font-medium text-gray-600  dark:text-white'>
+          <label
+            htmlFor='email'
+            className='text-sm font-medium text-gray-600  dark:text-white'
+          >
             Email
           </label>
           <Input
@@ -167,7 +170,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         <div className='flex flex-col gap-1'>
           <label
             htmlFor='education'
-            className='text-sm font-medium text-gray-600  dark:text-white' 
+            className='text-sm font-medium text-gray-600  dark:text-white'
           >
             Education
           </label>
@@ -182,7 +185,10 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           />
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='phone' className='text-sm font-medium text-gray-600  dark:text-white'>
+          <label
+            htmlFor='phone'
+            className='text-sm font-medium text-gray-600  dark:text-white'
+          >
             Phone Number
           </label>
           <Input

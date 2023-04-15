@@ -106,9 +106,23 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         Freelancer_id: project?.Freelancer_id,
         client_id: project?.client_id,
       })
-      .then((_response) => router.push(`/chat`))
+      .then((_response) =>
+        router.push(
+          `/chat?conversation=${
+            uuid !== project?.Freelancer_id
+              ? project?.Freelancer_id
+              : project?.client_id
+          }`
+        )
+      )
       .catch((_error) => {
-        router.push(`/chat`);
+        router.push(
+          `/chat?conversation=${
+            uuid !== project?.Freelancer_id
+              ? project?.Freelancer_id
+              : project?.client_id
+          }`
+        );
       });
   };
   const handleCompletion = async (

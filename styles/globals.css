@@ -30,14 +30,14 @@
     justify-content: center;
     align-items: center;
   }
-  
+
   #wifi-loader svg {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
+
   #wifi-loader svg circle {
     position: absolute;
     fill: none;
@@ -47,66 +47,66 @@
     transform: rotate(-100deg);
     transform-origin: center;
   }
-  
+
   #wifi-loader svg circle.back {
     stroke: var(--back-color);
   }
-  
+
   #wifi-loader svg circle.front {
     stroke: var(--front-color);
   }
-  
+
   #wifi-loader svg.circle-outer {
     height: 86px;
     width: 86px;
   }
-  
+
   #wifi-loader svg.circle-outer circle {
     stroke-dasharray: 62.75 188.25;
   }
-  
+
   #wifi-loader svg.circle-outer circle.back {
     animation: circle-outer135 1.8s ease infinite 0.3s;
   }
-  
+
   #wifi-loader svg.circle-outer circle.front {
     animation: circle-outer135 1.8s ease infinite 0.15s;
   }
-  
+
   #wifi-loader svg.circle-middle {
     height: 60px;
     width: 60px;
   }
-  
+
   #wifi-loader svg.circle-middle circle {
     stroke-dasharray: 42.5 127.5;
   }
-  
+
   #wifi-loader svg.circle-middle circle.back {
     animation: circle-middle6123 1.8s ease infinite 0.25s;
   }
-  
+
   #wifi-loader svg.circle-middle circle.front {
     animation: circle-middle6123 1.8s ease infinite 0.1s;
   }
-  
+
   #wifi-loader svg.circle-inner {
     height: 34px;
     width: 34px;
   }
-  
+
   #wifi-loader svg.circle-inner circle {
     stroke-dasharray: 22 66;
   }
-  
+
   #wifi-loader svg.circle-inner circle.back {
     animation: circle-inner162 1.8s ease infinite 0.2s;
   }
-  
+
   #wifi-loader svg.circle-inner circle.front {
     animation: circle-inner162 1.8s ease infinite 0.05s;
   }
-  
+
   #wifi-loader .text {
     position: absolute;
     bottom: -40px;
@@ -118,22 +118,23 @@
     font-size: 14px;
     letter-spacing: 0.2px;
   }
-  
-  #wifi-loader .text::before, #wifi-loader .text::after {
+
+  #wifi-loader .text::before,
+  #wifi-loader .text::after {
     content: attr(data-text);
   }
-  
+
   #wifi-loader .text::before {
     color: var(--text-color);
   }
-  
+
   #wifi-loader .text::after {
     color: var(--front-color);
     animation: text-animation76 3.6s ease infinite;
     position: absolute;
     left: 0;
   }
-  
+
   @keyframes circle-outer135 {
     0% {
       stroke-dashoffset: 25;
@@ -247,5 +248,4 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
-  
 }

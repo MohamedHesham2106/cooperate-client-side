@@ -88,7 +88,7 @@ const Register: React.FC<IRegister> = ({ role }) => {
       : 'Sign up to find work you love';
 
   return (
-    <Container className='max-w-xl mx-auto bg-white px-12 pt-8 my-20 border shadow rounded-md'>
+    <Container className='max-w-xl mx-auto bg-white px-12 pt-8 my-20 border shadow rounded-md dark:bg-gray-700 dark:border-gray-600'>
       <h1 className='text-3xl text-center font-semibold font-serif'>
         {Greeting}
       </h1>

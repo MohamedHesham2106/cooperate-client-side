@@ -30,7 +30,7 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
       setUser(user);
       setImage(user.imageUrl);
     }
-  }, []);
+  }, [accessToken, uuid]);
   useEffect(() => {
     fetchUser();
 

@@ -37,12 +37,12 @@ const CustomToast: React.FC<IProps> = ({ notification, t }) => {
           </svg>
         </button>
       </div>
-      <div className='flex items-center gap-5'>
+      <div className='flex items-center gap-2'>
         <div className='relative '>
           <Image
-            width={48}
-            height={48}
-            className='w-12 h-12 object-cover rounded-full shadow '
+            width={50}
+            height={50}
+            className='w-[50px] h-[50px] object-cover rounded-full shadow '
             src={
               notification.user.imageUrl
                 ? notification.user.imageUrl

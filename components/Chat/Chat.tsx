@@ -72,8 +72,8 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
   };
 
   return (
-    <div className='  flex flex-col  justify-between border border-t-0 lg:border-t '>
-      <div className='h-[70vh]  relative '>
+    <div className='  flex flex-col  justify-between border border-t-0 lg:border-t dark:border-gray-800  dark:bg-gray-700'>
+      <div className='h-[80vh] relative '>
         <div
           className='overflow-y-auto h-full p-2 grid grid-cols-12 gap-y-1 '
           ref={chatBubbleRef}
@@ -110,7 +110,7 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
           </div>
         )}
       </div>
-      <section className='flex items-center justify-between gap-2 w-full p-3 border-t border-gray-300'>
+      <section className='flex items-center justify-between gap-2 w-full p-3 border-t border-gray-300 dark:border-gray-800  dark:bg-gray-800'>
         <button onClick={() => setShowPicker(!showPicker)}>
           <FaRegSmile />
         </button>

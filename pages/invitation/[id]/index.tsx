@@ -13,7 +13,7 @@ interface IProps {
 const Invitation: NextPage<IProps> = ({ user, freelancer }) => {
   console.log(freelancer);
   return (
-    <Container className='md:w-6/12 w-11/12 mx-auto my-24 border border-gray-300 rounded shadow-lg'>
+    <Container className='md:w-6/12 w-11/12 mx-auto my-24 border border-gray-300 rounded shadow-md dark:border-gray-800 dark:shadow-gray-900'>
       <InvitationForm user={user} freelancer={freelancer} />
     </Container>
   );
@@ -44,6 +44,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     };
     const user = {
       _id: userData._id,
+      first_name: userData.first_name,
+      last_name: userData.last_name,
       jobs: userData.jobs,
     };
     if (payload.sub && payload.role === 'client' && freelancer._id) {

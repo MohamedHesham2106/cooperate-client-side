@@ -2,8 +2,14 @@ import Link from 'next/link';
 import React from 'react';
 interface IProps {
   skills: IUser['skills'];
+  color?: string;
+  bg?: string;
 }
-const SkillsSection: React.FC<IProps> = ({ skills }) => {
+const SkillsSection: React.FC<IProps> = ({
+  skills,
+  color = 'text-blue-700 ',
+  bg = 'bg-blue-200 ',
+}) => {
   return (
     <div className='flex mt-2 gap-3 flex-wrap'>
       {skills?.map((skill: ISkill) => (
@@ -11,7 +17,7 @@ const SkillsSection: React.FC<IProps> = ({ skills }) => {
           href={`/jobs?skills=${skill.name}`}
           key={skill._id}
           title={skill.name}
-          className='px-4 py-2  text-base rounded-3xl text-green-600 font-semibold bg-green-200 ring-2 ring-offset-2 ring-green-500 '
+          className={`px-4 py-2  text-sm rounded-3xl ${color} font-bold ${bg} shadow-md dark:shadow-gray-900 dark:border-2 dark:border-gray-900 `}
         >
           {skill.name}
         </Link>

@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import toast from 'react-hot-toast';
 import { ImCross } from 'react-icons/im';
 
+import SkillsSection from '../Profile/Sections/SkillsSection';
 import Button from '../UI/Button';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
@@ -15,7 +16,6 @@ interface IProps {
 interface IProposal {
   cover_letter?: string;
   website_link?: string;
-  budget?: number;
 }
 const ProposalForm: FC<IProps> = ({ userId, job }) => {
   const { sendNotification } = useNotification();
@@ -23,7 +23,6 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
   const [proposal, setProposal] = useState<IProposal>({
     cover_letter: '',
     website_link: '',
-    budget: job.budget,
   });
   const [file, setFile] = useState<File | null>(null);
 
@@ -92,7 +91,7 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { cover_letter, budget, website_link } = proposal;
+    const { cover_letter, website_link } = proposal;
     if (cover_letter?.length === 0) {
       toast.error('Please Fill The Cover Letter.', {
         style: {
@@ -105,7 +104,6 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
     await axiosInstance
       .post(`/api/proposal/${userId}`, {
         cover_letter,
-        budget,
         website_link,
         job_id: job._id,
       })
@@ -138,8 +136,8 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
   };
 
   return (
-    <section className='flex flex-col gap-4 p-5'>
-      <h2 className='text-3xl font-medium text-center p-5 text-white rounded-lg shadow-md mb-5 bg-blue-500'>
+    <section className='flex flex-col gap-4 p-5 dark:bg-gray-700'>
+      <h2 className='text-4xl font-black text-center p-5 text-white rounded-lg shadow-md mb-5 bg-blue-500 dark:bg-gray-800 capitalize'>
         {job.title}
       </h2>
       <div className='grid grid-cols-2 gap-4'>
@@ -150,12 +148,14 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
           <h2 className='text-lg font-medium mt-5'>Experience &amp; Budget:</h2>
           <section className='grid grid-cols-2 items-center text-center  font-semibold text-sm'>
             <div className='flex flex-col gap-1'>
-              <span>${job.budget.toFixed(2)}</span>
-              <span className='text-xs font-light text-black'>Fixed-price</span>
+              <span>Fixed-price</span>
+              <span className='text-xs font-light text-black dark:text-blue-500'>
+                ${job.budget.toFixed(2)}
+              </span>
             </div>
             <div className='flex flex-col gap-1'>
               <span>Experience</span>
-              <span className='text-xs font-light text-black capitalize'>
+              <span className='text-xs font-light text-black capitalize dark:text-blue-500'>
                 {job.experience_level} Level
               </span>
             </div>
@@ -165,43 +165,26 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
           </h2>
           <section>
             <div className='flex mt-2 gap-2 flex-wrap items-center justify-center'>
-              {job.skills?.map((skill: ISkill) => (
-                <span
-                  key={skill._id}
-                  title={skill.name}
-                  className='px-4 py-2  text-sm rounded-3xl text-blue-600 font-medium bg-blue-200 '
-                >
-                  {skill.name}
-                </span>
-              ))}
+              {job.skills && (
+                <SkillsSection
+                  skills={job.skills}
+                  bg='bg-blue-200'
+                  color='text-blue-500'
+                />
+              )}
             </div>
           </section>
         </div>
         <div className='p-5 flex flex-col'>
-          <h2 className='text-lg font-medium '>Submit a Proposal:</h2>
+          <h2 className='text-2xl font-bold '>Submit a Proposal:</h2>
           <Form className='mt-10 flex flex-col gap-5' OnSubmit={submitHandler}>
-            <h3 className='text-left text-md font-normal'>Confirm Budget</h3>
-            <section className='flex flex-col'>
-              <div className='flex flex-col gap-2 relative'>
-                <Input
-                  value={proposal.budget}
-                  onChange={handleChange}
-                  required={false}
-                  name='budget'
-                  type='number'
-                />
-                <span className='absolute bottom-2 right-5 text-gray-400'>
-                  $
-                </span>
-              </div>
-            </section>
             <section className='flex flex-col gap-4 relative'>
-              <h3 className='text-left text-md font-normal'>Cover Letter</h3>
+              <h3 className='text-left text-lg font-bold'>Cover Letter</h3>
               <textarea
                 name='cover_letter'
                 onChange={handleChange}
                 rows={8}
-                className='block p-5 w-full text-sm text-gray-800 bg-white border-2  rounded-md border-gray-300 outline-none focus:border-blue-400 resize-none'
+                className='block p-5 w-full text-sm text-gray-800 bg-white border-2  rounded-md border-gray-300 outline-none focus:border-blue-400 resize-none dark:bg-gray-900 dark:border-gray-900 dark:text-white'
                 value={proposal.cover_letter}
                 maxLength={MAX_CHARACTERS}
               ></textarea>
@@ -209,7 +192,7 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
                 {charactersLeft} characters left
               </span>
             </section>
-            <h3 className='text-left text-md font-normal'>
+            <h3 className='text-left text-lg font-bold'>
               Website Link (Optional)
             </h3>
             <section className='flex flex-col'>
@@ -224,7 +207,7 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
                 />
               </div>
             </section>
-            <h3 className='text-left text-md font-normal'>
+            <h3 className='text-left text-lg font-bold'>
               Attachments (Optional)
             </h3>
             <section className='w-full rounded-md'>

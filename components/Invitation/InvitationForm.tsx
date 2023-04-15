@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import Button from '../UI/Button';
 import CustomSelect from '../UI/CustomSelect';
 import Form from '../UI/Form';
+import { useNotification } from '../../context/NotificationProvider';
 import axiosInstance from '../../utils/axios';
 
 interface IProps {
@@ -19,7 +20,7 @@ interface IOption {
 const InvitationForm: FC<IProps> = ({ user, freelancer }) => {
   const [selectedJob, setSelectedJob] = useState<string>('');
   const [invitationLetter, setInvitationLetter] = useState<string>('');
-
+  const { sendNotification } = useNotification();
   const MAX_CHARACTERS = 1000;
   // calculate number of characters left
   const invitationLetterLength = invitationLetter?.length;
@@ -44,31 +45,49 @@ const InvitationForm: FC<IProps> = ({ user, freelancer }) => {
           padding: '16px',
         },
       });
-    }
-    await axiosInstance
-      .post(`/api/invitation/${user._id}`, {
-        job_id: selectedJob,
-        invitation_letter: invitationLetter,
-        freelancer_id: freelancer._id,
-      })
-      .then(() => {
-        toast.success('Invitation Sent!', {
-          style: {
-            border: '1px solid #07bd3a',
-            padding: '16px',
-          },
-        });
-      })
-      .catch((error) => {
-        const err = error as IError;
-        const { message } = err.response.data;
-        toast.error(message, {
-          style: {
-            border: '1px solid #ce1500',
-            padding: '16px',
-          },
-        });
+    } else if (selectedJob === '') {
+      toast.error('Please Choose a Job.', {
+        style: {
+          border: '1px solid #ce1500',
+          padding: '16px',
+        },
       });
+    } else {
+      await axiosInstance
+        .post(`/api/invitation/${user._id}`, {
+          job_id: selectedJob,
+          invitation_letter: invitationLetter,
+          freelancer_id: freelancer._id,
+        })
+        .then(() => {
+          sendNotification(
+            user._id,
+            freelancer._id,
+            `${user.first_name} ${
+              user.last_name
+            } sees you as potential candidate For ${
+              user.jobs?.find((job) => selectedJob === job._id)?.title
+            }`,
+            `/invitation/received/${freelancer._id}`
+          );
+          toast.success('Invitation Sent!', {
+            style: {
+              border: '1px solid #07bd3a',
+              padding: '16px',
+            },
+          });
+        })
+        .catch((error) => {
+          const err = error as IError;
+          const { message } = err.response.data;
+          toast.error(message, {
+            style: {
+              border: '1px solid #ce1500',
+              padding: '16px',
+            },
+          });
+        });
+    }
   };
 
   const jobList: IOption[] | undefined = user.jobs?.map((job) => ({
@@ -76,8 +95,8 @@ const InvitationForm: FC<IProps> = ({ user, freelancer }) => {
     name: job.title,
   }));
   return (
-    <div className='p-5 flex flex-col gap-5'>
-      <h2 className='text-2xl font-medium text-center p-5 text-white rounded-lg shadow-md mb-5 bg-blue-500'>
+    <div className='p-5 flex flex-col gap-5 dark:bg-gray-700 '>
+      <h2 className='text-2xl font-medium text-center p-5 text-white rounded-lg shadow-md mb-5 bg-blue-500 dark:bg-gray-800'>
         Gig Invitation to{' '}
         <Link href={`/freelancer/~${freelancer._id}`}>
           {freelancer.first_name} {freelancer.last_name}
@@ -96,7 +115,7 @@ const InvitationForm: FC<IProps> = ({ user, freelancer }) => {
             name='invitation_letter'
             onChange={handleChange}
             rows={8}
-            className='block p-5 w-full text-sm text-gray-800 bg-white border-2  rounded-md border-gray-300 outline-none focus:border-blue-400 resize-none'
+            className='block p-5 w-full text-sm text-gray-800 bg-white border-2  rounded-md border-gray-300 outline-none focus:border-blue-400 resize-none dark:bg-gray-900 dark:border-gray-900 dark:text-white'
             value={invitationLetter}
             maxLength={MAX_CHARACTERS}
           ></textarea>

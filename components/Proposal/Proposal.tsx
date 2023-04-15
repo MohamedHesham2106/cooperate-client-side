@@ -58,9 +58,12 @@ const Proposal: FC<IProps> = ({ proposal, offset }) => {
 
           <div className='ml-2'>
             <h4 className='text-lg font-semibold leading-tight text-gray-900 flex items-center gap-2 dark:text-white'>
-              <SlEnvolopeLetter className='dark:text-blue-500' /> {data.user.first_name} {data.user.last_name}
+              <SlEnvolopeLetter className='dark:text-blue-500' />{' '}
+              {data.user.first_name} {data.user.last_name}
             </h4>
-            <p className='text-sm text-gray-600 dark:text-white'>sent you a proposal!</p>
+            <p className='text-sm text-gray-600 dark:text-white'>
+              sent you a proposal!
+            </p>
           </div>
         </motion.div>
       )}
