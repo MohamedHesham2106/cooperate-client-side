@@ -1,17 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC, useContext, useEffect, useState } from 'react';
+import { HiMenuAlt3 } from 'react-icons/hi';
+import { IoCloseOutline } from 'react-icons/io5';
 
 import NotificationDropDown from '../DropDownMenus/NotificationDropDown';
 import UserDropDown from '../DropDownMenus/UserDropDown';
+import ThemeIcon from '../SVG/ThemeIcon';
 import { AuthContext } from '../../context/AuthContext';
+import { useAuthenticate } from '../../context/AuthProvider';
 import { useScrollPosition } from '../../hooks/useScrollPosition';
-import {
-  getCookie,
-  getPayloadFromToken,
-  isAuthenticated,
-} from '../../utils/cookie';
+import { isAuthenticated } from '../../utils/cookie';
 import { getRole } from '../../utils/user';
+
 const classNames = (...classes: string[]) => {
   return classes.filter(Boolean).join(' ');
 };
@@ -20,7 +21,7 @@ const MainNavigation: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [role] = useState<string | undefined>(getRole() || undefined);
-
+  const { uuid } = useAuthenticate();
   const scrollPosition = useScrollPosition();
   const checkAuthentication = isAuthenticated();
   const { SignOut } = useContext(AuthContext);
@@ -29,8 +30,7 @@ const MainNavigation: FC = () => {
     SignOut();
   };
 
-  const tokenPayload = getPayloadFromToken(getCookie('jwt_refresh'));
-  const userURL = `/${role}/~${tokenPayload?.sub}`;
+  const userURL = `/${role}/~${uuid}`;
   useEffect(() => {
     setIsAuth(checkAuthentication);
   }, [checkAuthentication]);
@@ -51,8 +51,8 @@ const MainNavigation: FC = () => {
     <header
       className={classNames(
         scrollPosition > 0
-          ? 'shadow bg-white'
-          : 'shadow-none md:bg-transparent bg-white',
+          ? 'shadow dark:shadow-gray-800 bg-white dark:bg-gray-900'
+          : 'shadow-none md:bg-transparent bg-white dark:md:bg-transparent dark:bg-gray-900',
         `transition-shadow fixed top-0 left-0 z-10 w-full `
       )}
     >
@@ -77,33 +77,9 @@ const MainNavigation: FC = () => {
                   onClick={() => setIsOpen(!isOpen)}
                 >
                   {isOpen ? (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-6 h-6 text-black'
-                      viewBox='0 0 20 20'
-                      fill='currentColor'
-                    >
-                      <path
-                        fillRule='evenodd'
-                        d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                        clipRule='evenodd'
-                      />
-                    </svg>
+                    <IoCloseOutline size={35} className='dark:text-white' />
                   ) : (
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      className='w-6 h-6 text-black'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M4 6h16M4 12h16M4 18h16'
-                      />
-                    </svg>
+                    <HiMenuAlt3 size={35} className='dark:text-white' />
                   )}
                 </button>
               </div>
@@ -111,42 +87,38 @@ const MainNavigation: FC = () => {
           </div>
           <div>
             <div
-              className={`flex-1 justify-self-center md:bg-transparent bg-white pb-3  md:block md:pb-0 md:mt-0  ${
+              className={`flex-1 justify-self-center md:bg-transparent bg-white dark:bg-gray-900 pb-3  md:block md:pb-0 md:mt-0  ${
                 isOpen ? 'block p-6 shadow-xl' : 'hidden'
               }`}
             >
               {isAuth && (
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base'>
-                  <li className='text-gray-900 hover:text-blue-500 text-center'>
+                  <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
                     <Link href='/'>Home</Link>
                   </li>
-                  <li className='text-gray-900 hover:text-blue-500 text-center'>
+                  <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
                     <Link href='/jobs'>Jobs</Link>
                   </li>
                   {role === 'client' && (
-                    <li className='text-gray-900 hover:text-blue-500 text-center'>
-                      <Link href={`/proposals/~${tokenPayload?.sub}`}>
-                        Proposals
-                      </Link>
+                    <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
+                      <Link href={`/proposals/~${uuid}`}>Proposals</Link>
                     </li>
                   )}
                   {role === 'freelancer' && (
-                    <li className='text-gray-900 hover:text-blue-500 text-center'>
-                      <Link href={`/invitation/received/~${tokenPayload?.sub}`}>
+                    <li className='text-gray-900 hover:text-blue-500  dark:hover:text-blue-500 text-center dark:text-white'>
+                      <Link href={`/invitation/received/~${uuid}`}>
                         Invitations
                       </Link>
                     </li>
                   )}
-                  <li className='text-gray-900 hover:text-blue-500 text-center'>
-                    <Link href={`/ongoing-projects/~${tokenPayload?.sub}`}>
-                      Projects
-                    </Link>
+                  <li className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'>
+                    <Link href={`/ongoing-projects/~${uuid}`}>Projects</Link>
                   </li>
                 </ul>
               )}
 
               <div
-                className={`mt-3 space-y-2 md:hidden ${
+                className={`mt-3 space-y-2  md:hidden ${
                   !isAuth
                     ? 'inline-block'
                     : 'flex flex-col justify-between items-center'
@@ -164,26 +136,26 @@ const MainNavigation: FC = () => {
                   <div className='pt-6  w-full flex flex-col space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base '>
                     <Link
                       href={userURL}
-                      className='text-gray-900 hover:text-blue-500 text-center'
+                      className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'
                     >
                       Profile
                     </Link>
                     <Link
                       href='/chat'
-                      className='text-gray-900 hover:text-blue-500 text-center'
+                      className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'
                     >
                       Chat
                     </Link>
                     <Link
                       href={`${userURL}/settings`}
-                      className='text-gray-900 hover:text-blue-500 text-center'
+                      className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'
                     >
                       Settings
                     </Link>
                     <Link
                       href='/'
                       onClick={logOutHandler}
-                      className='text-gray-900 hover:text-blue-500 text-center'
+                      className='text-gray-900 hover:text-blue-500 dark:hover:text-blue-500 text-center dark:text-white'
                     >
                       LogOut
                     </Link>
@@ -200,17 +172,21 @@ const MainNavigation: FC = () => {
               </div>
             </div>
           </div>
-          <div className='hidden space-x-2 md:inline-block'>
+          <div className='hidden gap-x-2 md:flex items-center'>
+            <div>
+              <ThemeIcon />
+            </div>
+
             {!isAuth && (
               <Link
                 href='/oauth'
-                className='px-4 py-2 text-white bg-blue-500 rounded-md shadow hover:bg-blue-800'
+                className='px-4 py-2 text-white  bg-blue-500 rounded-md shadow hover:bg-blue-800'
               >
                 Log In
               </Link>
             )}
             {isAuth && (
-              <div className='flex md:pr-5 gap-2 items-center'>
+              <div className='flex md:pr-5 gap-3 items-center'>
                 <NotificationDropDown />
                 <UserDropDown />
               </div>

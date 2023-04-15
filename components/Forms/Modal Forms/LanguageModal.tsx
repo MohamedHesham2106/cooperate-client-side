@@ -116,15 +116,15 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
       onClose={onClose}
       className='p-2 flex flex-col gap-5 justify-center '
     >
-      <h1 className='text-2xl font-semibold'>Add/Edit language</h1>
+      <h1 className='text-2xl font-bold'>Add/Edit language</h1>
       <div className='flex gap-2'>
         <Button
           type='button'
           className={`${
             action === 'edit'
-              ? 'bg-gray-700 text-white '
-              : 'bg-gray-50 text-gray-900 border'
-          }text-sm rounded-lg focus:ring-blue-500 text-center font-medium focus:border-blue-500 block w-full p-2.5`}
+              ? 'bg-gray-700 text-white dark:bg-gray-900 '
+              : 'bg-gray-50 text-gray-900  dark:bg-gray-500 dark:text-white'
+          } text-sm rounded-lg text-center font-medium  block w-full p-2.5`}
           onClick={() => setAction('edit')}
         >
           Add/Edit Language
@@ -134,9 +134,9 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
           onClick={() => setAction('remove')}
           className={`${
             action === 'remove'
-              ? 'bg-gray-700 text-white '
-              : 'bg-gray-50 text-gray-900 border'
-          } text-sm rounded-lg text-center font-medium focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+              ? 'bg-gray-700 text-white dark:bg-gray-900 '
+              : 'bg-gray-50 text-gray-900  dark:bg-gray-500  dark:text-white'
+          } text-sm rounded-lg text-center font-medium  block w-full p-2.5`}
         >
           Remove Language
         </Button>

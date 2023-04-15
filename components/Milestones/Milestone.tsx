@@ -41,7 +41,7 @@ const Milestone: FC<IProps> = ({ milestone, role }) => {
     <div
       className={`grid ${
         role === 'freelancer' ? 'grid-cols-4' : 'grid-cols-3'
-      } text-sm capitalize items-center justify-between text-center bg-blue-400 text-white p-2  rounded-lg shadow `}
+      } text-sm capitalize items-center justify-between text-center bg-blue-400 dark:bg-gray-400 text-white p-2  rounded-lg shadow `}
     >
       <span>{milestone.title}</span>
       <span>{milestone.status}</span>
@@ -50,7 +50,7 @@ const Milestone: FC<IProps> = ({ milestone, role }) => {
         <Button
           onClick={handleMarkAsDone}
           type='button'
-          className='border px-2.5 py-1 bg-orange-400 border-orange-400 rounded-full'
+          className='px-2.5 py-1 bg-orange-400 hover:bg-orange-500   dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full'
         >
           Mark as Done
         </Button>

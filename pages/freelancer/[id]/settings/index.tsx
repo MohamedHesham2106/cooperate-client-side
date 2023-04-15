@@ -28,7 +28,7 @@ const Settings: NextPage<IProps> = ({ user }) => {
           content='COO/RATE User Settings, account management, preferences, password management, profile updates, notification settings'
         />
       </Head>
-      <Container className='w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-md'>
+      <Container className='w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-md dark:bg-gray-800 dark:border-gray-700'>
         <FreelancerEditProfile user={user} />
       </Container>
     </Fragment>

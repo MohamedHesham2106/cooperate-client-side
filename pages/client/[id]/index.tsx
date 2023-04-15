@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
-import { Fragment, MouseEvent, useState } from 'react';
+import { Fragment } from 'react';
 
 import ClientDetails from '../../../components/Profile/ClientDetails';
 import Profile from '../../../components/Profile/Profile';
@@ -12,7 +12,7 @@ interface IProps {
   user: IUser;
   isOwnProfile: boolean;
   isSameRole: boolean;
-  isFreelancer: 'freelancer' | 'client';
+  isFreelancer: 'freelancer' | 'client' | undefined;
 }
 const Client: NextPage<IProps> = ({
   isOwnProfile,
@@ -36,7 +36,7 @@ const Client: NextPage<IProps> = ({
         />
       </Head>
 
-      <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
+      <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 dark:border-none dark:bg-gray-800 rounded-md shadow-lg'>
         <Profile
           isOwnProfile={isOwnProfile}
           isSameRole={isSameRole}
@@ -68,6 +68,13 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
+    const isFreelancer =
+      payload.role === 'freelancer'
+        ? 'freelancer'
+        : payload.role === 'client'
+        ? 'client'
+        : undefined;
+
     if (user.role !== 'client') {
       return { redirect: { destination: '/404', permanent: false } };
     }
@@ -76,7 +83,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         user,
         isOwnProfile: payload.sub === user._id,
         isSameRole: payload.role === user.role,
-        isFreelancer: payload.role === 'freelancer' ? 'freelancer' : 'client',
+        isFreelancer: isFreelancer,
       },
     };
   } catch {

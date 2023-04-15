@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { SlOptions } from 'react-icons/sl';
 import useSWR from 'swr';
 
+import { ModalManagerContext } from '../../../context/ModalManager';
 import axiosInstance from '../../../utils/axios';
 import { getCookie } from '../../../utils/cookie';
 
@@ -11,17 +12,43 @@ const UserList = () => {
   const [show, setShow] = useState<string | undefined>();
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const { data, isLoading } = useSWR('/api/user', async (url) => {
-    const response = await axiosInstance.get(url, {
-      headers: {
-        Authorization: 'Bearer ' + getCookie('jwt_access'), // Replace with your authorization header
-        'Content-Type': 'application/json', // Replace with your desired content type header
-      },
-    });
-    const data = await response.data;
-    return data;
-  });
-  const users = data?.users || [];
+  const [users, setUsers] = useState<IUser[]>([]);
+
+  const { displayModal } = useContext(ModalManagerContext);
+
+  const handleViewUser = (user: IUser) => {
+    displayModal('viewUser', { user });
+  };
+  const handleModifyUser = (user: IUser) => {
+    displayModal('modifyUser', { user });
+  };
+
+  const { data, isLoading } = useSWR(
+    '/api/user',
+    async (url) => {
+      const response = await axiosInstance.get(url, {
+        headers: {
+          Authorization: 'Bearer ' + getCookie('jwt_access'), // Replace with your authorization header
+          'Content-Type': 'application/json', // Replace with your desired content type header
+        },
+      });
+      const data = await response.data;
+      return data;
+    },
+    {
+      refreshInterval: 1000,
+    }
+  );
+  const handleNewData = (newData: IUser[]) => {
+    setUsers(newData);
+  };
+
+  useEffect(() => {
+    if (data) {
+      handleNewData(data.users);
+    }
+  }, [data]);
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
@@ -76,7 +103,7 @@ const UserList = () => {
           />
         </div>
         <div className='p-5'>
-          <h6 className='text-base font-bold mb-2'>Role</h6>
+          <h6 className='text-lg font-bold mb-2'>Role</h6>
           <div className='flex items-center gap-4'>
             <div>
               <label className='flex items-center space-x-1'>
@@ -151,13 +178,13 @@ const UserList = () => {
         <table className='w-full whitespace-nowrap'>
           <thead>
             <tr className='h-16 w-full text-sm leading-none text-gray-800'>
-              <th className='font-normal text-left pl-4'>Full Name</th>
-              <th className='font-normal text-left pl-12'>Role</th>
-              <th className='font-normal text-left pl-12'>Created At</th>
-              <th className='font-normal text-left pl-20'>Latest Update</th>
-              <th className='font-normal text-left pl-20'>E-Mail</th>
-              <th className='font-normal text-left pl-16'>Verified</th>
-              <th className='font-normal text-left pl-16'>Modify</th>
+              <th className='font-bold text-left pl-4'>Full Name</th>
+              <th className='font-bold text-left pl-12'>Role</th>
+              <th className='font-bold text-left pl-12'>Created At</th>
+              <th className='font-bold text-left pl-20'>Latest Update</th>
+              <th className='font-bold text-left pl-20'>E-Mail</th>
+              <th className='font-bold text-left pl-16'>Verified</th>
+              <th className='font-bold text-left pl-16'>Modify</th>
             </tr>
           </thead>
           <tbody className='w-full'>
@@ -242,11 +269,20 @@ const UserList = () => {
                       </button>
                     )}
                     {show == user._id && (
-                      <div className=' bg-white shadow w-24 absolute right-0 z-30 mr-6 '>
-                        <div className='text-xs w-full hover:bg-blue-700 py-4 px-4 cursor-pointer hover:text-white'>
+                      <div className=' bg-white shadow-lg w-24 absolute right-0 z-30 mr-6  rounded-lg'>
+                        <div
+                          onClick={() => handleViewUser(user)}
+                          className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-md hover:text-white'
+                        >
+                          <p>View</p>
+                        </div>
+                        <div
+                          onClick={() => handleModifyUser(user)}
+                          className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-md hover:text-white'
+                        >
                           <p>Edit</p>
                         </div>
-                        <div className='text-xs w-full hover:bg-blue-700 py-4 px-4 cursor-pointer hover:text-white'>
+                        <div className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-md hover:text-white'>
                           <p>Delete</p>
                         </div>
                       </div>

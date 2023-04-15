@@ -31,7 +31,7 @@ const Review: React.FC<IProps> = ({ name, feedback, value, date }) => {
   }
 
   return (
-    <article className='p-5 border shadow rounded-lg grid grid-cols-1 gap-2'>
+    <article className='p-5 border shadow-md rounded-lg grid grid-cols-1 gap-2 dark:shadow-gray-900 cursor-pointer dark:bg-gray-700 dark:border-gray-600'>
       <div className='flex justify-center mb-2 flex-col'>
         <div className='font-medium '>
           <p>

@@ -4,7 +4,6 @@ import {
   Fragment,
   MouseEvent,
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -14,9 +13,8 @@ import { MdOutlineDescription } from 'react-icons/md';
 import Button from '../UI/Button';
 import Container from '../UI/Container';
 import Modal from '../UI/Modal';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuthenticate } from '../../context/AuthProvider';
 import axiosInstance from '../../utils/axios';
-import { getPayloadFromToken } from '../../utils/cookie';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
@@ -33,7 +31,7 @@ const JobDetails: FC<IProps> = ({
   isSameRole,
 }) => {
   const [data, setData] = useState<{ job: IJobs }>();
-  const { refreshToken } = useContext(AuthContext);
+  const { uuid } = useAuthenticate();
   const getJob = useCallback(async () => {
     await axiosInstance
       .get(`/api/job/${jobId}`)
@@ -50,7 +48,7 @@ const JobDetails: FC<IProps> = ({
   ) => {
     event.preventDefault();
     await axiosInstance
-      .delete(`/api/job/${getPayloadFromToken(refreshToken).sub}`, {
+      .delete(`/api/job/${uuid}`, {
         data: {
           jobId,
         },
@@ -82,11 +80,11 @@ const JobDetails: FC<IProps> = ({
   return (
     <Fragment>
       {data && (
-        <Modal className='p-2 flex flex-col' onClose={onClose} tall={true}>
+        <Modal className='p-2 flex flex-col' onClose={onClose} Side>
           <Container className='flex flex-col min-h-[85vh] justify-between'>
             <div className='flex flex-col gap-2'>
               <div className='flex items-center justify-between'>
-                <h1 className='font-normal text-3xl capitalize'>
+                <h1 className='font-bold text-3xl capitalize'>
                   {data?.job.title}
                 </h1>
               </div>
@@ -105,21 +103,21 @@ const JobDetails: FC<IProps> = ({
               </div>
               <div className='flex flex-col gap-2'>
                 <div className='inline-flex items-center justify-center w-full'>
-                  <hr className='w-[90%] h-1 my-4 border-0 rounded bg-gray-700' />
-                  <div className='absolute px-4 mb-1 -translate-x-1/2 bg-white left-1/2 font-semibold text-lg'>
+                  <hr className='w-[90%] h-1 my-4 border-0 rounded bg-gray-800' />
+                  <div className='absolute px-4 mb-1 -translate-x-1/2 bg-white dark:bg-gray-700 left-1/2 font-semibold text-lg'>
                     Requirements
                   </div>
                 </div>
                 <div className='grid grid-cols-2 items-center text-center  font-semibold text-sm'>
                   <div className='flex flex-col gap-1'>
-                    <span>${data?.job.budget.toFixed(2)}</span>
-                    <span className='text-xs font-light text-black'>
-                      Fixed-price
+                    <span>Fixed-price</span>
+                    <span className='text-sm font-light text-black capitalize dark:text-blue-500'>
+                      ${data?.job.budget.toFixed(2)}
                     </span>
                   </div>
                   <div className='flex flex-col gap-1'>
                     <span>Experience</span>
-                    <span className='text-xs font-light text-black capitalize'>
+                    <span className='text-sm font-light text-black capitalize dark:text-blue-500'>
                       {data?.job.experience_level} Level
                     </span>
                   </div>
@@ -127,18 +125,18 @@ const JobDetails: FC<IProps> = ({
               </div>
               <div className='flex flex-col gap-2'>
                 <div className='inline-flex items-center justify-center w-full'>
-                  <hr className='w-[90%] h-1 my-4 border-0 rounded bg-gray-700' />
-                  <div className='absolute px-4 mb-1 -translate-x-1/2 bg-white left-1/2 font-semibold text-lg'>
+                  <hr className='w-[90%] h-1 my-4 border-0 rounded bg-gray-800' />
+                  <div className='absolute px-4 mb-1 -translate-x-1/2 bg-white dark:bg-gray-700 left-1/2 font-semibold text-lg'>
                     Skills &amp; Expertise
                   </div>
                 </div>
                 <div className='mt-2'>
-                  <div className='flex mt-2 gap-2 flex-wrap items-center justify-center'>
+                  <div className='flex mt-2 gap-3 flex-wrap items-center justify-center'>
                     {data?.job.skills?.map((skill: ISkill) => (
                       <span
                         key={skill._id}
                         title={skill.name}
-                        className='px-4 py-2  text-sm rounded-3xl text-blue-600 shadow font-medium bg-blue-200 '
+                        className='px-4 py-2 flex text-center  shadow text-xs rounded-md text-white font-semibold bg-blue-500 '
                       >
                         {skill.name}
                       </span>

@@ -47,8 +47,8 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             prefetch={false}
             scroll={false}
             className={` ${
-              openTab === 1 ? 'bg-blue-500 text-white' : 'text-black'
-            } inline-block px-4 py-2 text-sm md:text-base  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white`}
+              openTab === 1 ? 'bg-blue-500 text-white' : 'text-black dark:text-white dark:bg-gray-700'
+            }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500`}
           >
             Contact Information
           </Link>
@@ -62,8 +62,8 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             prefetch={false}
             scroll={false}
             className={` ${
-              openTab === 2 ? 'bg-blue-500 text-white' : 'text-black'
-            } inline-block px-4 py-2  shadow text-sm md:text-base  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white`}
+              openTab === 2 ? 'bg-blue-500 text-white' : 'text-black dark:text-white dark:bg-gray-700'
+            }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500`}
           >
             Password &amp; Security
           </Link>
@@ -77,14 +77,14 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             scroll={false}
             prefetch={false}
             className={` ${
-              openTab === 3 ? 'bg-blue-500 text-white' : 'text-black'
-            } inline-block px-4 py-2  shadow text-sm md:text-base  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white`}
+              openTab === 3 ? 'bg-blue-500 text-white' : 'text-black dark:text-white dark:bg-gray-700'
+            }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500`}
           >
             Skills &amp; Categories
           </Link>
         </li>
       </ul>
-      <div className='p-3 bg-white md:border-l'>
+      <div className='p-3 bg-white md:border-l dark:bg-gray-800 dark:border-gray-700'>
         <div className={openTab === 1 ? 'block' : 'hidden'}>
           <ContactInfo user={user} />
         </div>

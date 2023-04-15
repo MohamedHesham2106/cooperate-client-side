@@ -6,6 +6,7 @@ type IButton = {
   disabled?: boolean;
   className?: string;
   width?: string;
+  value?: string | number;
   type?: 'button' | 'submit' | 'reset';
 };
 
@@ -16,15 +17,17 @@ const Button: FC<IButton> = ({
   className = '',
   width,
   type = 'button',
+  value,
 }) => {
   const currWidth = width ? width : 'w-full';
   return (
     <button
       className={
         !className
-          ? `text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-base ${currWidth}  px-5 py-2.5 text-center`
+          ? `text-white bg-blue-500 dark:bg-gray-800 dark:hover:bg-gray-900 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-sm text-base ${currWidth}  px-5 py-2.5 text-center`
           : className
       }
+      value={value}
       onClick={onClick}
       disabled={disabled}
       type={type}

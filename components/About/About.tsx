@@ -8,7 +8,7 @@ import { fadeIn } from '../../utils/variants';
 const About: FC = () => {
   const variants = useMemo(() => fadeIn('down', 0.7), []);
   return (
-    <Container className='relative w-full  p-4 px-12 mx-auto  bg-white  sm:px-6 lg:px-8 mb-5'>
+    <Container className='relative w-full  p-4 px-12 mx-auto  bg-white dark:bg-gray-900 sm:px-6 lg:px-8 mb-5'>
       <motion.div
         variants={variants}
         initial='hidden'
@@ -21,16 +21,16 @@ const About: FC = () => {
             className='flex justify-center lg:justify-start w-auto h-auto'
             width={400}
             height={400}
-            src='/images/businessman-working-on-laptop.svg'
+            src='/images/sapiens2.svg'
             alt='working on laptop'
             priority
           />
 
           <div className='ml-auto lg:col-start-2 lg:max-w-2xl'>
-            <h4 className='mt-2 text-2xl font-extrabold leading-8 text-gray-900  sm:text-3xl sm:leading-9 font-serif'>
+            <h4 className='mt-2 text-2xl font-black leading-8 text-gray-900 dark:text-blue-500  sm:text-5xl sm:leading-9 font-serif'>
               What&apos;s great about it?
             </h4>
-            <p className='mt-4 text-base leading-6 text-gray-500 font-sans'>
+            <p className='mt-4 text-base leading-6 text-gray-500 dark:text-white font-sans'>
               At{' '}
               <span className='font-semibold text-sm text-blue-500 '>
                 COO<span className='text-orange-500 font-bold text-lg'>/</span>
@@ -53,7 +53,7 @@ const About: FC = () => {
                     <span className='flex items-center justify-center flex-shrink-0 w-6 h-6 text-green-800 bg-green-100 rounded-full'>
                       <TiTick />
                     </span>
-                    <span className='ml-4 text-sm font-medium leading-6 text-gray-500 '>
+                    <span className='ml-4 text-sm font-medium leading-6 text-gray-500 dark:text-white '>
                       {item.text}
                     </span>
                   </div>

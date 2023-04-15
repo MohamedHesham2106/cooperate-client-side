@@ -1,13 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import {
-  FC,
-  Fragment,
-  MouseEvent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { FC, Fragment, MouseEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BsChat } from 'react-icons/bs';
 import { HiOutlineDownload } from 'react-icons/hi';
@@ -16,17 +9,38 @@ import { ImCross } from 'react-icons/im';
 import MilestoneList from '../Milestones/MilestoneList';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuthenticate } from '../../context/AuthProvider';
 import axiosInstance from '../../utils/axios';
-import { getCookie, getPayloadFromToken } from '../../utils/cookie';
+import { getPayloadFromToken } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
   project?: IProject;
 }
-
+const validFileTypes = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/x-rar-compressed',
+  'application/x-7z-compressed',
+  'application/zip',
+  'application/gzip',
+  'application/x-tar',
+  'application/x-bzip',
+  'application/x-bzip2',
+  'application/x-ace-compressed',
+  'application/x-gzip',
+  'application/x-stuffit',
+  'application/x-stuffitx',
+  'application/x-tar-gz',
+  'application/x-tar-bz2',
+  'application/x-tar-lzma',
+  'application/x-tar-xz',
+  'application/x-zip-compressed',
+];
 const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
+  const { uuid, refreshToken } = useAuthenticate();
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const truncatedDescription = project && project.job.description.slice(0, 200);
@@ -37,28 +51,6 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   const handleOndragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
-
-  const validFileTypes = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/x-rar-compressed',
-    'application/x-7z-compressed',
-    'application/zip',
-    'application/gzip',
-    'application/x-tar',
-    'application/x-bzip',
-    'application/x-bzip2',
-    'application/x-ace-compressed',
-    'application/x-gzip',
-    'application/x-stuffit',
-    'application/x-stuffitx',
-    'application/x-tar-gz',
-    'application/x-tar-bz2',
-    'application/x-tar-lzma',
-    'application/x-tar-xz',
-    'application/x-zip-compressed',
-  ];
 
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currFile = event.target?.files?.[0];
@@ -95,7 +87,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   const removeImage = () => {
     setFile(null);
   };
-  const { refreshToken } = useContext(AuthContext);
+
   const role = getPayloadFromToken(refreshToken).role;
   const [createdAt, setCreatedAt] = useState<string | undefined>();
   const router = useRouter();
@@ -124,8 +116,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   ) => {
     event.preventDefault();
     try {
-      const userId = getPayloadFromToken(getCookie('jwt_refresh')).sub;
-      await axiosInstance.put(`/api/project/${userId}`, {
+      await axiosInstance.put(`/api/project/${uuid}`, {
         projectId: project?._id,
       });
       toast.success('Incredible! Project have been completed.');
@@ -149,7 +140,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         <Modal
           onClose={onClose}
           className='p-2 flex flex-col gap-5 justify-between'
-          tall={true}
+          Side
         >
           <div className='grid grid-cols-[9fr_9fr_1fr] gap-2 items-center'>
             <span className='text-xs text-gray-400'>Started {createdAt}</span>
@@ -170,11 +161,11 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
             </div>
           </div>
 
-          <section className='shadow-md flex items-center justify-between p-5 rounded-md border-2 text-gray-700'>
+          <section className='shadow-md flex items-center justify-between p-5 rounded-md border-2 dark:border-gray-800 dark:bg-gray-800 text-gray-700'>
             <div className='flex items-center gap-2'>
-              <h4 className='text-lg font-bold'>Status:</h4>
+              <h4 className='text-lg font-bold dark:text-white'>Status:</h4>
               <div
-                className={`rounded-full border text-sm text-white py-1 px-2 shadow font-bold ${
+                className={`rounded-full border text-sm text-white dark:border-none py-1 px-2 shadow font-bold ${
                   project.project_status === 'Complete'
                     ? 'bg-green-400 '
                     : 'bg-blue-500'
@@ -195,9 +186,11 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               </div>
             )}
           </section>
-          <section className='shadow-md flex flex-col gap-5 justify-between p-5 rounded-md border-2'>
+          <section className='shadow-md flex flex-col gap-5 dark:border-gray-800 dark:bg-gray-800 justify-between p-5 rounded-md border-2'>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-2xl text-gray-700 font-bold'>Description</h3>
+              <h3 className='text-2xl text-gray-700 dark:text-gray-200 font-bold'>
+                Description
+              </h3>
               <p className='whitespace-pre-wrap'>
                 {showFullDescription
                   ? project.job.description
@@ -215,14 +208,14 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
             </div>
 
             <div className='flex flex-col gap-2'>
-              <h3 className='text-xl text-gray-700  font-bold'>
+              <h3 className='text-xl text-gray-700 dark:text-gray-200  font-bold'>
                 Skills &amp; Expertise
               </h3>
               <div className='flex gap-2 items-center'>
                 {project.job.skills?.map((skill: ISkill) => (
                   <span
                     key={skill._id}
-                    className='px-4 py-2 flex text-center shadow text-xs rounded-md text-white font-semibold bg-blue-500 '
+                    className='px-4 py-2 flex text-center  shadow text-xs rounded-md text-white font-semibold bg-blue-500 '
                   >
                     {skill.name}
                   </span>
@@ -230,7 +223,9 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               </div>
             </div>
             <div className='flex flex-col gap-2'>
-              <h3 className='text-lg font-bold text-gray-800 '>Attachments</h3>
+              <h3 className='text-lg font-bold text-gray-800 dark:text-gray-200'>
+                Attachments
+              </h3>
               {role && role === 'freelancer' && (
                 <div className='mt-5 rounded-sm flex items-center flex-col justify-center'>
                   <div
@@ -271,7 +266,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
                   </div>
                   <div className='flex flex-wrap gap-2 mt-2 w-4/5'>
                     {file && (
-                      <div className='w-full h-16 flex items-center justify-between rounded p-3 bg-gray-700 shadow'>
+                      <div className='w-full h-16 flex items-center justify-between rounded p-3 bg-gray-700 dark:bg-blue-600 shadow'>
                         <div className='flex flex-row items-center gap-2'>
                           <span className='truncate w-44 text-white'>
                             {file.name}
@@ -310,7 +305,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
               )}
             </div>
           </section>
-          <section className='shadow-md flex flex-col gap-5  p-5 rounded-md border-2 '>
+          <section className='dark:bg-gray-800 dark:border-gray-800 shadow-md flex flex-col gap-5  p-5 rounded-md border-2 '>
             <h3 className='text-xl font-bold'>Milestone</h3>
 
             <MilestoneList
@@ -323,9 +318,9 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
           {project?.project_status === 'Complete' && (
             <Link
               href={`/feedback/~${project._id}`}
-              className='rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-orange-600 active:shadow-none shadow-lg bg-gradient-to-tr from-orange-600 to-orange-500 border-orange-700 text-white'
+              className='rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 dark:active:border-gray-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 dark:from-gray-600 dark:to-gray-500 border-blue-700 dark:border-gray-700 text-white'
             >
-              <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-full group-hover:h-32 opacity-10'></span>
+              <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-sm group-hover:w-full group-hover:h-12 opacity-10'></span>
               <span className='relative'>Give Feedback</span>
             </Link>
           )}

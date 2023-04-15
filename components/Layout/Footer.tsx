@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 const Footer: FC = () => {
   return (
-    <footer className=' pb-12 bg-gray-900 rounded-md m-5'>
+    <footer className=' pb-12 bg-gray-900 dark:bg-gray-800 rounded-md m-5'>
       <div className='mx-auto container pt-20 lg:pt-32 flex flex-col items-center justify-center'>
         <Image
           src='/logo.png'

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import Multiselect from 'multiselect-react-dropdown';
 import { useRouter } from 'next/router';
+import { useTheme } from 'next-themes';
 import { FC, useMemo, useState } from 'react';
 import { BiCalendar } from 'react-icons/bi';
 import { BsPaypal } from 'react-icons/bs';
@@ -12,12 +13,12 @@ import Form from '../../UI/Form';
 import Input from '../../UI/Input';
 import axiosInstance from '../../../utils/axios';
 import { fadeIn } from '../../../utils/variants';
-
 type IProps = {
   user: IUser;
 };
 
 const JobForm: FC<IProps> = ({ user }) => {
+  const { theme } = useTheme();
   const router = useRouter();
   // Job Values State
   const [jobValues, setJobValues] = useState<IJob>({
@@ -138,7 +139,7 @@ const JobForm: FC<IProps> = ({ user }) => {
       initial='hidden'
       whileInView='show'
       viewport={{ once: false, amount: 0.1 }}
-      className='flex flex-col gap-5'
+      className='flex flex-col gap-5 dark:bg-gray-700 p-5 rounded-md dark:shadow-md dark:shadow-gray-900'
     >
       <h1 className='text-center text-2xl font-bold'>
         Tell us what you need done
@@ -149,7 +150,7 @@ const JobForm: FC<IProps> = ({ user }) => {
         satisfied with their work.
       </p>
       <Form OnSubmit={submitHandler} className='flex flex-col gap-3'>
-        <div className='border-2 rounded-2xl p-4 grid md:grid-cols-[5fr_2fr] grid-cols-1 gap-3'>
+        <div className='border-2 rounded-2xl p-4 grid md:grid-cols-[5fr_2fr] grid-cols-1 gap-3 dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2'>
             <h3 className='text-left text-lg font-semibold'>
               Choose a name for your project
@@ -165,7 +166,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               placeholder=' e.g. Graphic designer needed to design ad creative for  multiple campaigns.'
             />
           </div>
-          <div className='hidden md:flex md:flex-col border-l-2 px-2'>
+          <div className='hidden md:flex md:flex-col border-l-2 px-2 '>
             <h3 className='font-semibold'>Example titles</h3>
             <ul className='text-sm list-disc ml-5'>
               <li>
@@ -180,7 +181,7 @@ const JobForm: FC<IProps> = ({ user }) => {
             </ul>
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2 relative'>
             <h3 className='text-left text-lg font-semibold'>
               Tell us more about your project
@@ -189,7 +190,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               name='description'
               onChange={handleChange}
               rows={8}
-              className='block p-5 w-full text-sm text-gray-800 bg-white border border-gray-400 outline-none focus:border-blue-500 resize-none'
+              className='block p-5 w-full text-sm text-gray-800 bg-white border border-gray-400  focus:border-blue-500 resize-none dark:border-none dark:focus:ring-0 outline-none rounded-md dark:bg-gray-900  dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 scrollbar-hide'
               value={jobValues.description}
               placeholder='Describe your project here...'
               required
@@ -200,7 +201,7 @@ const JobForm: FC<IProps> = ({ user }) => {
             </span>
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2'>
             <h3 className='text-left text-lg font-semibold'>
               What category best describes your project?
@@ -211,6 +212,20 @@ const JobForm: FC<IProps> = ({ user }) => {
             {categories && (
               <Multiselect
                 isObject={false}
+                style={{
+                  searchBox: {
+                    padding:'0.75rem',
+                    border: `${theme === 'dark' ? ' rgb(17,24,39)' : '#000'}`,
+                    background: `${
+                      theme === 'dark' ? ' rgb(17,24,39)' : '#fff'
+                    }`,
+                  },
+                  multiselectContainer: {
+                    color: ` ${
+                      theme === 'dark' ? 'rgb(17,24,39)' : '#000'
+                    }`,
+                  },
+                }}
                 options={categories}
                 selectionLimit={true}
                 onSelect={handleCategorySelect}
@@ -221,7 +236,7 @@ const JobForm: FC<IProps> = ({ user }) => {
             )}
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2'>
             <h3 className='text-left text-lg font-semibold'>
               What skills are required?
@@ -231,6 +246,20 @@ const JobForm: FC<IProps> = ({ user }) => {
               <Multiselect
                 isObject={false}
                 options={skills}
+                style={{
+                  searchBox: {
+                    padding:'0.75rem',
+                    border: `${theme === 'dark' ? ' rgb(17,24,39)' : '#000'}`,
+                    background: `${
+                      theme === 'dark' ? ' rgb(17,24,39)' : '#fff'
+                    }`,
+                  },
+                  multiselectContainer: {
+                    color: ` ${
+                      theme === 'dark' ? 'rgb(17,24,39)' : 'rgb(59,130,246)'
+                    }`,
+                  },
+                }}
                 onSelect={handleSkillsSelect}
                 onRemove={handleSkillsRemove}
                 placeholder='Select Skills'
@@ -239,13 +268,13 @@ const JobForm: FC<IProps> = ({ user }) => {
             )}
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2'>
-            <h3 className='text-left text-lg font-semibold'>
+            <h3 className='text-left text-lg font-bold'>
               What&apos;s the experience level required?
             </h3>
           </div>
-          <div className='flex flex-col gap-2 py-5 px-2'>
+          <div className='flex flex-col gap-2 py-5 px-2 '>
             <div className='flex'>
               <div className='flex items-center h-5'>
                 <input
@@ -259,7 +288,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               <div className='ml-2 text-sm'>
                 <label
                   htmlFor='experience_lvl'
-                  className='font-medium text-gray-900 '
+                  className='font-medium text-gray-900 dark:text-white'
                 >
                   Entry Level
                 </label>
@@ -268,7 +297,7 @@ const JobForm: FC<IProps> = ({ user }) => {
                 </p>
               </div>
             </div>
-            <div className='flex'>
+            <div className='flex '>
               <div className='flex items-center h-5'>
                 <input
                   name='experience_level'
@@ -282,7 +311,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               <div className='ml-2 text-sm'>
                 <label
                   htmlFor='experience_lvl'
-                  className='font-medium text-gray-900 '
+                  className='font-medium text-gray-900 dark:text-white'
                 >
                   Intermediate Level
                 </label>
@@ -307,7 +336,7 @@ const JobForm: FC<IProps> = ({ user }) => {
               <div className='ml-2 text-sm'>
                 <label
                   htmlFor='experience_lvl'
-                  className='font-medium text-gray-900 '
+                  className='font-medium text-gray-900 dark:text-white'
                 >
                   Expert Level
                 </label>
@@ -321,7 +350,7 @@ const JobForm: FC<IProps> = ({ user }) => {
             </div>
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2 relative'>
             <h3 className='text-left text-lg font-semibold'>
               Project&apos;s budget
@@ -335,7 +364,7 @@ const JobForm: FC<IProps> = ({ user }) => {
             <span className='absolute bottom-2 right-5 text-gray-400'>$</span>
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2 relative'>
             <h3 className='text-left text-lg font-semibold'>
               Project&apos;s Deadline
@@ -349,19 +378,19 @@ const JobForm: FC<IProps> = ({ user }) => {
                 onChange={handleChange}
                 type='date'
                 value={jobValues.project_length}
-                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full outline-none pl-10 p-2.5  '
+                className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full outline-none pl-10 p-2.5 dark:bg-gray-900 dark:text-white dark:border-gray-900  '
                 placeholder='Select date'
               />
             </div>
           </div>
         </div>
-        <div className='border-2 rounded-2xl p-4 flex flex-col'>
+        <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2 '>
-            <h3 className='text-left text-lg font-semibold'>
+            <h3 className='text-left text-lg font-bold'>
               Payment&apos;s Method
             </h3>
             <div className=' flex gap-2 mt-3'>
-              <div className='w-1/5 '>
+              <div className='w-full md:w-1/5 '>
                 <input
                   className='hidden'
                   type='radio'
@@ -371,14 +400,14 @@ const JobForm: FC<IProps> = ({ user }) => {
                   onChange={handleChange}
                 />
                 <label
-                  className='flex flex-col items-center p-4 border-2 rounded-xl border-gray-400 cursor-pointer'
+                  className='flex flex-col items-center p-4 border-2 rounded-xl border-gray-400 cursor-pointer dark:bg-gray-900 '
                   htmlFor='paypal'
                 >
                   <BsPaypal size={50} className=' p-2' />
                   <span>Paypal</span>
                 </label>
               </div>
-              <div className='w-1/5'>
+              <div className='w-full md:w-1/5'>
                 <input
                   id='Fawry'
                   className='hidden'
@@ -388,7 +417,7 @@ const JobForm: FC<IProps> = ({ user }) => {
                   onChange={handleChange}
                 />
                 <label
-                  className='flex flex-col p-4 border-2 rounded-xl items-center border-gray-400 cursor-pointer'
+                  className='flex flex-col p-4 border-2 rounded-xl items-center border-gray-400 cursor-pointer dark:bg-gray-900  '
                   htmlFor='Fawry'
                 >
                   <FawryIcon />

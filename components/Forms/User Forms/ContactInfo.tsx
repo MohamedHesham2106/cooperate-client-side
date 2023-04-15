@@ -101,7 +101,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
   };
 
   return (
-    <div className='p-1 flex flex-col gap-2'>
+    <div className='p-1 flex flex-col gap-2 dark:bg-gray-800'>
       <div className='flex gap-2 items-center justify-center md:justify-start pl-8 md:pl-0  w-full'>
         <h2 className='text-2xl font-semibold'>Contact Information</h2>
         <span
@@ -115,13 +115,13 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         </span>
       </div>
 
-      <span className='md:w-1/2 w-full border-t-2 border-black my-2 '></span>
+      <span className='md:w-1/2 w-full border-t-2 border-black my-2 dark:border-gray-700 '></span>
       <Form OnSubmit={submitHandler}>
         <div className='grid gap-6 mb-6 lg:grid-cols-2'>
           <div className='flex flex-col gap-1'>
             <label
               htmlFor='first_name'
-              className='text-sm font-medium text-gray-600'
+              className='text-sm font-medium text-gray-600 dark:text-white'
             >
               First Name
             </label>
@@ -137,7 +137,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           <div className='flex flex-col gap-1'>
             <label
               htmlFor='last_name'
-              className='text-sm font-medium text-gray-600'
+              className='text-sm font-medium text-gray-600  dark:text-white'
             >
               Last Name
             </label>
@@ -151,7 +151,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           </div>
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='email' className='text-sm font-medium text-gray-600'>
+          <label htmlFor='email' className='text-sm font-medium text-gray-600  dark:text-white'>
             Email
           </label>
           <Input
@@ -167,7 +167,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         <div className='flex flex-col gap-1'>
           <label
             htmlFor='education'
-            className='text-sm font-medium text-gray-600'
+            className='text-sm font-medium text-gray-600  dark:text-white' 
           >
             Education
           </label>
@@ -182,7 +182,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           />
         </div>
         <div className='flex flex-col gap-1'>
-          <label htmlFor='phone' className='text-sm font-medium text-gray-600'>
+          <label htmlFor='phone' className='text-sm font-medium text-gray-600  dark:text-white'>
             Phone Number
           </label>
           <Input
@@ -198,7 +198,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         <div className='flex flex-col gap-1'>
           <label
             htmlFor='address'
-            className='text-sm font-medium text-gray-600'
+            className='text-sm font-medium text-gray-600  dark:text-white'
           >
             Address
           </label>
@@ -216,7 +216,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           <div className='flex flex-col gap-1'>
             <label
               htmlFor='company_name'
-              className='text-sm font-medium text-gray-600'
+              className='text-sm font-medium text-gray-600  dark:text-white'
             >
               Company Name
             </label>

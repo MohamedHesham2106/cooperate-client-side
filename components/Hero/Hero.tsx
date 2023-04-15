@@ -16,16 +16,16 @@ const Hero: FC = () => {
       viewport={{ once: false, amount: 0.5 }}
       className='bg-transparent'
     >
-      <div className='relative px-6 pt- lg:px-8'>
-        <div className='absolute right-0 top-0 z-[-1] hidden md:block'>
+      <div className='relative px-6 pt- lg:px-8 overflow-hidden'>
+        <div className='absolute -right-10 top-0 z-[-1] hidden md:block'>
           <Blob />
         </div>
         <div className='flex items-center w-full pt-44 pb-16 px-2 z-10'>
           <div className='text-start'>
-            <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl font-serif'>
-              Hire the best freelancers for any job, online
+            <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl font-serif dark:text-white '>
+              Hire the best freelancers for any job.
             </h1>
-            <p className='mt-6 text-lg leading-8 text-gray-600 '>
+            <p className='mt-6 text-xl leading-8 text-gray-600 dark:text-gray-300 '>
               Discover the Talent You Need, Today Find and hire top-quality
               freelancers for your next project with ease. you'll find the
               expertise you need to get the job done right.
@@ -39,7 +39,7 @@ const Hero: FC = () => {
               </Link>
               <Link
                 href='#'
-                className='text-sm font-semibold leading-6 text-gray-900'
+                className='text-sm font-semibold leading-6 text-gray-900 dark:text-white'
               >
                 Learn more <span aria-hidden='true'>→</span>
               </Link>

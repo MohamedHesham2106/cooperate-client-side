@@ -7,6 +7,7 @@ import { ImUser } from 'react-icons/im';
 import { SlLogout, SlSettings } from 'react-icons/sl';
 
 import { AuthContext } from '../../context/AuthContext';
+import { useAuthenticate } from '../../context/AuthProvider';
 import { getCookie, getPayloadFromToken } from '../../utils/cookie';
 import { getRole, getUserData } from '../../utils/user';
 
@@ -18,19 +19,16 @@ const UserDropDown: FC = () => {
   const [image, setImage] = useState<string | undefined>();
   const [profileUrl, setProfileUrl] = useState<string>('');
   const role = useRef(getRole());
-
+  const { accessToken, uuid } = useAuthenticate();
   useEffect(() => {
     const fetchUserImage = async () => {
-      const user = await getUserData(
-        tokenPayload?.sub,
-        getCookie('jwt_access')
-      );
+      const user = await getUserData(uuid, accessToken);
       if (user) {
         setImage(user.imageUrl);
       }
     };
     if (tokenPayload) {
-      setProfileUrl(`/${role.current}/~${tokenPayload.sub}`);
+      setProfileUrl(`/${role.current}/~${uuid}`);
 
       fetchUserImage();
     }
@@ -38,7 +36,7 @@ const UserDropDown: FC = () => {
       setImage(undefined);
       setProfileUrl('');
     };
-  }, [SignOut]);
+  }, [SignOut, accessToken, uuid]);
 
   const logOutHandler = () => {
     SignOut();
@@ -91,9 +89,9 @@ const UserDropDown: FC = () => {
           transformOrigin: 'top right',
         }}
       >
-        <div className='px-2 py-2 bg-white rounded-md shadow-sm border'>
+        <div className='px-2 py-2 bg-white dark:bg-gray-900 dark:border-none rounded-md shadow-sm border'>
           <Link
-            className='flex rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent  text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='flex rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent  text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
             href={profileUrl}
           >
             <span>
@@ -102,7 +100,7 @@ const UserDropDown: FC = () => {
             <span>Profile</span>
           </Link>
           <Link
-            className='flex  rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='flex  rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
             href={`${profileUrl}/settings`}
           >
             <span className='pt-1'>
@@ -112,7 +110,7 @@ const UserDropDown: FC = () => {
           </Link>
           <Link
             href='/chat'
-            className='cursor-pointer  rounded-full flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='cursor-pointer  rounded-full flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
           >
             <span className='pt-1'>
               <AiFillWechat size={25} />
@@ -122,7 +120,7 @@ const UserDropDown: FC = () => {
           <Link
             href='/'
             onClick={logOutHandler}
-            className='cursor-pointer  rounded-full flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline'
+            className='cursor-pointer  rounded-full flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
           >
             <span className='pt-1'>
               <SlLogout size={18} />

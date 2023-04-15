@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @layer components {
+  body {
+    @apply bg-white dark:bg-gray-900;
+  }
   .primary-btn {
     @apply w-4/5 my-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full lg:w-1/2 xl:w-1/2 md:w-2/3 sm:w-4/5 cursor-pointer font-sans;
   }
@@ -9,75 +12,128 @@
     @apply w-4/5 my-2 bg-gray-400 text-white font-bold py-2 px-4 rounded-full lg:w-1/2 xl:w-1/2 md:w-2/3 sm:w-4/5 cursor-not-allowed font-sans;
   }
   .register-field {
-    @apply bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none;
+    @apply bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none dark:bg-gray-900 dark:border-gray-900 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500;
   }
   .error-field {
-    @apply bg-gray-50 border border-red-500 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none;
+    @apply bg-gray-50 border border-red-500 text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none dark:bg-gray-900 dark:text-white;
   }
   #wifi-loader {
-    @apply w-16 h-16 relative flex justify-center items-center rounded-[50px];
-    --background: #3b82f6;
-    --front-color: #3b82f6;
+    --background: #62abff;
+    --front-color: #317aef;
     --back-color: #c3c8de;
-    --text-color: #ef9d59;
+    --text-color: #feb838;
+    width: 64px;
+    height: 64px;
+    border-radius: 50px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+  
   #wifi-loader svg {
-    @apply absolute flex justify-center items-center;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+  
   #wifi-loader svg circle {
-    @apply absolute fill-none stroke-[6px] rotate-[-100deg] origin-center;
+    position: absolute;
+    fill: none;
+    stroke-width: 6px;
     stroke-linecap: round;
     stroke-linejoin: round;
+    transform: rotate(-100deg);
+    transform-origin: center;
   }
+  
   #wifi-loader svg circle.back {
-    @apply stroke-[color:var(--back-color)];
+    stroke: var(--back-color);
   }
+  
   #wifi-loader svg circle.front {
-    @apply stroke-[color:var(--front-color)];
+    stroke: var(--front-color);
   }
+  
   #wifi-loader svg.circle-outer {
-    @apply h-[86px] w-[86px];
+    height: 86px;
+    width: 86px;
   }
+  
   #wifi-loader svg.circle-outer circle {
     stroke-dasharray: 62.75 188.25;
   }
+  
   #wifi-loader svg.circle-outer circle.back {
-    @apply animate-[circle-outer135_1.8s_ease_infinite_0.3s];
+    animation: circle-outer135 1.8s ease infinite 0.3s;
   }
+  
   #wifi-loader svg.circle-outer circle.front {
-    @apply animate-[circle-outer135_1.8s_ease_infinite_0.15s];
+    animation: circle-outer135 1.8s ease infinite 0.15s;
   }
+  
   #wifi-loader svg.circle-middle {
-    @apply h-[60px] w-[60px];
+    height: 60px;
+    width: 60px;
   }
+  
   #wifi-loader svg.circle-middle circle {
     stroke-dasharray: 42.5 127.5;
   }
+  
   #wifi-loader svg.circle-middle circle.back {
-    @apply animate-[circle-middle6123_1.8s_ease_infinite_0.25s];
+    animation: circle-middle6123 1.8s ease infinite 0.25s;
   }
+  
   #wifi-loader svg.circle-middle circle.front {
-    @apply animate-[circle-middle6123_1.8s_ease_infinite_0.1s];
+    animation: circle-middle6123 1.8s ease infinite 0.1s;
   }
+  
   #wifi-loader svg.circle-inner {
-    @apply h-[34px] w-[34px];
+    height: 34px;
+    width: 34px;
   }
+  
   #wifi-loader svg.circle-inner circle {
     stroke-dasharray: 22 66;
   }
+  
   #wifi-loader svg.circle-inner circle.back {
-    @apply animate-[circle-inner162_1.8s_ease_infinite_0.2s];
+    animation: circle-inner162 1.8s ease infinite 0.2s;
   }
+  
   #wifi-loader svg.circle-inner circle.front {
-    @apply animate-[circle-inner162_1.8s_ease_infinite_0.05s];
+    animation: circle-inner162 1.8s ease infinite 0.05s;
   }
+  
   #wifi-loader .text {
-    @apply absolute flex justify-center items-center font-medium text-sm tracking-[0.2px] -bottom-10 before:text-[color:var(--text-color)] after:text-[color:var(--front-color)] after:animate-[text-animation76_3.6s_ease_infinite] after:absolute after:left-0;
+    position: absolute;
+    bottom: -40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: lowercase;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.2px;
   }
-  #wifi-loader .text::before,
+  
+  #wifi-loader .text::before, #wifi-loader .text::after {
+    content: attr(data-text);
+  }
+  
+  #wifi-loader .text::before {
+    color: var(--text-color);
+  }
+  
   #wifi-loader .text::after {
-    @apply content-[attr(data-text)];
+    color: var(--front-color);
+    animation: text-animation76 3.6s ease infinite;
+    position: absolute;
+    left: 0;
   }
+  
   @keyframes circle-outer135 {
     0% {
       stroke-dashoffset: 25;
@@ -191,4 +247,5 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+  
 }

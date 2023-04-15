@@ -86,7 +86,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
 
     return (
       <div key={category.name} className='flex flex-col p-3'>
-        <label className='text-center font-bold text bg-blue-200 rounded-sm md:p-2 p-1 mb-4 text-black'>
+        <label className='text-center font-bold text bg-blue-200 rounded-sm md:p-2 p-1 mb-4 text-black dark:text-white dark:bg-gray-800'>
           {category.name}
         </label>
         <div className='grid grid-cols-3'>{childCheckboxes}</div>
@@ -130,8 +130,8 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
         />
       </Head>
       {isModalOpen && (
-        <Modal onClose={closeModalHandler} className='' tall>
-          <h2 className='font-black text-sm md:text-3xl text-center p-2 rounded-sm bg-gradient-to-r from-blue-500 to-blue-400 shadow-md text-white'>
+        <Modal onClose={closeModalHandler} className='' Side>
+          <h2 className='font-black text-3xl text-center p-2 rounded-sm bg-blue-500 shadow-md dark:bg-gray-900 text-white'>
             Filter Jobs
           </h2>
           {parentCheckboxes}
@@ -143,7 +143,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
             onClick={openModalHandler}
             className='rounded relative inline-flex font-bold group items-center justify-center px-10 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 border-blue-700 text-white'
           >
-            <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10'></span>
+            <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-sm group-hover:w-full group-hover:h-12 opacity-10'></span>
             <span className='relative flex gap-2 items-center'>
               <GoSettings size={20} /> Filter
             </span>
@@ -155,7 +155,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
           initial='hidden'
           whileInView='show'
           viewport={{ once: false, amount: 0.3 }}
-          className='border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
+          className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
         >
           <JobList jobs={filteredJobs} isFreelancer={isFreelancer} />
         </motion.section>

@@ -22,6 +22,7 @@
     "js-cookie": "^3.0.1",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "latest",
+    "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "18.2.0",

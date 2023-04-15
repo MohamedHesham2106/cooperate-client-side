@@ -5,6 +5,7 @@ import { ImCross } from 'react-icons/im';
 import Button from '../UI/Button';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
+import { useNotification } from '../../context/NotificationProvider';
 import axiosInstance from '../../utils/axios';
 
 interface IProps {
@@ -17,6 +18,8 @@ interface IProposal {
   budget?: number;
 }
 const ProposalForm: FC<IProps> = ({ userId, job }) => {
+  const { sendNotification } = useNotification();
+
   const [proposal, setProposal] = useState<IProposal>({
     cover_letter: '',
     website_link: '',
@@ -106,7 +109,15 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
         website_link,
         job_id: job._id,
       })
-      .then(() => {
+      .then((response) => {
+        const { proposal } = response.data;
+        console.log(proposal);
+        sendNotification(
+          userId,
+          proposal.client_id as string,
+          `Sent Proposal For ${job.title}`,
+          `/proposals/~${proposal.client_id}`
+        );
         toast.success('Proposal Sent!', {
           style: {
             border: '1px solid #07bd3a',

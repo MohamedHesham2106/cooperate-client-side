@@ -67,7 +67,7 @@ const BioModal: FC<IProps> = ({ onClose, userId, bio }) => {
       </div>
 
       <Form OnSubmit={submitHandler} className='flex flex-col gap-5'>
-        <div className='py-2 px-4 bg-white '>
+        <div className='py-2 px-4 bg-white dark:bg-gray-900 dark:border-gray-900 '>
           <label htmlFor='bio' className='sr-only'>
             Publish post
           </label>
@@ -75,7 +75,7 @@ const BioModal: FC<IProps> = ({ onClose, userId, bio }) => {
             name='bio'
             onChange={changeHandler}
             rows={8}
-            className='block p-5 w-full text-sm text-gray-800 bg-white border-2 border-black focus:ring-0 resize-none'
+            className='block p-5 w-full text-sm text-gray-800 bg-white border-2 border-black focus:ring-0 resize-none dark:border-none dark:focus:ring-0 outline-none rounded-sm dark:bg-gray-900  dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 scrollbar-hide'
             value={biography}
             required
           ></textarea>

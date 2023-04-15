@@ -52,7 +52,7 @@ const CreateUsers: React.FC = () => {
   // Form submit handler
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isValid && country && role) {
+    if (isValid) {
       // Send registration data to the server and redirect to the login page
       await axiosInstance
         .post('/api/register', {

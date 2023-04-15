@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 import { FaFileAlt } from 'react-icons/fa';
 import { FiMessageSquare } from 'react-icons/fi';
@@ -11,22 +11,20 @@ import { MdOutlineDashboard } from 'react-icons/md';
 import { RiSettings4Line } from 'react-icons/ri';
 import { TbReportAnalytics } from 'react-icons/tb';
 
-import { AuthContext } from '../../context/AuthContext';
-import { getCookie, getPayloadFromToken } from '../../utils/cookie';
+import { useAuthenticate } from '../../context/AuthProvider';
 import { getUserData } from '../../utils/user';
-const tokenPayload = getPayloadFromToken(getCookie('jwt_access'));
 
 interface IProps {
   isOpen: (open: boolean) => void;
 }
 
 const Sidebar: React.FC<IProps> = ({ isOpen }) => {
-  const { SignOut } = useContext(AuthContext);
+  const { SignOut, uuid, accessToken } = useAuthenticate();
   const [image, setImage] = useState<string | undefined>();
   const [user, setUser] = useState<IUser | undefined>();
 
   const fetchUser = useCallback(async () => {
-    const user = await getUserData(tokenPayload?.sub, getCookie('jwt_access'));
+    const user = await getUserData(uuid, accessToken);
     if (user) {
       //   console.log(user);
       setUser(user);
@@ -55,18 +53,18 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
     },
     {
       name: 'Messages',
-      link: '/dashboard/messages',
+      link: '/dashboard/inbox',
       icon: FiMessageSquare,
       margin: true,
     },
     {
       name: 'Skills and Categories',
-      link: '/dashboard/addCategories',
+      link: '/dashboard/skills-categories',
       icon: MdCategory,
     },
     {
       name: 'Current Posted Jobs',
-      link: '/dashboard/jobs',
+      link: '/dashboard/manage-jobs',
       icon: FaFileAlt,
     },
     {

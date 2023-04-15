@@ -1,5 +1,4 @@
-import Router from 'next/router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 import { AuthContext, IAuthContext } from './AuthContext';
@@ -17,6 +16,8 @@ const ACCESS_TOKEN_EXPIRE = 30 * 60 * 1000; // 30 min
 type Props = {
   children: JSX.Element;
 };
+export const useAuthenticate = () => useContext(AuthContext);
+
 function AuthProvider({ children }: Props) {
   const [accessToken, setAccessToken] = useState(
     getCookie('jwt_access') || undefined
@@ -24,6 +25,8 @@ function AuthProvider({ children }: Props) {
   const [refreshToken, setRefreshToken] = useState(
     getCookie('jwt_refresh') || undefined
   );
+  const [userId, setUserId] = useState(getCookie('uuid') || undefined);
+
   const [isFirstMounted, setIsFirstMounted] = useState(true);
 
   const handleAuthentication = useCallback(
@@ -33,11 +36,14 @@ function AuthProvider({ children }: Props) {
           email,
           password,
         });
-        const { accessToken, refreshToken } = data;
+        const { accessToken, refreshToken, userId } = data;
         setCookie('jwt_access', accessToken, ACCESS_TOKEN_EXPIRE);
         setCookie('jwt_refresh', refreshToken, REFRESH_TOKEN_EXPIRE);
+        setCookie('uuid', userId, REFRESH_TOKEN_EXPIRE);
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
+        setUserId(userId);
+
         window.location.href = 'http://localhost:3000/';
       } catch (error) {
         const err = error as IError;
@@ -57,6 +63,7 @@ function AuthProvider({ children }: Props) {
     const refresh = getCookie('jwt_refresh');
     removeCookie('jwt_access');
     removeCookie('jwt_refresh');
+    removeCookie('uuid');
     if (refresh) {
       await Promise.all([
         axiosInstance.delete('/api/logout', {
@@ -117,6 +124,7 @@ function AuthProvider({ children }: Props) {
     isFirstMounted,
     accessToken,
     refreshToken,
+
     updateAccessToken,
     handleSignOut,
   ]);
@@ -125,10 +133,11 @@ function AuthProvider({ children }: Props) {
     () => ({
       accessToken: accessToken,
       refreshToken: refreshToken,
+      uuid: userId,
       Authenticate: handleAuthentication,
       SignOut: handleSignOut,
     }),
-    [accessToken, handleAuthentication, handleSignOut, refreshToken]
+    [accessToken, handleAuthentication, handleSignOut, refreshToken, userId]
   ) as IAuthContext;
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,5 +1,7 @@
 import { createContext, FC, useContext, useMemo, useState } from 'react';
 
+import EditUser from '../components/Admin/User Management/EditUser';
+import ViewUser from '../components/Admin/User Management/ViewUser';
 import BioModal from '../components/Forms/Modal Forms/BioModal';
 import LanguageModal from '../components/Forms/Modal Forms/LanguageModal';
 import ProfilePictureModal from '../components/Forms/Modal Forms/ProfilePictureModal';
@@ -84,6 +86,10 @@ export const ModalManagerProvider: FC<IModalManagerProvider> = ({
         return (
           <ProjectDetails onClose={closeModal} project={modalProps.project} />
         );
+      case 'viewUser':
+        return <ViewUser onClose={closeModal} user={modalProps.user} />;
+      case 'modifyUser':
+        return <EditUser onClose={closeModal} user={modalProps.user} />;
       default:
         return null;
     }

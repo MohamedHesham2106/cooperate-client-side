@@ -79,7 +79,7 @@ const ProposalDetails: FC<IProps> = ({ proposal, onClose }) => {
         <Modal
           className='p-2 flex flex-col gap-5 relative'
           onClose={onClose}
-          tall={true}
+          Side
         >
           <section className='flex flex-col'>
             <div className='flex items-center gap-5 relative'>

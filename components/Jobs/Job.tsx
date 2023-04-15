@@ -28,15 +28,17 @@ const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
   return (
     <div
-      className='flex flex-col w-full my-3 p-4 gap-3 border rounded-lg shadow-md cursor-pointer'
+      className='flex flex-col w-full my-3  gap-3 border rounded-lg shadow-md dark:shadow-gray-900 cursor-pointer dark:bg-gray-700 dark:border-gray-700'
       onClick={showModalHandler}
     >
-      <div className='font-semibold capitalize'>{job.title}</div>
-      <div className='text-gray-400 text-sm capitalize'>
+      <div className='font-bold p-5 capitalize dark:text-white rounded-t-lg dark:bg-gray-900 leading-3'>
+        {job.title}
+      </div>
+      <div className='text-gray-400 px-4 text-sm font-thin capitalize dark:text-white'>
         Est. Budget: ${job.budget} - {job.experience_level} Level - Deadline:{' '}
         {date}
       </div>
-      <div className='mt-2 text-sm'>
+      <div className='mt-2 px-4 text-sm'>
         {showFullDescription ? job.description : truncatedDescription}
         {job.description.length > 200 && (
           <button
@@ -47,11 +49,11 @@ const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
           </button>
         )}
       </div>
-      <div className='flex mt-2 gap-2 flex-wrap'>
+      <div className='flex mt-2 gap-2 pb-4 flex-wrap px-4'>
         {job.skills.map((skill) => (
           <span
             key={skill._id}
-            className='px-4 py-2 shadow  text-sm rounded-3xl text-blue-500 font-medium bg-blue-200 '
+            className='px-4 py-2 shadow  text-sm rounded-3xl text-blue-500 font-medium bg-blue-200  '
           >
             {skill.name}
           </span>

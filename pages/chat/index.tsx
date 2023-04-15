@@ -95,7 +95,7 @@ const Conversation: NextPage<IProps> = ({
         }
       });
     }
-  }, [socket, chat, conversations]);
+  }, [socket, chat, conversations, latestMessages]);
 
   return (
     <Fragment>

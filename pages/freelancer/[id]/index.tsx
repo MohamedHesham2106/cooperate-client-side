@@ -13,7 +13,7 @@ interface IProps {
   user: IUser;
   isOwnProfile: boolean;
   isSameRole: boolean;
-  isFreelancer: 'freelancer' | 'client';
+  isFreelancer: 'freelancer' | 'client' | undefined;
 }
 
 const Freelancer: NextPage<IProps> = ({
@@ -38,7 +38,7 @@ const Freelancer: NextPage<IProps> = ({
           content='COO/RATE, freelancer profile, showcase skills, bid on projects, communicate with clients, get hired, build reputation'
         />
       </Head>
-      <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 rounded-md shadow-lg'>
+      <Container className='md:w-9/12 w-11/12 mx-auto my-24  dark:bg-gray-800 rounded-md shadow-lg'>
         <Profile
           isOwnProfile={isOwnProfile}
           isSameRole={isSameRole}
@@ -66,6 +66,13 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
+    const isFreelancer =
+      payload.role === 'freelancer'
+        ? 'freelancer'
+        : payload.role === 'client'
+        ? 'client'
+        : undefined;
+
     if (user.role !== 'freelancer') {
       return { redirect: { destination: '/404', permanent: false } };
     }
@@ -74,7 +81,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         user,
         isOwnProfile: payload.sub === user._id,
         isSameRole: payload.role === user.role,
-        isFreelancer: payload.role === 'freelancer' ? 'freelancer' : 'client',
+        isFreelancer: isFreelancer,
       },
     };
   } catch {

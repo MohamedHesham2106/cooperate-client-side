@@ -6,11 +6,12 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import { ModalManagerContext } from '../../context/ModalManager';
 import { getTimeDifference } from '../../utils/date';
-
+import { useTheme } from 'next-themes';
 interface IProps {
   project: IProject;
 }
 const Project: FC<IProps> = ({ project }) => {
+  const { theme } = useTheme();
   const { displayModal } = useContext(ModalManagerContext);
   const showModalHandler = () => {
     displayModal('project', {
@@ -35,17 +36,17 @@ const Project: FC<IProps> = ({ project }) => {
         delay: 0.5,
         ease: [0, 0.71, 0.2, 1.01],
       }}
-      className='flex flex-col bg-white w-full my-3 p-4 gap-3 border border-gray-200 rounded-2xl shadow-md cursor-pointer'
+      className='flex flex-col bg-white w-full my-3 p-4 gap-3 border border-gray-200 dark:bg-gray-800 dark:border-gray-800 rounded-2xl shadow-md cursor-pointer'
       onClick={showModalHandler}
     >
-      <div className='flex flex-col min-w-full lg:flex-row mx-auto bg-white rounded'>
+      <div className='flex flex-col min-w-full lg:flex-row mx-auto bg-white dark:bg-gray-800 rounded'>
         <div className='w-full lg:w-1/2 px-10 flex flex-col justify-between py-10'>
           <div className='flex flex-col gap-2'>
-            <h2 className='text-gray-800 capitalize  text-3xl tracking-normal font-semibold mb-1'>
+            <h2 className='text-gray-800 dark:text-blue-500 capitalize  text-3xl tracking-normal font-semibold mb-1'>
               {project.job.title}
             </h2>
 
-            <p className='text-gray-600  text-sm tracking-normal font-normal mb-8  w-full'>
+            <p className='text-gray-600 dark:text-white text-sm tracking-normal font-normal mb-8  w-full'>
               {project.job.description.length > 200
                 ? `${project.job.description.slice(0, 200) + '...'}`
                 : project.job.description}
@@ -54,22 +55,28 @@ const Project: FC<IProps> = ({ project }) => {
 
           <div className='flex items-center justify-evenly flex-wrap'>
             <div className='flex items-center flex-col'>
-              <h2 className='text-gray-600 font-bold    text-md leading-6 mb-2 text-center'>
+              <h2 className='text-gray-600 dark:text-blue-500 font-bold    text-md leading-6 mb-2 text-center'>
                 {project.job.budget}
               </h2>
-              <p className='text-gray-800  text-sm leading-5'>$</p>
+              <p className='text-gray-800 dark:text-white text-sm leading-5'>
+                $
+              </p>
             </div>
             <div className='mx-6 lg:mx-3 xl:mx-6 px-8 lg:px-4 xl:px-8 border-l border-r flex flex-col items-center'>
-              <h2 className='text-gray-600 capitalize font-bold   text-md leading-6 mb-2 text-center'>
+              <h2 className='text-gray-600 capitalize font-bold dark:text-blue-500  text-md leading-6 mb-2 text-center'>
                 {project.job.experience_level}
               </h2>
-              <p className='text-gray-800  text-sm leading-5'>Level</p>
+              <p className='text-gray-800 dark:text-white text-sm leading-5'>
+                Level
+              </p>
             </div>
             <div className='flex items-center flex-col'>
-              <h2 className='text-gray-600 font-bold     text-xs leading-6 mb-2 text-center'>
+              <h2 className='text-gray-600 capitalize font-bold  dark:text-blue-500  text-md leading-6 mb-2 text-cente'>
                 {createdAt}
               </h2>
-              <p className='text-gray-800  text-sm leading-5'>Published</p>
+              <p className='text-gray-800  text-sm leading-5 dark:text-white'>
+                Published
+              </p>
             </div>
           </div>
         </div>
@@ -83,27 +90,27 @@ const Project: FC<IProps> = ({ project }) => {
                   styles={{
                     path: { stroke: '#3b82f6', strokeLinecap: 'round' },
                     trail: {
-                      stroke: '#d6d6d6',
+                      stroke: `${theme !== 'dark' ? '#d6d6d6' : '#fff'}`,
                       strokeLinecap: 'round',
                     },
                     text: {
                       fontSize: '1.2rem',
-                      fill: '#000',
+                      fill: `${theme !== 'dark' ? '#000' : '#fff'}`,
                       fontWeight: '600',
                     },
                   }}
                 />
               ) : (
-                <p className='text-gray-600  text-sm tracking-normal font-normal mb-3 text-center'>
+                <p className='text-gray-600 dark:text-white text-sm tracking-normal font-normal mb-3 text-center'>
                   No Milestones set yet.
                 </p>
               )}
             </div>
           </div>
-          <h2 className='text-gray-800 text-xl tracking-normal text-center font-medium mb-1'>
+          <h2 className='text-gray-800 dark:text-white text-xl tracking-normal text-center font-medium mb-1'>
             {project.milestone.length}
           </h2>
-          <p className='text-gray-600  text-sm tracking-normal font-normal mb-3 text-center'>
+          <p className='text-gray-600 dark:text-white  text-sm tracking-normal font-normal mb-3 text-center'>
             Milestones
           </p>
           <div className='flex items-center justify-center'>
@@ -132,57 +139,6 @@ const Project: FC<IProps> = ({ project }) => {
           </div>
         </div>
       </div>
-      {/* Card code block end */}
-
-      {/* <div className='flex justify-between items-center border-b border-gray-300 px-2 pb-3 flex-wrap'>
-        <div className='font-bold capitalize text-xl'>{project.job.title}</div>
-
-        {project.milestone.length > 0 && (
-          <div className='w-16 h-16'>
-            <CircularProgressbar
-              value={percentage}
-              text={`${percentage.toFixed(1)}%`}
-              styles={{
-                path: { stroke: '#3b82f6' },
-                text: {
-                  fontSize: '1.2rem',
-                  fill: '#000',
-                  fontWeight: '600',
-                },
-              }}
-            />
-          </div>
-        )}
-      </div>
-
-      <div className='flex  border-b border-gray-300 pb-4 pt-2 gap-2 flex-wrap'>
-        {project.job.skills?.map((skill: ISkill) => (
-          <span
-            key={skill._id}
-            className='px-4 py-2 shadow  text-sm rounded-3xl text-blue-500 font-medium bg-blue-200 '
-          >
-            {skill.name}
-          </span>
-        ))}
-      </div>
-
-      <div className='flex justify-between px-5 items-center'>
-        <span>${project.job.budget.toFixed(2)}</span>
-        <span>
-          Status:{' '}
-          <span
-            className={`${
-              project.project_status === 'In progress'
-                ? 'text-blue-400'
-                : 'text-green-500'
-            }`}
-          >
-            {project.project_status}
-          </span>
-        </span>
-
-        <span className='text-gray-400 text-xs'>{createdAt}</span>
-      </div> */}
     </motion.div>
   );
 };

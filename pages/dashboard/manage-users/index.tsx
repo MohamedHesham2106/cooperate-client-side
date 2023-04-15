@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
 
-import CreateUsers from '../../../components/Admin/Dashboard/CreateUsers';
-import UserList from '../../../components/Admin/Dashboard/UserList';
 import DashboardTitle from '../../../components/Admin/DashboardTitle';
+import CreateUsers from '../../../components/Admin/User Management/CreateUsers';
+import UserList from '../../../components/Admin/User Management/UserList';
 import Container from '../../../components/UI/Container';
 import { getPayloadFromToken } from '../../../utils/cookie';
 

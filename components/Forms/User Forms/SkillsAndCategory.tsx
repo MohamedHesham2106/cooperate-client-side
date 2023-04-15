@@ -1,6 +1,7 @@
 import Multiselect from 'multiselect-react-dropdown';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useTheme } from 'next-themes';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
@@ -15,6 +16,7 @@ interface IProps {
 }
 
 const SkillsAndCategory: FC<IProps> = ({ user }) => {
+  const { theme } = useTheme();
   const { categories, skills, first_name, _id } = user;
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>(
@@ -163,6 +165,20 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
                   disable={!checkedCategories.includes(category.name)}
                   isObject={false}
                   options={skills}
+                  style={{
+                    searchBox: {
+                      padding:'0.75rem',
+                      border: `${theme === 'dark' ? ' rgb(17,24,39)' : '#000'}`,
+                      background: `${
+                        theme === 'dark' ? ' rgb(17,24,39)' : '#fff'
+                      }`,
+                    },
+                    multiselectContainer: {
+                      color: ` ${
+                        theme === 'dark' ? 'rgb(17,24,39)' : '#000'
+                      }`,
+                    },
+                  }}
                   selectionLimit={7}
                   selectedValues={user_skills}
                   onSelect={handleSelect}

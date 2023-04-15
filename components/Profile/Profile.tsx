@@ -10,7 +10,7 @@ interface IProps {
   isOwnProfile: boolean;
   isSameRole: boolean;
   user: IUser;
-  isFreelancer: 'freelancer' | 'client';
+  isFreelancer: 'freelancer' | 'client' | undefined;
 }
 interface IProfileButton {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -59,7 +59,7 @@ const Profile: FC<IProps> = ({
     });
   };
   return (
-    <div className='p-6 bg-white rounded-t-md '>
+    <div className='p-6 bg-white dark:bg-gray-800 rounded-t-md '>
       <div
         className={`flex flex-col md:flex-row items-center ${
           !isOwnProfile ? 'justify-between gap-6 md:gap-0' : 'gap-6'
@@ -82,8 +82,8 @@ const Profile: FC<IProps> = ({
               </svg>
             ) : (
               <Image
-                height={300}
-                width={300}
+                height={128}
+                width={128}
                 alt='profile'
                 className='h-full w-full rounded-full overflow-hidden shadow'
                 src={user.imageUrl}
@@ -152,7 +152,7 @@ const Profile: FC<IProps> = ({
             Post a job
           </ProfileButton>
         )}
-        {isOwnProfile && (
+        {isOwnProfile && isSameRole && (
           <ProfileButton
             className='text-lg'
             onClick={() => router.push(`/${user.role}/~${user._id}/settings`)}

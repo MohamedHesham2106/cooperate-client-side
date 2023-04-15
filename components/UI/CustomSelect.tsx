@@ -30,7 +30,7 @@ const CustomSelect: FC<IProps> = ({ options, onSelect, label }) => {
           <BiChevronDown size={20} />
         </div>
         <ul
-          className={`bg-gray-50 overflow-y-auto ${
+          className={`bg-gray-50 overflow-y-auto scrollbar-hide ${
             open ? 'max-h-40 mt-3' : 'max-h-0'
           } `}
         >

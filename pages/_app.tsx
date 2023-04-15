@@ -2,6 +2,7 @@ import { Mulish, Philosopher } from '@next/font/google';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Router from 'next/router';
+import { ThemeProvider } from 'next-themes';
 import { Fragment, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -11,6 +12,7 @@ import Layout from '../components/Layout/Layout';
 import Spinner from '../components/UI/Spinner';
 import AuthProvider from '../context/AuthProvider';
 import { ModalManagerProvider } from '../context/ModalManager';
+import { NotificationProvider } from '../context/NotificationProvider';
 import { SocketProvider } from '../context/SocketContext';
 
 const philosopher = Philosopher({
@@ -65,11 +67,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       ) : (
         <AuthProvider>
           <SocketProvider url='http://localhost:8080/'>
-            <ModalManagerProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </ModalManagerProvider>
+            <ThemeProvider enableSystem={false} attribute='class'>
+              <NotificationProvider>
+                <ModalManagerProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </ModalManagerProvider>
+              </NotificationProvider>
+            </ThemeProvider>
           </SocketProvider>
         </AuthProvider>
       )}

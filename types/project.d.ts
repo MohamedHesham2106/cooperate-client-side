@@ -11,8 +11,8 @@ interface IProject {
 }
 interface IReviews {
   _id: string;
-  user: string;
-  rated_user: Partial<IUser>;
+  freelancer_Id: Partial<IUser>;
+  client_Id: Partial<IUser>;
   job_id: string;
   value: number;
   feedback: string;

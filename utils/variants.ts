@@ -10,7 +10,7 @@ export const fadeIn = (direction: string, delay: number) => {
       y = -80;
       break;
     case 'left':
-      x = 20;
+      x = 150;
       break;
     case 'right':
       x = -20;

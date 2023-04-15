@@ -76,7 +76,7 @@ const MilestoneList: FC<IProps> = ({
         <div
           className={`grid ${
             role === 'freelancer' ? 'grid-cols-4' : 'grid-cols-3'
-          } items-center justify-between text-center bg-gray-800 font-semibold text-white p-2 capitalize rounded-md shadow`}
+          } items-center justify-between text-center bg-gray-800 dark:bg-gray-700 font-semibold text-white p-2 capitalize rounded-md shadow`}
         >
           <span>Title</span>
           <span>Status</span>
