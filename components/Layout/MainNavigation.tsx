@@ -20,7 +20,7 @@ const classNames = (...classes: string[]) => {
 
 const MainNavigation: FC = () => {
   const router = useRouter();
-  console.log(router.pathname);
+  // console.log(router.pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [role] = useState<string | undefined>(getRole() || undefined);
@@ -73,7 +73,8 @@ const MainNavigation: FC = () => {
                   />
                 </Link>
               </div>
-              <div className='md:hidden'>
+              <div className='md:hidden flex items-center gap-2'>
+                <ThemeIcon />
                 <button
                   className='p-2 text-gray-700 rounded-md outline-none '
                   onClick={() => setIsOpen(!isOpen)}

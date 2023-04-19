@@ -14,10 +14,9 @@ interface IModalManagerContext {
   displayModal: (type: string, props?: any) => void;
 }
 
-export const ModalManagerContext = createContext<IModalManagerContext>({
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  displayModal: () => {},
-});
+export const ModalManagerContext = createContext<IModalManagerContext>(
+  {} as IModalManagerContext
+);
 
 interface IModalManagerProvider {
   children: React.ReactNode;

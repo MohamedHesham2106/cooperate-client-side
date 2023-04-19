@@ -29,7 +29,7 @@ const JobList: FC<IProps> = ({
   );
 
   return (
-    <Container className='flex flex-wrap'>
+    <Container className='flex flex-wrap '>
       <form className='relative w-full my-2 h-[3rem]'>
         <div className='relative'>
           <AiOutlineSearch

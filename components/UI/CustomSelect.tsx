@@ -18,7 +18,7 @@ const CustomSelect: FC<IProps> = ({ options, onSelect, label }) => {
   const displayText = selected ? selectedText : `Select ${label}`;
 
   return (
-    <div className='mb-6'>
+    <div>
       <div className='bg-gray-50 border border-gray-300 dark:bg-gray-900 dark:border-gray-900 dark:text-white text-gray-600 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'>
         <div
           onClick={() => setOpen(!open)}

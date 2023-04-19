@@ -84,14 +84,14 @@ const CreateUsers: React.FC = () => {
   ];
   return (
     <Form
-      className='gap-5 flex flex-col border rounded-md shadow'
+      className='w-full bg-white border shadow rounded-md dark:bg-gray-700 dark:border-gray-600'
       OnSubmit={submitHandler}
     >
-      <h5 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal  bg-gray-100 px-4 md:px-10 py-4 md:py-7'>
+      <h5 className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal  bg-gray-100 px-4 md:px-10 py-4 md:py-7 dark:bg-gray-800 dark:text-white'>
         Create User
       </h5>
-      <div className='p-5'>
-        <div className='grid gap-6 mb-6 lg:grid-cols-2'>
+      <div className='p-5 flex flex-col gap-y-6'>
+        <div className='grid gap-6 lg:grid-cols-2'>
           <Input
             name='firstname'
             value={userInfo.firstname}
@@ -112,7 +112,6 @@ const CreateUsers: React.FC = () => {
           />
         </div>
         <Input
-          ContainerClass='mb-6'
           name='username'
           value={userInfo.username}
           onChange={handleChange}
@@ -122,7 +121,6 @@ const CreateUsers: React.FC = () => {
           onBlur={handleBlur}
         />
         <Input
-          ContainerClass='mb-6'
           name='email'
           type='email'
           value={userInfo.email}
@@ -133,7 +131,6 @@ const CreateUsers: React.FC = () => {
           onBlur={handleBlur}
         />
         <Input
-          ContainerClass='mb-6'
           name='password'
           type='password'
           value={userInfo.password}
@@ -144,7 +141,6 @@ const CreateUsers: React.FC = () => {
           onBlur={handleBlur}
         />
         <Input
-          ContainerClass='mb-6'
           name='repeat_password'
           type='password'
           value={userInfo.repeat_password}

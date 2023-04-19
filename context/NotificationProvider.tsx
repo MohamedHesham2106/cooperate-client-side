@@ -25,11 +25,9 @@ type INotificationContext = {
   ) => void;
 };
 
-const NotificationContext = createContext<INotificationContext>({
-  notifications: [],
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  sendNotification: () => {},
-});
+const NotificationContext = createContext<INotificationContext>(
+  {} as INotificationContext
+);
 
 const useNotification = () => useContext(NotificationContext);
 interface IProps {
@@ -65,13 +63,12 @@ const NotificationProvider: React.FC<IProps> = ({ children }) => {
       feedback: string | undefined,
       destination: string | undefined
     ): void => {
-      socket &&
-        socket.emit('new-notification', {
-          user,
-          target,
-          feedback,
-          destination,
-        });
+      socket.emit('new-notification', {
+        user,
+        target,
+        feedback,
+        destination,
+      });
     },
     [socket]
   );
@@ -85,14 +82,9 @@ const NotificationProvider: React.FC<IProps> = ({ children }) => {
     []
   );
   useEffect(() => {
-    if (socket) {
-      socket.on('receive-notification', handleNotificationReceived);
-    }
-
+    socket.on('receive-notification', handleNotificationReceived);
     return () => {
-      if (socket) {
-        socket.off('receive-notification', handleNotificationReceived);
-      }
+      socket.off('receive-notification', handleNotificationReceived);
     };
   }, [handleNotificationReceived, socket]);
 

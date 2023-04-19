@@ -11,7 +11,7 @@ const MessageAccordion: React.FC<IProps> = ({ adminMessages }) => {
   const [filterOption, setFilterOption] = useState<string>('both');
 
   return (
-    <div className='grid grid-cols-1 w-full  rounded-md border bg-gray-200  shadow-lg'>
+    <div className='grid grid-cols-1 w-full  rounded-md border bg-gray-200 dark:bg-gray-700 dark:border-gray-800  shadow-lg'>
       <div className='h-full  bg-gray-700 rounded-sm text-white'>
         <div className=' flex items-center rounded-t-sm overflow-hidden'>
           <div className=' p-5 bg-pink-500  text-white text-xl font-bold mr-3'>

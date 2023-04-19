@@ -54,7 +54,7 @@ const SingleMessageAccordion: React.FC<IProps> = ({ message }) => {
       <div
         className={`relative grid grid-cols-[11fr_0.2fr] gap-2 items-center text-lg ${getBackgroundColor(
           message.status
-        )}  shadow border-b rounded-b-sm`}
+        )}  shadow border-b rounded-b-sm dark:border-gray-600`}
       >
         <label
           htmlFor={`panel-${message._id}`}
@@ -87,7 +87,7 @@ const SingleMessageAccordion: React.FC<IProps> = ({ message }) => {
               },
             }}
             exit={{ opacity: 0 }}
-            className={`overflow-hidden bg-gray-100 p-4   flex flex-col gap-2  `}
+            className={`overflow-hidden bg-gray-100 p-4   flex flex-col gap-2 dark:text-black `}
           >
             <p className='text-lg'>
               <span className='font-bold'>Subject: </span>

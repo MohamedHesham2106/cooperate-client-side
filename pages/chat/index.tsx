@@ -60,17 +60,7 @@ const Conversation: NextPage<IProps> = ({
   useEffect(() => {
     if (conversationId) {
       fetchMessages();
-      if (socket) {
-        socket.emit('joinRoom', { conversationId });
-      }
-    }
-    return () => {
-      socket?.emit('leaveRoom', `conversation-${conversationId}`);
-    };
-  }, [conversationId, fetchMessages, socket]);
-
-  useEffect(() => {
-    if (socket) {
+      socket.emit('joinRoom', { conversationId });
       socket.on('newMessage', (data: IChat) => {
         setChat([...chat, data]);
 
@@ -96,7 +86,11 @@ const Conversation: NextPage<IProps> = ({
         }
       });
     }
-  }, [socket, chat, conversations, latestMessages]);
+    return () => {
+      socket.off('leaveRoom');
+      socket.off('newMessage');
+    };
+  }, [chat, conversationId, conversations, fetchMessages, socket]);
 
   const router = useRouter();
   useEffect(() => {

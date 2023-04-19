@@ -11,10 +11,12 @@ import { io, Socket } from 'socket.io-client';
 import { getCookie, getPayloadFromToken } from '../utils/cookie';
 
 interface SocketContextValue {
-  socket: Socket | null;
+  socket: Socket;
 }
 
-const SocketContext = createContext<SocketContextValue>({ socket: null });
+const SocketContext = createContext<SocketContextValue>(
+  {} as SocketContextValue
+);
 interface SocketProviderProps {
   url: string;
   children: ReactNode;
@@ -25,18 +27,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
 
   children,
 }) => {
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const socket = useMemo(() => io(url), [url]);
+
   const [userId, setUserId] = useState<IUser['_id'] | undefined>(
     getPayloadFromToken(getCookie('jwt_refresh'))?.sub
   );
-  useEffect(() => {
-    const newSocket = io(url);
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [url]);
   useEffect(() => {
     const handleConnect = () => {
       console.log('Connected to server');
@@ -50,13 +45,13 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({
     const handleError = (error: any) => {
       console.log('Socket connection error:', error);
     };
-    socket?.on('connect', handleConnect);
-    socket?.on('disconnect', handleDisconnect);
-    socket?.on('error', handleError);
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('error', handleError);
     return () => {
-      socket?.off('connect', handleConnect);
-      socket?.off('disconnect', handleDisconnect);
-      socket?.off('error', handleError);
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('error', handleError);
     };
   }, [socket, userId]);
 

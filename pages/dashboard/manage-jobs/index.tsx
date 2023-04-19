@@ -128,19 +128,19 @@ const ManageJobs: NextPage<IProps> = ({ categories }) => {
     <Fragment>
       {isModalOpen && (
         <Modal onClose={closeModalHandler} className='' Side>
-          <h2 className='font-black text-sm md:text-3xl text-center p-2 rounded-sm bg-gradient-to-r from-blue-500 to-blue-400 shadow-md text-white'>
+          <h2 className='font-black text-3xl text-center p-2 rounded-sm bg-blue-500 shadow-md dark:bg-gray-900 text-white'>
             Filter Jobs
           </h2>
           {parentCheckboxes}
         </Modal>
       )}
-      <Container className='md:p-5 p-1 flex flex-col gap-2 min-h-screen scrollbar-hide overflow-y-scroll'>
+      <Container className='mt-24 md:p-5 p-1 flex flex-col gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
         <div className='flex justify-end'>
           <Button
             onClick={openModalHandler}
             className='rounded relative inline-flex font-bold group items-center justify-center px-10 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 border-blue-700 text-white'
           >
-            <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10'></span>
+            <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-sm group-hover:w-full group-hover:h-12 opacity-10'></span>
             <span className='relative flex gap-2 items-center'>
               <GoSettings size={20} /> Filter
             </span>
@@ -152,9 +152,13 @@ const ManageJobs: NextPage<IProps> = ({ categories }) => {
           initial='hidden'
           whileInView='show'
           viewport={{ once: false, amount: 0.3 }}
-          className='border rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
+          className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
         >
-          <JobList jobs={filteredJobs} isOwnProfile={true} />
+          <JobList
+            jobs={filteredJobs}
+            isFreelancer={undefined}
+            isOwnProfile={true}
+          />
         </motion.section>
       </Container>
     </Fragment>

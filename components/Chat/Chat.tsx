@@ -1,7 +1,9 @@
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
+import Link from 'next/link';
 import { FC, useEffect, useRef, useState } from 'react';
 import { AiOutlineSend } from 'react-icons/ai';
+import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { FaRegSmile } from 'react-icons/fa';
 import useSWR from 'swr';
 
@@ -44,7 +46,7 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
       }
 
       try {
-        socket?.emit('sendMessage', { conversationId, message, senderId });
+        socket.emit('sendMessage', { conversationId, message, senderId });
         clearChange();
         chatBubbleRef.current?.scrollTo(0, chatBubbleRef.current?.scrollHeight);
       } catch (error) {
@@ -60,7 +62,7 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
     }
 
     try {
-      socket?.emit('sendMessage', { conversationId, message, senderId });
+      socket.emit('sendMessage', { conversationId, message, senderId });
       clearChange();
       chatBubbleRef.current?.scrollTo(0, chatBubbleRef.current?.scrollHeight);
     } catch (error) {
@@ -72,10 +74,18 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
   };
 
   return (
-    <div className='  flex flex-col  justify-between border border-t-0 lg:border-t dark:border-gray-800  dark:bg-gray-700'>
-      <div className='h-[80vh] relative '>
+    <div className='flex flex-col  justify-between border border-t-0 lg:border-t dark:border-gray-800  dark:bg-gray-700'>
+      <div className='relative '>
+        <div className='w-full bg-white dark:bg-gray-800 shadow-sm p-5 flex items-center justify-end'>
+          <Link href={`/call/~${conversationId}`}>
+            <BsFillCameraVideoFill
+              size={20}
+              className='hover:text-blue-500 cursor-pointer'
+            />
+          </Link>
+        </div>
         <div
-          className='overflow-y-auto h-full p-2 grid grid-cols-12 gap-y-1 '
+          className='overflow-y-auto h-[70vh] p-2 grid grid-cols-12 gap-y-1 '
           ref={chatBubbleRef}
         >
           {sender &&
@@ -110,7 +120,7 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
           </div>
         )}
       </div>
-      <section className='flex items-center justify-between gap-2 w-full p-3 border-t border-gray-300 dark:border-gray-800  dark:bg-gray-800'>
+      <section className='flex  z-[2] items-center justify-between gap-2 w-full p-3 border-t border-gray-300 dark:border-gray-800  dark:bg-gray-800'>
         <button onClick={() => setShowPicker(!showPicker)}>
           <FaRegSmile />
         </button>

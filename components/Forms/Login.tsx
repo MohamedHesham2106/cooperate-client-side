@@ -7,6 +7,7 @@ import Container from '../UI/Container';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
 import { AuthContext } from '../../context/AuthContext';
+import { useAuthenticate } from '../../context/AuthProvider';
 
 const Login: FC = () => {
   // Initialize state for password input type and user information
@@ -15,7 +16,7 @@ const Login: FC = () => {
     email: '',
     password: '',
   });
-  const { Authenticate } = useContext(AuthContext);
+  const { Authenticate } = useAuthenticate();
 
   // Function to toggle password hide/show
   const togglePassword = () => {

@@ -81,22 +81,22 @@ const UserList = () => {
       }
     });
   return (
-    <div className='w-full shadow'>
-      <div className='px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg'>
+    <div className='w-full shadow bg-white dark:bg-gray-700 rounded-t-lg '>
+      <div className='px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-t-lg  dark:bg-gray-800 '>
         <div className='sm:flex items-center justify-between'>
-          <p className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800'>
+          <p className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800 dark:text-white '>
             Users List
           </p>
         </div>
       </div>
-      <div className='grid grid-cols-2 items-center px-2 gap-4 bg-gray-100 border-t'>
+      <div className='grid grid-cols-2 items-center px-2 gap-4 bg-gray-100 border-t dark:bg-gray-800 dark:border-gray-600'>
         <div className='relative'>
           <AiOutlineSearch
             size={20}
             className='absolute z-[5] cursor-pointer top-[15px] left-4'
           />
           <input
-            className='relative text-sm leading-none border text-gray-600 bg-white  rounded  w-full px-10 py-4 outline-none'
+            className='relative text-sm leading-none border text-gray-600 bg-white  rounded  w-full px-10 py-4 outline-none dark:bg-gray-700 dark:text-white dark:border-gray-800'
             type='text'
             placeholder='Search for Users'
             onChange={handleSearchChange}
@@ -122,7 +122,7 @@ const UserList = () => {
                   }}
                   className=' bg-white bg-check border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none'
                 />
-                <span className='font-normal text-gray-700 text-xs'>
+                <span className='font-normal text-gray-700 text-xs dark:text-white'>
                   Freelancers
                 </span>
               </label>
@@ -144,7 +144,7 @@ const UserList = () => {
                   }}
                   className=' bg-white bg-check border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none'
                 />
-                <span className='font-normal text-gray-700 text-xs'>
+                <span className='font-normal text-gray-700 text-xs dark:text-white'>
                   Clients
                 </span>
               </label>
@@ -166,7 +166,7 @@ const UserList = () => {
                   }}
                   className=' bg-white bg-check border border-gray-300 rounded-md checked:bg-blue-500 checked:border-transparent focus:outline-none'
                 />
-                <span className='font-normal text-gray-700 text-xs'>
+                <span className='font-normal text-gray-700 text-xs dark:text-white'>
                   Admins
                 </span>
               </label>
@@ -174,10 +174,10 @@ const UserList = () => {
           </div>
         </div>
       </div>
-      <div className='bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto min-h-screen'>
+      <div className='bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto min-h-screen dark:bg-gray-700'>
         <table className='w-full whitespace-nowrap'>
           <thead>
-            <tr className='h-16 w-full text-sm leading-none text-gray-800'>
+            <tr className='h-16 w-full text-sm leading-none text-gray-800 dark:text-white'>
               <th className='font-bold text-left pl-4'>Full Name</th>
               <th className='font-bold text-left pl-12'>Role</th>
               <th className='font-bold text-left pl-12'>Created At</th>
@@ -192,7 +192,7 @@ const UserList = () => {
               filteredUsers.map((user: IUser) => (
                 <tr
                   key={user._id}
-                  className='h-20 cursor-pointer text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100'
+                  className='h-20 cursor-pointer text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-800'
                 >
                   <td className='pl-4'>
                     <div className='flex items-center'>
@@ -221,7 +221,7 @@ const UserList = () => {
                     </div>
                   </td>
                   <td className='pl-12'>
-                    <p className='text-sm font-medium leading-none text-gray-800 capitalize'>
+                    <p className='text-sm font-medium leading-none text-gray-800 capitalize dark:text-white'>
                       {user.role}
                     </p>
                   </td>

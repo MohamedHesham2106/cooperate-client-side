@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext } from 'react';
 
 export interface IAuthContext {
@@ -9,10 +8,4 @@ export interface IAuthContext {
   SignOut: () => void;
 }
 
-export const AuthContext = createContext<IAuthContext>({
-  refreshToken: '',
-  accessToken: '',
-  uuid: '',
-  Authenticate() {},
-  SignOut() {},
-});
+export const AuthContext = createContext<IAuthContext>({} as IAuthContext);

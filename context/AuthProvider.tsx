@@ -46,10 +46,11 @@ function AuthProvider({ children }: Props) {
 
         window.location.href = 'http://localhost:3000/';
       } catch (error) {
-        const err = error as IError;
-        const { message } = err.response.data;
+        // const err = error as IError;
+        // const { message } = err.response.data;
+
         toast.error('Invalid email or password.');
-        console.log(message);
+        // console.log(message);
       }
       if (isFirstMounted) {
         setIsFirstMounted(false);

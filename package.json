@@ -28,6 +28,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.7.1",
+    "simple-peer": "^9.11.1",
     "socket.io-client": "^4.6.1",
     "swr": "^2.0.4"
   },
@@ -38,6 +39,8 @@
     "@types/node": "18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
+    "@types/simple-peer": "^9.11.5",
+    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "autoprefixer": "^10.4.12",
