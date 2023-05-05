@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import { FC, useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 import Button from '../UI/Button';
 import Container from '../UI/Container';
 import Form from '../UI/Form';
 import Input from '../UI/Input';
-import { AuthContext } from '../../context/AuthContext';
 import { useAuthenticate } from '../../context/AuthProvider';
 
 const Login: FC = () => {

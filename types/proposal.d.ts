@@ -1,7 +1,7 @@
 interface IProposal {
   proposal: {
     _id: string;
-    freelancer_id: string;
+    freelancer_id: Partial<IUser>;
     client_id: string;
     job_id: IJobs;
     cover_letter: string;

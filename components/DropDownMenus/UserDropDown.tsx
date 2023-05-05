@@ -91,7 +91,7 @@ const UserDropDown: FC = () => {
       >
         <div className='px-2 py-2 bg-white dark:bg-gray-900 dark:border-none rounded-md shadow-sm border'>
           <Link
-            className='flex rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent  text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
+            className='flex rounded-md items-center gap-2 px-4 py-2 mt-2  bg-transparent  text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
             href={profileUrl}
           >
             <span>
@@ -100,7 +100,7 @@ const UserDropDown: FC = () => {
             <span>Profile</span>
           </Link>
           <Link
-            className='flex  rounded-full items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
+            className='flex rounded-md items-center gap-2 px-4 py-2 mt-2  bg-transparent   text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
             href={`${profileUrl}/settings`}
           >
             <span className='pt-1'>
@@ -110,7 +110,7 @@ const UserDropDown: FC = () => {
           </Link>
           <Link
             href='/chat'
-            className='cursor-pointer  rounded-full flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
+            className='cursor-pointer rounded-md flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
           >
             <span className='pt-1'>
               <AiFillWechat size={25} />
@@ -120,7 +120,7 @@ const UserDropDown: FC = () => {
           <Link
             href='/'
             onClick={logOutHandler}
-            className='cursor-pointer  rounded-full flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
+            className='cursor-pointer rounded-md flex items-center gap-2 px-4 py-2 mt-2  bg-transparent text-base font-medium md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white'
           >
             <span className='pt-1'>
               <SlLogout size={18} />

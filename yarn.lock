@@ -374,6 +374,11 @@
     "@typescript-eslint/types" "5.50.0"
     eslint-visitor-keys "^3.3.0"
 
+"@zegocloud/zego-uikit-prebuilt@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@zegocloud/zego-uikit-prebuilt/-/zego-uikit-prebuilt-1.8.0.tgz#ebd60c0d8381c04f2378b042fd2e3c92ca9606b7"
+  integrity sha512-cMODexSDcZA7IPAQjswyPM4ELfwV2o6Ebzoc2W1Kp1EQ9MZw4O8ANPyHtngLXs/46A64BZCwLS0YuTzkkdSeew==
+
 acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"

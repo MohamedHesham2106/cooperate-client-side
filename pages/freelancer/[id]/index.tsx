@@ -38,7 +38,7 @@ const Freelancer: NextPage<IProps> = ({
           content='COO/RATE, freelancer profile, showcase skills, bid on projects, communicate with clients, get hired, build reputation'
         />
       </Head>
-      <Container className='md:w-9/12 w-11/12 mx-auto my-24  dark:bg-gray-800 rounded-md shadow-lg'>
+      <Container className='md:w-9/12 w-11/12 mx-auto my-24  dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-900'>
         <Profile
           isOwnProfile={isOwnProfile}
           isSameRole={isSameRole}

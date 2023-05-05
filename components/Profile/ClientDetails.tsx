@@ -112,7 +112,8 @@ const ClientDetails: FC<IProps> = ({
               {reviews.map((review: IReviews) => (
                 <Review
                   key={review._id}
-                  name={`${review.freelancer_Id.first_name} ${review.freelancer_Id.last_name}`}
+                  imageUrl={review.user.imageUrl}
+                  name={`${review.user.first_name} ${review.user.last_name}`}
                   feedback={review.feedback}
                   value={review.value}
                   date={review.createdAt}

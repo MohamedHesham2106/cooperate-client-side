@@ -98,7 +98,8 @@ const MainNavigation: FC = () => {
                 <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base'>
                   <li
                     className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
-                      router.pathname === '/'
+                      router.pathname === '/' ||
+                      router.pathname === '/freelancer'
                         ? 'text-blue-500 dark:text-blue-500'
                         : 'text-gray-900 dark:text-white'
                     }`}

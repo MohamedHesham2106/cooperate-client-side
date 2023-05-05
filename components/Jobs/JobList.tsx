@@ -30,7 +30,7 @@ const JobList: FC<IProps> = ({
 
   return (
     <Container className='flex flex-wrap '>
-      <form className='relative w-full my-2 h-[3rem]'>
+      <form className='relative w-full my-2 h-[3rem] mb-5'>
         <div className='relative'>
           <AiOutlineSearch
             size={20}
@@ -44,6 +44,7 @@ const JobList: FC<IProps> = ({
           />
         </div>
       </form>
+
       {filteredJobs && filteredJobs.length > 0 ? (
         filteredJobs.map((job) => (
           <Job

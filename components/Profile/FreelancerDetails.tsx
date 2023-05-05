@@ -109,7 +109,7 @@ const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user }) => {
       {showModal && (
         <ConfirmationModal show={showModal} onClose={handleCloseModal} />
       )}
-      <div className=' bg-white dark:bg-gray-800 flex flex-col md:flex-row justify-between rounded-b-md px-3 my-8 border-t-2 dark:border-gray-700'>
+      <div className=' bg-white dark:bg-gray-800 flex flex-col md:flex-row justify-between rounded-b-md px-3 my-8 border-t-2 dark:border-gray-700 '>
         <div className=' md:w-2/6 py-6 px-3  md:border-r-2 dark:border-gray-700 md:border-gray-200 flex flex-wrap flex-col gap-5'>
           <div className='flex flex-col justify-between mt-3'>
             <div className='flex items-center gap-2 flex-wrap'>

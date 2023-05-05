@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import React, { useCallback, useEffect, useState } from 'react';
-import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineUser, AiTwotoneStar } from 'react-icons/ai';
 import { FaFileAlt } from 'react-icons/fa';
 import { FiMessageSquare } from 'react-icons/fi';
 import { HiMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
@@ -55,6 +55,11 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
       icon: TbReportAnalytics,
     },
     {
+      name: 'Reviews',
+      link: '/dashboard/reviews',
+      icon: AiTwotoneStar,
+    },
+    {
       name: 'Messages',
       link: '/dashboard/inbox',
       icon: FiMessageSquare,
@@ -83,8 +88,8 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
     <header className='flex gap-6 sticky top-0 left-0 h-screen'>
       <nav
         className={`bg-gray-900 min-h-screen relative ${
-          open ? 'w-full' : 'w-20'
-        } duration-500 text-gray-100 px-4`}
+          open ? 'w-full px-4' : 'w-16 px-2.5'
+        } duration-500 text-gray-100 `}
       >
         <div className='py-3 flex justify-end'>
           <HiMenuAlt3

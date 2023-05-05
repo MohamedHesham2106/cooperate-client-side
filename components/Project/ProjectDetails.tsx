@@ -330,13 +330,22 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
             />
           </section>
           {project?.project_status === 'Complete' && (
-            <Link
-              href={`/feedback/~${project._id}`}
-              className='rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 dark:active:border-gray-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 dark:from-gray-600 dark:to-gray-500 border-blue-700 dark:border-gray-700 text-white'
-            >
-              <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-sm group-hover:w-full group-hover:h-12 opacity-10'></span>
-              <span className='relative'>Give Feedback</span>
-            </Link>
+            <div className='flex items-center gap-5 w-full'>
+              <Link
+                href={`/feedback/~${project._id}`}
+                className='w-full rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 dark:active:border-gray-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 dark:from-gray-600 dark:to-gray-500 border-blue-700 dark:border-gray-700 text-white'
+              >
+                <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-sm group-hover:w-full group-hover:h-12 opacity-10'></span>
+                <span className='relative'>Give Feedback</span>
+              </Link>
+              <Link
+                href={`/report/~${project._id}`}
+                className='w-full rounded relative inline-flex group items-center justify-center px-3.5 py-2 m-1 cursor-pointer border-b-4 border-l-2 active:border-blue-600 dark:active:border-gray-600 active:shadow-none shadow-lg bg-gradient-to-tr from-blue-600 to-blue-500 dark:from-gray-600 dark:to-gray-500 border-blue-700 dark:border-gray-700 text-white'
+              >
+                <span className='absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-sm group-hover:w-full group-hover:h-12 opacity-10'></span>
+                <span className='relative'>Report User</span>
+              </Link>
+            </div>
           )}
         </Modal>
       )}

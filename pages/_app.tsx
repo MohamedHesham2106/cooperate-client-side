@@ -11,6 +11,7 @@ import '../styles/globals.css';
 import Layout from '../components/Layout/Layout';
 import Spinner from '../components/UI/Spinner';
 import AuthProvider from '../context/AuthProvider';
+import { CallProvider } from '../context/CallProvider';
 import { ModalManagerProvider } from '../context/ModalManager';
 import { NotificationProvider } from '../context/NotificationProvider';
 import { SocketProvider } from '../context/SocketContext';
@@ -67,15 +68,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       ) : (
         <AuthProvider>
           <SocketProvider url='http://localhost:8080/'>
-            <ThemeProvider enableSystem={false} attribute='class'>
-              <NotificationProvider>
-                <ModalManagerProvider>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </ModalManagerProvider>
-              </NotificationProvider>
-            </ThemeProvider>
+            <CallProvider>
+              <ThemeProvider enableSystem={false} attribute='class'>
+                <NotificationProvider>
+                  <ModalManagerProvider>
+                    <Layout>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </ModalManagerProvider>
+                </NotificationProvider>
+              </ThemeProvider>
+            </CallProvider>
           </SocketProvider>
         </AuthProvider>
       )}

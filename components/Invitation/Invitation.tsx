@@ -9,11 +9,8 @@ import {
   useState,
 } from 'react';
 import { SlEnvolopeLetter } from 'react-icons/sl';
-import useSWR from 'swr';
 
 import { ModalManagerContext } from '../../context/ModalManager';
-import axiosInstance from '../../utils/axios';
-import { getCookie } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
 import { fadeIn } from '../../utils/variants';
 
@@ -34,20 +31,9 @@ const Invitation: FC<IProps> = ({ invitation, offset }) => {
       invitation,
     });
   };
-  const fetcher = (url: string) =>
-    axiosInstance
-      .get(url, {
-        headers: { Authorization: `Bearer ${getCookie('jwt_access')}` },
-      })
-      .then((res) => res.data);
-
-  const { data, isLoading } = useSWR(
-    `/api/user/${invitation.client_id}`,
-    fetcher
-  );
   return (
     <Fragment>
-      {data && !isLoading && (
+      {invitation && (
         <motion.div
           variants={variants}
           initial='hidden'
@@ -66,7 +52,7 @@ const Invitation: FC<IProps> = ({ invitation, offset }) => {
           <div className='ml-2'>
             <h4 className='text-lg font-semibold leading-tight text-gray-900 flex items-center gap-2 dark:text-white'>
               <SlEnvolopeLetter className='dark:text-blue-500' />{' '}
-              {data.user.first_name} {data.user.last_name}
+              {invitation.client_id.first_name} {invitation.client_id.last_name}
             </h4>
             <p className='text-sm text-gray-600 dark:text-white'>
               sent you an invitation!

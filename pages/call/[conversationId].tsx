@@ -1,172 +1,74 @@
+import { ZegoUser } from '@zegocloud/zego-uikit-prebuilt';
 import { GetServerSideProps, NextPage } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import Peer from 'simple-peer';
-import SimplePeer from 'simple-peer';
+import React, { LegacyRef } from 'react';
 
-import Button from '../../components/UI/Button';
-import Container from '../../components/UI/Container';
+import { useAuthenticate } from '../../context/AuthProvider';
 import { useSocket } from '../../context/SocketContext';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 
 interface IProps {
+  conversation_id: string;
   receiverId: string;
+  fullName: string;
 }
 
-const CallRoom: NextPage<IProps> = ({ receiverId }) => {
+const CallRoom: NextPage<IProps> = ({
+  conversation_id,
+  receiverId,
+  fullName,
+}) => {
   const { socket } = useSocket();
-  const [openCam, setOpenCam] = useState<boolean>(false);
-  const [usingCam, setUsingCam] = useState<boolean>(false);
-  const myVideoRef = useRef<HTMLVideoElement>(null);
-  const userVideoRef = useRef<HTMLVideoElement>(null);
-  const [localStream, setLocalStream] = useState<MediaStream | undefined>();
-  const peerRef = useRef<Peer.Instance>();
-  const [gotCall, setGotCall] = useState<boolean>(false);
-  const [call, setCall] = useState<any>();
-  const [callAccepted, setCallAccepted] = useState<boolean>(false);
-  const [callEnded, setCallEnded] = useState<boolean>(false);
+  const { uuid } = useAuthenticate();
 
-  const handleAnswer = useCallback(() => {
-    setGotCall(false);
-    setCallAccepted(true);
-    if (!call || !localStream || !socket) return;
+  const myMeeting = async (element: HTMLElement) => {
+    const appID = 1141166665;
+    const serverSecret = '9ddfbe3e5b6d521f8c15731f3a5e6261';
+    const { ZegoUIKitPrebuilt } = await import(
+      '@zegocloud/zego-uikit-prebuilt'
+    );
+    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+      appID,
+      serverSecret,
+      conversation_id,
+      uuid,
+      fullName
+    );
+    const zc = ZegoUIKitPrebuilt.create(kitToken);
+    if (zc) {
+      zc.joinRoom({
+        container: element,
+        scenario: {
+          mode: ZegoUIKitPrebuilt.OneONoneCall,
+        },
 
-    const newPeer = new SimplePeer({
-      initiator: false,
-      trickle: false,
-      stream: localStream,
-    });
-    peerRef.current = newPeer;
-    newPeer.on('signal', (data) => {
-      socket.emit('answer', { signal: data, receiverId });
-    });
-    newPeer.on('stream', (currentStream) => {
-      if (userVideoRef.current) {
-        userVideoRef.current.srcObject = currentStream;
-      }
-    });
-    newPeer.signal(call.signal);
-  }, [call, localStream, receiverId, socket]);
-
-  const handleCall = useCallback(() => {
-    if (!socket?.connected) return;
-
-    const newPeer = new SimplePeer({
-      initiator: true,
-      trickle: false,
-      stream: localStream,
-    });
-    newPeer.on('signal', (data) => {
-      console.log('signal el f handleCall', data);
-      socket.emit('call', { signal: data, receiverId });
-    });
-    newPeer.on('stream', (currStream) => {
-      if (userVideoRef.current) {
-        userVideoRef.current.srcObject = currStream;
-      }
-    });
-    socket.on('answer', ({ signal }) => {
-      setCallAccepted(true);
-      newPeer.signal(signal);
-    });
-    peerRef.current = newPeer;
-  }, [localStream, receiverId, socket]);
-  const leaveCall = useCallback(() => {
-    setCallEnded(true);
-    if (peerRef.current) peerRef.current.destroy();
-
-    window.location.reload();
-  }, []);
-  const handleOpenCam = useCallback(() => {
-    setOpenCam((openCam) => !openCam);
-  }, []);
-
-  useEffect(() => {
-    if (openCam && !usingCam) {
-      // only create the stream if the camera is not currently being used
-      navigator.mediaDevices
-        .getDisplayMedia({ video: true, audio: true })
-        .then((currStream: MediaStream) => {
-          setLocalStream(currStream);
-          if (myVideoRef.current) {
-            myVideoRef.current.srcObject = currStream;
-          }
-          setUsingCam(true); // set the state to true to indicate that the camera stream is currently being used
-        });
-    } else if (!openCam && usingCam) {
-      // only remove the stream if the camera is currently being used
-      if (localStream)
-        localStream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      if (myVideoRef.current) {
-        myVideoRef.current.srcObject = null;
-      }
-      setUsingCam(false); // set the state to false to indicate that the camera stream is no longer being used
+        showScreenSharingButton: true,
+        showTurnOffRemoteCameraButton: true,
+        showTurnOffRemoteMicrophoneButton: true,
+        showRemoveUserButton: false,
+        turnOnCameraWhenJoining: false,
+        showPreJoinView: false,
+        showMyMicrophoneToggleButton: true,
+        layout: 'Sidebar',
+        turnOnMicrophoneWhenJoining: false, // set this option to false to turn off the microphone when joining
+        onJoinRoom: (users: ZegoUser[]) => {
+          socket.emit('call', { conversation_id, receiverId, fullName });
+        },
+      });
     }
-  }, [localStream, openCam, usingCam]);
-  useEffect(() => {
-    socket.on('call', (data) => {
-      console.log('galy offer');
-      console.log(data);
-      setGotCall(true);
-
-      setCall(data);
-    });
-  }, [socket]);
+  };
 
   return (
-    <Container className='mt-24 min-h-screen p-5 bg-gray-700 rounded-sm m-5 grid grid-cols-1 gap-2 '>
+    <div className='mt-28 min-h-screen bg-[#1d1e2e] dark:bg-[#1d1e2e] rounded-sm m-10 flex items-center justify-center'>
       <div
-        className={`${
-          userVideoRef && !callEnded
-            ? 'grid grid-cols-2 gap-3'
-            : 'grid-cols-1 grid'
-        }`}
-      >
-        {myVideoRef && openCam && (
-          <div className='flex items-center justify-center'>
-            <video muted autoPlay ref={myVideoRef} playsInline />
-          </div>
-        )}
-        {userVideoRef && !callEnded && (
-          <div className='flex items-center justify-center'>
-            <video autoPlay ref={userVideoRef} playsInline />
-          </div>
-        )}
-      </div>
-
-      <div className='flex items-start justify-center gap-5'>
-        {!usingCam && (
-          <Button type='button' width='w-1/3' onClick={handleOpenCam}>
-            Start Camera
-          </Button>
-        )}
-
-        {usingCam && (
-          <Button type='button' width='w-1/3' onClick={handleOpenCam}>
-            Stop Camera
-          </Button>
-        )}
-        {gotCall && (
-          <Button type='button' width='w-1/3' onClick={handleAnswer}>
-            Answer
-          </Button>
-        )}
-        {callAccepted ? (
-          <Button type='button' width='w-1/3' onClick={leaveCall}>
-            Hang Up
-          </Button>
-        ) : (
-          <Button type='button' width='w-1/3' onClick={handleCall}>
-            Call
-          </Button>
-        )}
-      </div>
-    </Container>
+        ref={myMeeting as LegacyRef<HTMLDivElement>}
+        className='w-[100vw] h-[100vh]'
+      ></div>
+    </div>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   params,
@@ -183,6 +85,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     const conversations = await axiosInstance.get(
       `/api/conversation/${userId}`
     );
+    const { data } = await axiosInstance.get(`/api/user/${userId}`);
+    const full_name = `${data.user.first_name} ${data.user.last_name}`;
     let isValid = false;
     let receiverId = null;
     for (const conversation of conversations.data.conversations) {
@@ -206,6 +110,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         props: {
           conversation_id,
           receiverId,
+          fullName: full_name,
         },
       };
 

@@ -14,6 +14,7 @@ interface IProps {
 }
 const ProposalDetails: FC<IProps> = ({ proposal, onClose }) => {
   const [createdAt, setCreatedAt] = useState<string | undefined>();
+  console.log(proposal);
   useEffect(() => {
     if (proposal) {
       setCreatedAt(getTimeDifference(new Date(proposal?.createdAt).getTime()));
@@ -87,7 +88,7 @@ const ProposalDetails: FC<IProps> = ({ proposal, onClose }) => {
                 Proposal for {proposal?.job_id.title} Job
               </h1>
               <Link
-                href={`/freelancer/~${proposal.freelancer_id}`}
+                href={`/freelancer/~${proposal.freelancer_id._id}`}
                 className='bg-blue-500 w-44 text-xs rounded-md p-2 flex items-center justify-center text-white  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset'
               >
                 View Freelancer Profile

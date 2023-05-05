@@ -1,13 +1,21 @@
+import Image from 'next/image';
 import React from 'react';
 
 interface IProps {
   name: string;
+  imageUrl?: string;
   feedback: string;
   value: number;
   date: string;
 }
 
-const Review: React.FC<IProps> = ({ name, feedback, value, date }) => {
+const Review: React.FC<IProps> = ({
+  name,
+  feedback,
+  value,
+  date,
+  imageUrl,
+}) => {
   const stars = [];
   const currDate = new Date(date).toLocaleString('en-GB', {
     day: 'numeric',
@@ -31,23 +39,37 @@ const Review: React.FC<IProps> = ({ name, feedback, value, date }) => {
   }
 
   return (
-    <article className='p-5 border shadow-md rounded-lg grid grid-cols-1 gap-2 dark:shadow-gray-900 cursor-pointer dark:bg-gray-700 dark:border-gray-600'>
-      <div className='flex justify-center mb-2 flex-col'>
-        <div className='font-medium '>
-          <p>
-            {name}
-            <time
-              dateTime={date}
-              className='block text-xs text-gray-500 dark:text-gray-400'
-            >
-              {currDate}
-            </time>
-          </p>
-        </div>
-        <div className='flex'>{stars}</div>
-      </div>
+    <article className='border shadow-md rounded-md grid grid-cols-1 gap-2 dark:shadow-gray-900 cursor-pointer dark:bg-gray-700 dark:border-gray-600'>
+      <div className='flex justify-center flex-col  bg-gray-100 dark:bg-gray-800 rounded-md shadow-sm  '>
+        <div className='flex items-center gap-2 px-5 py-3'>
+          <div className='w-10 h-10 relative '>
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt={name}
+                fill
+                className=' object-cover rounded-full'
+              />
+            )}
+          </div>
 
-      <p className='text-sm'>{feedback}</p>
+          <div className='font-medium '>
+            <p>
+              {name}
+              <time
+                dateTime={date}
+                className='block text-xs text-gray-500 dark:text-gray-400'
+              >
+                {currDate}
+              </time>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className='p-5 flex flex-col gap-2 '>
+        <div className='flex'>{stars}</div>
+        <p className='text-sm'>{feedback}</p>
+      </div>
     </article>
   );
 };

@@ -152,7 +152,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
           />
         </div>
         {action === 'edit' && (
-          <div className='flex flex-col justify-between gap-2'>
+          <div className='flex flex-col justify-between gap-2 mb-5'>
             <h1 className='text-sm font-semibold'>Proficiency level</h1>
             <CustomSelect
               label='Proficiency level'

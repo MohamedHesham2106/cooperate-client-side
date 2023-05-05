@@ -4,14 +4,15 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { GoSettings } from 'react-icons/go';
+import useSWR from 'swr';
 
 import JobList from '../../components/Jobs/JobList';
 import Button from '../../components/UI/Button';
 import Container from '../../components/UI/Container';
 import Modal from '../../components/UI/Modal';
-import axiosInstance from '../../utils/axios';
+import { useAuthenticate } from '../../context/AuthProvider';
+import axiosInstance, { fetcher } from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
-import { fadeIn } from '../../utils/variants';
 
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];
@@ -22,12 +23,19 @@ interface ISelectedCheckboxes {
 }
 
 interface IProps {
-  jobs: IUser['jobs'];
   isFreelancer: 'freelancer' | 'client';
   categories: ICategoryWithSkills[];
 }
 
-const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
+const FreelancerRecommendation: NextPage<IProps> = ({
+  isFreelancer,
+  categories,
+}) => {
+  const { uuid } = useAuthenticate();
+  const { data } = useSWR(`/api/machine/recommendation/${uuid}`, fetcher, {
+    refreshInterval: 30 * 60 * 1000,
+  });
+
   const [selectedCheckboxes, setSelectedCheckboxes] =
     useState<ISelectedCheckboxes>(
       categories.reduce(
@@ -94,26 +102,28 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
     );
   });
 
-  let filteredJobs = jobs;
+  let filteredJobs = [];
+  if (data) {
+    filteredJobs = data.jobs;
+    const selectedSkills = Object.entries(selectedCheckboxes)
+      .filter(([_, isChecked]) => isChecked)
+      .map(([skill]) => skill);
 
-  const selectedSkills = Object.entries(selectedCheckboxes)
-    .filter(([_, isChecked]) => isChecked)
-    .map(([skill]) => skill);
-
-  if (selectedSkills.length > 0) {
-    filteredJobs = jobs?.filter((job) =>
-      selectedSkills.every((skill) =>
-        job.skills.some((jobSkill) => jobSkill.name === skill)
-      )
-    );
+    if (selectedSkills.length > 0) {
+      filteredJobs = data.jobs?.filter((job: IJobs) =>
+        selectedSkills.every((skill) =>
+          job.skills.some((jobSkill) => jobSkill.name === skill)
+        )
+      );
+    }
   }
+
   const openModalHandler = () => {
     setIsModalOpen(true);
   };
   const closeModalHandler = () => {
     setIsModalOpen(false);
   };
-  const variants = useMemo(() => fadeIn('down', 0.5), []);
   return (
     <Fragment>
       <Head>
@@ -137,7 +147,10 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
           {parentCheckboxes}
         </Modal>
       )}
-      <Container className='mt-24 md:p-5 p-1 flex flex-col gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
+      <Container className='mt-24 md:p-5 p-1 flex flex-col w-11/12 mx-auto  gap-5 max-h-[2000px] scrollbar-hide overflow-y-scroll border rounded-md shadow m-10 dark:bg-gray-700 dark:border-gray-900'>
+        <h1 className=' py-10  text-3xl pl-5 border-b-2  dark:text-white font-bold  '>
+          Jobs you might like
+        </h1>
         <div className='flex justify-end'>
           <Button
             onClick={openModalHandler}
@@ -151,10 +164,13 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
         </div>
 
         <motion.section
-          variants={variants}
-          initial='hidden'
-          whileInView='show'
-          viewport={{ once: false, amount: 0.3 }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.5,
+            ease: [0, 0.71, 0.2, 1.01],
+          }}
           className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
         >
           <JobList jobs={filteredJobs} isFreelancer={isFreelancer} />
@@ -165,20 +181,25 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { jwt_refresh } = req.cookies;
+  const { jwt_refresh, uuid } = req.cookies;
   try {
-    const [{ data: jobs }, { data: categories }] = await Promise.all([
-      axiosInstance.get('/api/job?per_page=50&page=1'),
-      axiosInstance.get('/api/category'),
-    ]);
+    const categories = (await axiosInstance.get('/api/category')).data;
+
     const payload = getPayloadFromToken(jwt_refresh);
     const isFreelancer =
       payload?.role === 'freelancer' ? 'freelancer' : 'client';
+    if (!isFreelancer || uuid !== payload.sub) {
+      return {
+        redirect: {
+          destination: '/404',
+          permanent: false,
+        },
+      };
+    }
+
     return {
       props: {
-        jobs: jobs.jobs,
         categories: categories.categories,
-        isFreelancer,
       },
     };
   } catch {
@@ -191,4 +212,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 };
 
-export default Jobs;
+export default FreelancerRecommendation;

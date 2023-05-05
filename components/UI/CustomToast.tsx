@@ -9,7 +9,7 @@ const CustomToast: React.FC<IProps> = ({ notification, t }) => {
   return (
     <div
       id='toast-notification'
-      className='p-4 text-gray-900 border  bg-white dark:bg-gray-600 rounded-lg shadow-lg dark:border-none w-3/12'
+      className='p-4 text-gray-900 border  bg-white dark:bg-gray-600 rounded-lg shadow-lg dark:border-none md:w-3/12 w-full'
       role='alert'
     >
       <div className='flex items-center mb-3'>
