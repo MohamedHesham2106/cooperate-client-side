@@ -83,7 +83,7 @@ const SkillForm = () => {
             `${selects.length === 1 ? 'Skill' : 'Skills'} Added Successfully.`
           );
         })
-        .catch((error) => {
+        .catch((_error) => {
           toast.error('Something went wrong.');
         });
     }

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { GoSettings } from 'react-icons/go';
 
 import JobList from '../../components/Jobs/JobList';
@@ -11,7 +11,6 @@ import Container from '../../components/UI/Container';
 import Modal from '../../components/UI/Modal';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
-import { fadeIn } from '../../utils/variants';
 
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];
@@ -113,7 +112,6 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
   const closeModalHandler = () => {
     setIsModalOpen(false);
   };
-  const variants = useMemo(() => fadeIn('down', 0.5), []);
   return (
     <Fragment>
       <Head>
@@ -137,7 +135,7 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
           {parentCheckboxes}
         </Modal>
       )}
-      <Container className='mt-24 md:p-5 p-1 flex flex-col gap-2 h-[800px] scrollbar-hide overflow-y-scroll'>
+      <Container className='mt-24 md:p-5 p-1 flex flex-col gap-2 w-11/12 mx-auto'>
         <div className='flex justify-end'>
           <Button
             onClick={openModalHandler}
@@ -151,11 +149,14 @@ const Jobs: NextPage<IProps> = ({ jobs, isFreelancer, categories }) => {
         </div>
 
         <motion.section
-          variants={variants}
-          initial='hidden'
-          whileInView='show'
-          viewport={{ once: false, amount: 0.3 }}
-          className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-hide flex-col shadow p-5'
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.5,
+            ease: [0, 0.71, 0.2, 1.01],
+          }}
+          className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex-col shadow p-5'
         >
           <JobList jobs={filteredJobs} isFreelancer={isFreelancer} />
         </motion.section>

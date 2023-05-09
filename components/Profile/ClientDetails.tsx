@@ -65,7 +65,7 @@ const ClientDetails: FC<IProps> = ({
         </div>
       </div>
       <div className='md:w-4/6 py-6 px-3 flex flex-col'>
-        <div className='flex flex-col'>
+        <div className='flex flex-col max-h-screen overflow-y-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full '>
           <h1 className='font-semibold text-2xl'>
             {isOwnProfile ? 'Your Postings' : 'Jobs Posted'}
           </h1>
@@ -110,14 +110,7 @@ const ClientDetails: FC<IProps> = ({
           {reviews && (
             <div className='flex flex-col gap-3 py-2 overflow-y-auto scrollbar-hide'>
               {reviews.map((review: IReviews) => (
-                <Review
-                  key={review._id}
-                  imageUrl={review.user.imageUrl}
-                  name={`${review.user.first_name} ${review.user.last_name}`}
-                  feedback={review.feedback}
-                  value={review.value}
-                  date={review.createdAt}
-                />
+                <Review key={review._id} review={review} />
               ))}
             </div>
           )}

@@ -1,5 +1,12 @@
 import cookie from 'js-cookie';
-
+import jwtDecode from 'jwt-decode';
+interface IJWTPayload {
+  sub: string;
+  iat: number;
+  exp: number;
+  type: 'refresh' | 'access';
+  role: 'client' | 'freelancer';
+}
 export const setCookie = (key: string, value: string, expiryTimeMs: number) => {
   const expires = new Date(Date.now() + expiryTimeMs);
   cookie.set(key, value, {
@@ -20,28 +27,8 @@ export const getPayloadFromToken = (token: string | undefined) => {
   if (!token) {
     return null;
   }
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [header, payload, signature] = token.split('.');
-  const decodedPayload = decodeBase64Url(payload);
-  return JSON.parse(decodedPayload);
-};
-
-const decodeBase64Url = (base64Url: string) => {
-  let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  while (base64.length % 4) {
-    base64 += '=';
-  }
-  return b64DecodeUnicode(base64);
-};
-
-const b64DecodeUnicode = (str: string) => {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), (c: string) => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
+  const decodedPayload: IJWTPayload = jwtDecode(token);
+  return decodedPayload;
 };
 export const isAuthenticated = () => {
   const refresh = getCookie('jwt_refresh');

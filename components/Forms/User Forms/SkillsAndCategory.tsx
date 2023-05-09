@@ -1,8 +1,7 @@
 import Multiselect from 'multiselect-react-dropdown';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
@@ -30,14 +29,6 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
     useState<string[]>(userCategories);
 
   const router = useRouter();
-  const { query } = router;
-  const page_number = query.page_number
-    ? parseInt(query.page_number as string)
-    : 1;
-
-  useEffect(() => {
-    setCurrentPage(page_number);
-  }, [page_number]);
 
   const handleSelect = (selectedList: string[], _selectedItem: unknown) => {
     setSelectedSkills((prevState) => {
@@ -214,23 +205,16 @@ const SkillsAndCategory: FC<IProps> = ({ user }) => {
       <ul className='flex pl-0 list-none rounded my-5'>
         {pageNumbers.map((number) => (
           <li key={number}>
-            <Link
-              href={{
-                pathname: `/freelancer/~${user._id}/settings`,
-                query: {
-                  tab: 'skills&categories',
-                  page_number: `${number}`,
-                },
-              }}
-              scroll={false}
-              className={`px-2 py-1 border-2 mx-1 text-xs rounded-full ${
+            <div
+              onClick={() => setCurrentPage(number)}
+              className={`px-2 py-1 border-2 mx-1 text-xs rounded-full cursor-pointer ${
                 number === currentPage
                   ? 'bg-blue-500 text-white'
                   : 'bg-white text-gray-500 hover:text-gray-700 hover:bg-gray-100'
               }`}
             >
               {number}
-            </Link>
+            </div>
           </li>
         ))}
       </ul>

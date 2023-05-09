@@ -51,6 +51,8 @@ const Conversation: NextPage<IProps> = ({
       .messages;
     chats && setChat(chats.filter((chat: IChat) => chat));
   }, [conversationId]);
+
+
   const { data: sender } = useSWR(`/api/user/${senderId}`, fetcher);
 
   const handleNameClick = (id: string | undefined) => {
@@ -151,7 +153,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   }
 
   try {
-    const userId = getPayloadFromToken(jwt_refresh).sub;
+    const userId = getPayloadFromToken(jwt_refresh)?.sub;
     const conversations = (
       await axiosInstance.get(`/api/conversation/${userId}`)
     ).data.conversations;

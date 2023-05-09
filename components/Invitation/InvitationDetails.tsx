@@ -33,7 +33,7 @@ const InvitationDetails: FC<IProps> = ({ invitation, onClose }) => {
                 {invitation?.job_id.title} Job
               </h1>
               <Link
-                href={`/client/~${invitation.client_id}`}
+                href={`/client/~${invitation.client_id._id}`}
                 className='bg-blue-500 w-32 text-xs rounded-md p-2 flex items-center justify-center text-white  hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset'
               >
                 View Client Profile

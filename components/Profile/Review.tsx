@@ -2,22 +2,12 @@ import Image from 'next/image';
 import React from 'react';
 
 interface IProps {
-  name: string;
-  imageUrl?: string;
-  feedback: string;
-  value: number;
-  date: string;
+  review: IReviews;
 }
 
-const Review: React.FC<IProps> = ({
-  name,
-  feedback,
-  value,
-  date,
-  imageUrl,
-}) => {
+const Review: React.FC<IProps> = ({ review }) => {
   const stars = [];
-  const currDate = new Date(date).toLocaleString('en-GB', {
+  const currDate = new Date(review.createdAt).toLocaleString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -27,7 +17,9 @@ const Review: React.FC<IProps> = ({
       <svg
         key={i}
         aria-hidden='true'
-        className={`w-5 h-5 ${i < value ? 'text-yellow-400' : 'text-gray-400'}`}
+        className={`w-5 h-5 ${
+          i < review.value ? 'text-yellow-400' : 'text-gray-400'
+        }`}
         fill='currentColor'
         viewBox='0 0 20 20'
         xmlns='http://www.w3.org/2000/svg'
@@ -42,22 +34,22 @@ const Review: React.FC<IProps> = ({
     <article className='border shadow-md rounded-md grid grid-cols-1 gap-2 dark:shadow-gray-900 cursor-pointer dark:bg-gray-700 dark:border-gray-600'>
       <div className='flex justify-center flex-col  bg-gray-100 dark:bg-gray-800 rounded-md shadow-sm  '>
         <div className='flex items-center gap-2 px-5 py-3'>
-          <div className='w-10 h-10 relative '>
-            {imageUrl && (
+          {review.user.imageUrl && (
+            <div className='w-10 h-10 relative '>
               <Image
-                src={imageUrl}
-                alt={name}
+                src={review.user.imageUrl}
+                alt={review._id}
                 fill
                 className=' object-cover rounded-full'
               />
-            )}
-          </div>
+            </div>
+          )}
 
           <div className='font-medium '>
             <p>
-              {name}
+              {review.user.first_name} {review.user.last_name}
               <time
-                dateTime={date}
+                dateTime={review.createdAt}
                 className='block text-xs text-gray-500 dark:text-gray-400'
               >
                 {currDate}
@@ -68,7 +60,7 @@ const Review: React.FC<IProps> = ({
       </div>
       <div className='p-5 flex flex-col gap-2 '>
         <div className='flex'>{stars}</div>
-        <p className='text-sm'>{feedback}</p>
+        <p className='text-sm'>{review.feedback}</p>
       </div>
     </article>
   );

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { GoSettings } from 'react-icons/go';
 import useSWR from 'swr';
 
@@ -147,7 +147,7 @@ const FreelancerRecommendation: NextPage<IProps> = ({
           {parentCheckboxes}
         </Modal>
       )}
-      <Container className='mt-24 md:p-5 p-1 flex flex-col w-11/12 mx-auto  gap-5 max-h-[2000px] scrollbar-hide overflow-y-scroll border rounded-md shadow m-10 dark:bg-gray-700 dark:border-gray-900'>
+      <Container className='mt-24 md:p-5 p-1 flex flex-col w-11/12 mx-auto  gap-5 border rounded-md shadow m-10 dark:bg-gray-700 dark:border-gray-900'>
         <h1 className=' py-10  text-3xl pl-5 border-b-2  dark:text-white font-bold  '>
           Jobs you might like
         </h1>
@@ -188,7 +188,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const payload = getPayloadFromToken(jwt_refresh);
     const isFreelancer =
       payload?.role === 'freelancer' ? 'freelancer' : 'client';
-    if (!isFreelancer || uuid !== payload.sub) {
+    if (!isFreelancer || uuid !== payload?.sub) {
       return {
         redirect: {
           destination: '/404',

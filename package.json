@@ -21,6 +21,7 @@
     "emoji-mart": "^5.5.2",
     "framer-motion": "^10.8.3",
     "js-cookie": "^3.0.1",
+    "jwt-decode": "^3.1.2",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "latest",
     "next-themes": "^0.2.1",
@@ -31,7 +32,8 @@
     "react-icons": "^4.7.1",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.6.1",
-    "swr": "^2.0.4"
+    "swr": "^2.0.4",
+    "tailwind-scrollbar": "^3.0.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
