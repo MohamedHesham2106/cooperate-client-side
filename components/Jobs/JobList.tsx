@@ -27,7 +27,7 @@ const JobList: FC<IProps> = ({
   const filteredJobs = jobs?.filter((job) =>
     job.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  const renderCondition = jobs && filteredJobs && filteredJobs.length > 0;
   return (
     <Container className='flex flex-wrap flex-col'>
       <form className='relative w-full my-2 h-[3rem] mb-5'>
@@ -45,7 +45,7 @@ const JobList: FC<IProps> = ({
         </div>
       </form>
 
-      {filteredJobs && filteredJobs.length > 0 ? (
+      {renderCondition ? (
         filteredJobs.map((job) => (
           <Job
             key={job._id}

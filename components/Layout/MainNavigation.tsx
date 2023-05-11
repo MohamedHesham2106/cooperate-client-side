@@ -94,25 +94,24 @@ const MainNavigation: FC = () => {
                 isOpen ? 'block p-6 shadow-xl' : 'hidden'
               }`}
             >
-              {isAuth && (
-                <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base'>
-                  <li
-                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
-                      router.pathname === '/' ||
-                      router.pathname === '/freelancer'
-                        ? 'text-blue-500 dark:text-blue-500'
-                        : 'text-gray-900 dark:text-white'
-                    }`}
+              <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base'>
+                <li
+                  className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                    router.pathname === '/' || router.pathname === '/freelancer'
+                      ? 'text-blue-500 dark:text-blue-500'
+                      : 'text-gray-900 dark:text-white'
+                  }`}
+                >
+                  <Link
+                    href='/'
+                    onClick={(e) => {
+                      router.pathname === '/' && e.preventDefault();
+                    }}
                   >
-                    <Link
-                      href='/'
-                      onClick={(e) => {
-                        router.pathname === '/' && e.preventDefault();
-                      }}
-                    >
-                      Home
-                    </Link>
-                  </li>
+                    Home
+                  </Link>
+                </li>
+                {!isAuth && (
                   <li
                     className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
                       router.pathname === '/jobs'
@@ -126,47 +125,49 @@ const MainNavigation: FC = () => {
                         router.pathname === '/jobs' && e.preventDefault();
                       }}
                     >
-                      Jobs
+                      Find Work
                     </Link>
                   </li>
-                  {role === 'client' && (
-                    <li
-                      className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
-                        router.pathname.includes('/proposals/')
-                          ? 'text-blue-500 dark:text-blue-500'
-                          : 'text-gray-900 dark:text-white'
-                      }`}
+                )}
+                {isAuth && role === 'client' && (
+                  <li
+                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                      router.pathname.includes('/proposals/')
+                        ? 'text-blue-500 dark:text-blue-500'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Link
+                      href={`/proposals/~${uuid}`}
+                      onClick={(e) => {
+                        router.pathname.includes('/proposals/') &&
+                          e.preventDefault();
+                      }}
                     >
-                      <Link
-                        href={`/proposals/~${uuid}`}
-                        onClick={(e) => {
-                          router.pathname.includes('/proposals/') &&
-                            e.preventDefault();
-                        }}
-                      >
-                        Proposals
-                      </Link>
-                    </li>
-                  )}
-                  {role === 'freelancer' && (
-                    <li
-                      className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
-                        router.pathname.includes('/invitation/received/')
-                          ? 'text-blue-500 dark:text-blue-500'
-                          : 'text-gray-900 dark:text-white'
-                      }`}
+                      Proposals
+                    </Link>
+                  </li>
+                )}
+                {isAuth && role === 'freelancer' && (
+                  <li
+                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                      router.pathname.includes('/invitation/received/')
+                        ? 'text-blue-500 dark:text-blue-500'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Link
+                      href={`/invitation/received/~${uuid}`}
+                      onClick={(e) => {
+                        router.pathname.includes('/invitation/received/') &&
+                          e.preventDefault();
+                      }}
                     >
-                      <Link
-                        href={`/invitation/received/~${uuid}`}
-                        onClick={(e) => {
-                          router.pathname.includes('/invitation/received/') &&
-                            e.preventDefault();
-                        }}
-                      >
-                        Invitations
-                      </Link>
-                    </li>
-                  )}
+                      Invitations
+                    </Link>
+                  </li>
+                )}
+                {isAuth && (
                   <li
                     className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
                       router.pathname.includes('/ongoing-projects/')
@@ -181,11 +182,11 @@ const MainNavigation: FC = () => {
                           e.preventDefault();
                       }}
                     >
-                      Projects
+                      My Jobs
                     </Link>
                   </li>
-                </ul>
-              )}
+                )}
+              </ul>
 
               <div
                 className={`mt-3 space-y-2  md:hidden ${

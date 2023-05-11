@@ -38,8 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         permanent: true,
       },
     };
-  }
-  if (role && role === 'freelancer') {
+  } else if (role && role === 'freelancer') {
     return {
       redirect: {
         destination: '/freelancer',

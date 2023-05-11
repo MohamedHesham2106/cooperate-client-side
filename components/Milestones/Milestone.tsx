@@ -7,7 +7,7 @@ import { getTimeDifference } from '../../utils/date';
 
 interface IProps {
   milestone: IMilestone;
-  role: 'freelancer' | 'client';
+  role: 'freelancer' | 'client' | undefined;
 }
 const Milestone: FC<IProps> = ({ milestone, role }) => {
   const [updatedAt, setUpdatedAt] = useState<string | undefined>();

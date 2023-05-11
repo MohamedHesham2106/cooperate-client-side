@@ -13,7 +13,7 @@ interface IMilestoneInput {
 }
 
 interface IProps {
-  role: 'freelancer' | 'client';
+  role: 'freelancer' | 'client' | undefined;
   projectId: string;
   milestones: IMilestone[];
   isComplete: boolean;

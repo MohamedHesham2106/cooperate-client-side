@@ -147,24 +147,31 @@ const JobDetails: FC<IProps> = ({
             </div>
           </Container>
           {!isOwnProfile && isFreelancer === 'freelancer' && !isSameRole && (
-            <Container className='flex justify-end mt-5'>
+            <div className='flex justify-end mt-5'>
               <Button
                 width='w-1/3'
                 onClick={() => router.push(`/proposals/job/~${jobId}`)}
               >
                 Send Proposal
               </Button>
-            </Container>
+            </div>
+          )}
+          {!isOwnProfile && isFreelancer === undefined && (
+            <div className='flex justify-end mt-5'>
+              <Button width='w-1/3' onClick={() => router.push('/oauth')}>
+                Login
+              </Button>
+            </div>
           )}
           {isOwnProfile && (
-            <Container className='flex mt-5'>
+            <div className='flex mt-5'>
               <Button
                 className='focus:outline-none w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900'
                 onClick={removeJobHandler}
               >
                 Delete this Job
               </Button>
-            </Container>
+            </div>
           )}
         </Modal>
       )}

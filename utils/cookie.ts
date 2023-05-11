@@ -5,7 +5,7 @@ interface IJWTPayload {
   iat: number;
   exp: number;
   type: 'refresh' | 'access';
-  role: 'client' | 'freelancer';
+  role: 'client' | 'freelancer' | 'admin';
 }
 export const setCookie = (key: string, value: string, expiryTimeMs: number) => {
   const expires = new Date(Date.now() + expiryTimeMs);

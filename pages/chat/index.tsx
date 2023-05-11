@@ -52,7 +52,6 @@ const Conversation: NextPage<IProps> = ({
     chats && setChat(chats.filter((chat: IChat) => chat));
   }, [conversationId]);
 
-
   const { data: sender } = useSWR(`/api/user/${senderId}`, fetcher);
 
   const handleNameClick = (id: string | undefined) => {

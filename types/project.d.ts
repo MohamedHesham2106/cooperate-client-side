@@ -8,6 +8,7 @@ interface IProject {
   createdAt: string;
   updatedAt: string;
   rating?: IReviews[];
+  projectUrl?: string;
 }
 interface IReviews {
   _id: string;
@@ -19,6 +20,7 @@ interface IReviews {
   createdAt: string;
   updatedAt: string;
   __v: number;
+  status?: string;
 }
 
 interface IMilestone {
