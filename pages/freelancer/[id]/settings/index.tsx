@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
-    if (payload.sub === user._id && user.role === 'freelancer') {
+    if (payload && payload.sub === user._id && user.role === 'freelancer') {
       return {
         props: {
           user,

@@ -20,7 +20,7 @@ interface IReviews {
   createdAt: string;
   updatedAt: string;
   __v: number;
-  status?: string;
+  status?: 'Positive Review' | 'Negative Review';
 }
 
 interface IMilestone {

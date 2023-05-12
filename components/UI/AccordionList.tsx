@@ -16,11 +16,12 @@ const AccordionList: FC<IProps> = ({ title, children }) => {
         className='text-3xl font-medium text-center p-2 text-white rounded-sm shadow-md bg-blue-500 cursor-pointer flex items-center'
       >
         <div className='w-[96%] text-center ml-16 font-sans'>{title}</div>
-        {showList ? (
-          <VscTriangleUp className='justify-self-end w-[4%] transition-all ease-in-out' />
-        ) : (
-          <VscTriangleUp className='justify-self-end w-[4%] transition-all ease-in-out rotate-180' />
-        )}
+
+        <VscTriangleUp
+          className={`justify-self-end w-[4%] transition-all ease-in-out ${
+            !showList && 'rotate-180'
+          }`}
+        />
       </div>
       {showList && (
         <div className='grid grid-cols-1 md:grid-cols-2 gap-2 px-2 pt-2'>

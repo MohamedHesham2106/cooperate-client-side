@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const proposals = (await axiosInstance.get(`/api/proposal/${user._id}`))
       .data;
     const payload = getPayloadFromToken(jwt_refresh);
-    if (payload.sub === user._id && user.role === 'client') {
+    if (payload && payload.sub === user._id && user.role === 'client') {
       return {
         props: {
           user,

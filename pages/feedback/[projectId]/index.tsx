@@ -48,8 +48,8 @@ const Feedback: NextPage<IProps> = ({ project, userId, targetId }) => {
       setTimeout(() => {
         router.back();
       }, 2000);
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (_error: any) {
+      toast.error('Something went wrong.');
       //   console.log(error);
     }
   };
@@ -111,38 +111,42 @@ export const getServerSideProps: GetServerSideProps = async ({
     const { projectId } = params as ParsedUrlQuery;
     const payload = getPayloadFromToken(jwt_refresh);
     const project_id = projectId?.toString().replace('~', '');
-    const projectData = await axiosInstance.get('/api/project/', {
-      data: {
-        projectId: project_id,
-        userId: payload.sub,
-      },
-    });
-    const project: IProject = projectData.data.project;
-    let targetId;
-    switch (payload.sub) {
-      case project.Freelancer_id:
-        targetId = project.client_id;
-        break;
-      case project.client_id:
-        targetId = project.Freelancer_id;
-        break;
-      default:
-        targetId = null;
-        break;
+    if (payload) {
+      const projectData = await axiosInstance.get('/api/project/', {
+        data: {
+          projectId: project_id,
+          userId: payload.sub,
+        },
+      });
+
+      const project: IProject = projectData.data.project;
+      let targetId;
+      switch (payload.sub) {
+        case project.Freelancer_id:
+          targetId = project.client_id;
+          break;
+        case project.client_id:
+          targetId = project.Freelancer_id;
+          break;
+        default:
+          targetId = null;
+          break;
+      }
+      if (project.project_status !== 'Complete') {
+        return { redirect: { destination: '/', permanent: false } };
+      }
+      if (!targetId || !project || !payload.sub) {
+        return { redirect: { destination: '/', permanent: false } };
+      }
+      return {
+        props: {
+          project,
+          userId: payload.sub,
+          targetId,
+        },
+      };
     }
-    if (project.project_status !== 'Complete') {
-      return { redirect: { destination: '/', permanent: false } };
-    }
-    if (!targetId || !project || !payload.sub) {
-      return { redirect: { destination: '/', permanent: false } };
-    }
-    return {
-      props: {
-        project,
-        userId: payload.sub,
-        targetId,
-      },
-    };
+    return { redirect: { destination: '/404', permanent: false } };
   } catch {
     return { redirect: { destination: '/404', permanent: false } };
   }

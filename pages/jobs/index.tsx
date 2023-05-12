@@ -11,7 +11,6 @@ import Container from '../../components/UI/Container';
 import Modal from '../../components/UI/Modal';
 import { useAuthenticate } from '../../context/AuthProvider';
 import axiosInstance from '../../utils/axios';
-import { isAuthenticated } from '../../utils/cookie';
 
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];

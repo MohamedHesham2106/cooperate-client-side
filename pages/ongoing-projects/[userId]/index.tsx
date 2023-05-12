@@ -59,7 +59,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const user = await getUserData(user_id, jwt_access);
     const projects = (await axiosInstance.get(`/api/project/${user._id}`)).data;
     const payload = getPayloadFromToken(jwt_refresh);
-    if (user_id === payload.sub) {
+    if (payload && user_id === payload.sub) {
       return {
         props: {
           user,

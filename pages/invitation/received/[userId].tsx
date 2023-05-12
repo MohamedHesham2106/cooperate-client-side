@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const invitations = (await axiosInstance.get(`/api/invitation/${user._id}`))
       .data;
     const payload = getPayloadFromToken(jwt_refresh);
-    if (payload.sub === user._id && user.role === 'freelancer') {
+    if (payload && payload.sub === user._id && user.role === 'freelancer') {
       return {
         props: {
           user,

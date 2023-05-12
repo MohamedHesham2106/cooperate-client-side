@@ -11,10 +11,10 @@ import MilestoneList from '../Milestones/MilestoneList';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import { useAuthenticate } from '../../context/AuthProvider';
+import { useNotification } from '../../context/NotificationProvider';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
-import { useNotification } from '../../context/NotificationProvider';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;

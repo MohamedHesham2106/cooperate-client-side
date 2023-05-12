@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     const payload = getPayloadFromToken(jwt_refresh);
     const [freelancerData, userData] = await Promise.all([
       getUserData(freelancerId, jwt_access),
-      getUserData(payload.sub, jwt_access),
+      getUserData(payload?.sub, jwt_access),
     ]);
 
     const freelancer = {
@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       last_name: userData.last_name,
       jobs: userData.jobs,
     };
-    if (payload.sub && payload.role === 'client' && freelancer._id) {
+    if (payload && payload.sub && payload.role === 'client' && freelancer._id) {
       return {
         props: {
           user,

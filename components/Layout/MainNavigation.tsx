@@ -5,6 +5,7 @@ import { FC, useContext, useEffect, useState } from 'react';
 import { HiMenuAlt3 } from 'react-icons/hi';
 import { IoCloseOutline } from 'react-icons/io5';
 
+import GuideDropDown from '../DropDownMenus/GuideDropDown';
 import NotificationDropDown from '../DropDownMenus/NotificationDropDown';
 import UserDropDown from '../DropDownMenus/UserDropDown';
 import ThemeIcon from '../SVG/ThemeIcon';
@@ -54,8 +55,8 @@ const MainNavigation: FC = () => {
       className={classNames(
         scrollPosition > 0
           ? 'shadow dark:shadow-gray-800 bg-white dark:bg-gray-900'
-          : 'shadow-none md:bg-transparent bg-white dark:md:bg-transparent dark:bg-gray-900',
-        `transition-shadow fixed top-0 left-0 z-10 w-full `
+          : 'shadow-none bg-white dark:bg-gray-900',
+        `transition-shadow fixed top-0 left-0 z-10 w-full border-b dark:border-b-gray-900 `
       )}
     >
       <nav className='w-full  max-h-16'>
@@ -63,13 +64,13 @@ const MainNavigation: FC = () => {
           <div>
             <div className='flex items-center h-16 justify-between py-3 md:py-5 md:block '>
               <div className=' pt-2 h-full flex items-center '>
-                <Link href='/'>
+                <Link href='/' className='relative h-[3.5rem] w-32'>
                   <Image
                     src='/logo.png'
                     alt='Cooperate Logo'
-                    width={140}
-                    height={140}
+                    fill
                     priority
+                    className='object-cover'
                   />
                 </Link>
               </div>
@@ -94,7 +95,7 @@ const MainNavigation: FC = () => {
                 isOpen ? 'block p-6 shadow-xl' : 'hidden'
               }`}
             >
-              <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0 font-normal text-lg md:text-base'>
+              <ul className='items-center justify-center space-y-8 md:flex md:gap-x-6 md:space-y-0 font-normal text-lg md:text-base'>
                 <li
                   className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
                     router.pathname === '/' || router.pathname === '/freelancer'
@@ -110,6 +111,9 @@ const MainNavigation: FC = () => {
                   >
                     Home
                   </Link>
+                </li>
+                <li>
+                  <GuideDropDown />
                 </li>
                 {!isAuth && (
                   <li

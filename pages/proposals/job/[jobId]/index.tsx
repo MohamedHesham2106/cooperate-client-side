@@ -52,8 +52,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     const job_id = jobId?.toString().replace('~', '');
     const job = (await axiosInstance.get(`/api/job/${job_id}`)).data;
     const payload = getPayloadFromToken(jwt_refresh);
-    const user = await getUserData(payload.sub, jwt_access);
-    if (payload.sub === user._id && user.role === 'freelancer') {
+    const user = await getUserData(payload?.sub, jwt_access);
+    if (payload && payload.sub === user._id && user.role === 'freelancer') {
       return {
         props: {
           userId: user._id,

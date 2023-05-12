@@ -5,7 +5,7 @@ import Review from './Review';
 import { fetcher } from '../../../utils/axios';
 
 const ReviewsList: React.FC = () => {
-  const { data } = useSWR(`/api/rating`, fetcher, {
+  const { data } = useSWR('/api/machine/sentiment', fetcher, {
     refreshInterval: 30 * 1000 * 60,
   });
   const reviews = data?.ratings;

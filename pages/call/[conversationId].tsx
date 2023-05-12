@@ -52,7 +52,7 @@ const CallRoom: NextPage<IProps> = ({
         showMyMicrophoneToggleButton: true,
         layout: 'Sidebar',
         turnOnMicrophoneWhenJoining: false, // set this option to false to turn off the microphone when joining
-        onJoinRoom: (users: ZegoUser[]) => {
+        onJoinRoom: (_users: ZegoUser[]) => {
           socket.emit('call', { conversation_id, receiverId, fullName });
         },
       });
@@ -74,7 +74,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
 }) => {
   const { jwt_refresh, jwt_access } = req.cookies;
-  const userId = getPayloadFromToken(jwt_refresh).sub;
+  const userId = getPayloadFromToken(jwt_refresh)?.sub;
   const { conversationId } = params as ParsedUrlQuery;
   const conversation_id = conversationId?.toString().replace('~', '');
   if (!jwt_access) {

@@ -51,7 +51,11 @@ const Review: React.FC<IProps> = ({ review }) => {
         </p>
         <div className='flex justify-end'>
           <div
-            className={`py-2 px-4 text-xs leading-3 text-blue-700 rounded-full bg-blue-100`}
+            className={`py-2 px-4 text-xs leading-3 text-white rounded-full ${
+              review.status === 'Positive Review'
+                ? 'bg-green-400'
+                : 'bg-red-400'
+            }`}
           >
             {review.status}
           </div>

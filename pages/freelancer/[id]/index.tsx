@@ -66,24 +66,27 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
-    const isFreelancer =
-      payload.role === 'freelancer'
-        ? 'freelancer'
-        : payload.role === 'client'
-        ? 'client'
-        : undefined;
+    if (payload) {
+      const isFreelancer =
+        payload.role === 'freelancer'
+          ? 'freelancer'
+          : payload.role === 'client'
+          ? 'client'
+          : undefined;
 
-    if (user.role !== 'freelancer') {
-      return { redirect: { destination: '/404', permanent: false } };
+      if (user.role !== 'freelancer') {
+        return { redirect: { destination: '/404', permanent: false } };
+      }
+      return {
+        props: {
+          user,
+          isOwnProfile: payload.sub === user._id,
+          isSameRole: payload.role === user.role,
+          isFreelancer: isFreelancer,
+        },
+      };
     }
-    return {
-      props: {
-        user,
-        isOwnProfile: payload.sub === user._id,
-        isSameRole: payload.role === user.role,
-        isFreelancer: isFreelancer,
-      },
-    };
+    return { redirect: { destination: '/404', permanent: false } };
   } catch {
     return { redirect: { destination: '/404', permanent: false } };
   }
