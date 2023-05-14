@@ -44,19 +44,30 @@ const validFileTypes = [
   'image/png',
 ];
 const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
-  const { uuid, refreshToken } = useAuthenticate();
-  const { sendNotification } = useNotification();
-  const [showFullDescription, setShowFullDescription] = useState(false);
+  const { uuid, refreshToken } = useAuthenticate(); // Get the UUID and refreshToken using the useAuthenticate hook
+  const { sendNotification } = useNotification(); // Get the sendNotification function using the useNotification hook
+  const [showFullDescription, setShowFullDescription] = useState(false); // State variable to track whether the full description should be shown or not
 
+  // Truncate the project description to 200 characters
   const truncatedDescription = project && project.job.description.slice(0, 200);
+
+  // Determine whether the full description should be shown based on the length of the description
   const shouldShowMore = project && project.job.description.length > 200;
+
+  // Function to toggle the value of showFullDescription
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
+
+  // Append ellipsis if the description is truncated
   const showMore = shouldShowMore ? '...' : '';
-  const [file, setFile] = useState<File | null>(null);
+
+  const [file, setFile] = useState<File | null>(null); // State variable to store the selected file
+
+  // Function to handle the drag-over event
   const handleOndragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
+  // Function to handle the file selection event
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currFile = event.target?.files?.[0];
     if (currFile && validFileTypes.includes(currFile.type)) {
@@ -71,11 +82,12 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
     }
   };
 
+  // Function to handle the drop event when a file is dropped onto the component
   const handleOndrop = (event: React.DragEvent<HTMLDivElement>) => {
-    // prevent the browser from opening the file
+    // Prevent the browser from opening the file
     event.preventDefault();
     event.stopPropagation();
-    // grab the file
+    // Grab the dropped file
     const currFile = event.dataTransfer.files[0];
     if (currFile && validFileTypes.includes(currFile.type)) {
       setFile(currFile);
@@ -89,19 +101,22 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
     }
   };
 
+  // Function to remove the selected image
   const removeImage = () => {
     setFile(null);
   };
-
-  const role = getPayloadFromToken(refreshToken)?.role;
-  const [createdAt, setCreatedAt] = useState<string | undefined>();
+  const role = getPayloadFromToken(refreshToken)?.role; // Extract the role from the refreshToken
+  const [createdAt, setCreatedAt] = useState<string | undefined>(); // State variable to store the time difference between project creation and current time
   const router = useRouter();
+
+  // Update the createdAt state when the project or project.createdAt changes
   useEffect(() => {
     if (project) {
       setCreatedAt(getTimeDifference(new Date(project.createdAt).getTime()));
     }
   }, [project, project?.createdAt]);
 
+  // Function to create a chat conversation and navigate to the chat page
   const createChatHandler = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -130,6 +145,8 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         );
       });
   };
+
+  // Function to handle the completion of the project
   const handleCompletion = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -143,7 +160,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         uuid,
         project?.Freelancer_id as string,
         `Marked Project as Complete for ${project?.job.title}`,
-        `/ongoing-projects/~${project?.client_id}`
+        `/ongoing-projects/~${project?.Freelancer_id}`
       );
       setTimeout(() => {
         router.reload();
@@ -159,6 +176,8 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
       });
     }
   };
+
+  // Send a notification to the freelancer
   const submitHandler = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (!file) {

@@ -81,8 +81,8 @@ const UserList = () => {
       }
     });
   return (
-    <div className='w-full shadow bg-white dark:bg-gray-700 rounded-t-lg '>
-      <div className='px-4 md:px-10 py-4 md:py-7 bg-gray-100 rounded-t-lg  dark:bg-gray-800 '>
+    <div className='w-full shadow bg-white dark:bg-gray-700 rounded-t-lg max-w-full '>
+      <div className='px-4 md:px-5 py-4 md:py-7 bg-gray-100 rounded-t-lg  dark:bg-gray-800 '>
         <div className='sm:flex items-center justify-between'>
           <p className='text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800 dark:text-white '>
             Users List
@@ -175,16 +175,16 @@ const UserList = () => {
         </div>
       </div>
       <div className='bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto min-h-screen dark:bg-gray-700'>
-        <table className='w-full whitespace-nowrap'>
+        <table className='w-full'>
           <thead>
             <tr className='h-16 w-full text-sm leading-none text-gray-800 dark:text-white'>
-              <th className='font-bold text-left pl-4'>Full Name</th>
-              <th className='font-bold text-left pl-12'>Role</th>
-              <th className='font-bold text-left pl-12'>Created At</th>
-              <th className='font-bold text-left pl-20'>Latest Update</th>
-              <th className='font-bold text-left pl-20'>E-Mail</th>
-              <th className='font-bold text-left pl-16'>Verified</th>
-              <th className='font-bold text-left pl-16'>Modify</th>
+              <th className='font-bold text-left '>Full Name</th>
+              <th className='font-bold text-left '>Role</th>
+              <th className='font-bold text-left '>Created At</th>
+              <th className='font-bold text-left '>Latest Update</th>
+              <th className='font-bold text-left '>E-Mail</th>
+              <th className='font-bold text-left '>Verified</th>
+              <th className='font-bold text-left '>Modify</th>
             </tr>
           </thead>
           <tbody className='w-full'>
@@ -192,15 +192,15 @@ const UserList = () => {
               filteredUsers.map((user: IUser) => (
                 <tr
                   key={user._id}
-                  className='h-20 cursor-pointer text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-800'
+                  className='h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-800'
                 >
-                  <td className='pl-4'>
-                    <div className='flex items-center'>
+                  <td>
+                    <div className='flex items-center gap-5'>
                       <div className='w-10 h-10'>
                         <Image
                           width={50}
                           height={50}
-                          className=' w-[40px] h-[40px] object-cover'
+                          className=' w-[40px] h-[40px] object-cover rounded-md border border-gray-900'
                           src={
                             user.imageUrl
                               ? user.imageUrl
@@ -213,34 +213,34 @@ const UserList = () => {
                           }
                         />
                       </div>
-                      <div className='pl-4'>
+                      <div>
                         <p className='font-medium capitalize'>
                           {user.first_name} {user.last_name}
                         </p>
                       </div>
                     </div>
                   </td>
-                  <td className='pl-12'>
+                  <td >
                     <p className='text-sm font-medium leading-none text-gray-800 capitalize dark:text-white'>
                       {user.role}
                     </p>
                   </td>
-                  <td className='pl-12'>
+                  <td >
                     <p className='font-medium'>
                       {user.createdAt &&
                         new Date(user.createdAt).toLocaleDateString('en-GB')}
                     </p>
                   </td>
-                  <td className='pl-20'>
+                  <td >
                     <p className='font-medium'>
                       {user.updatedAt &&
                         new Date(user.updatedAt).toLocaleDateString('en-GB')}
                     </p>
                   </td>
-                  <td className='pl-20'>
+                  <td>
                     <p className='font-medium'>{user.email}</p>
                   </td>
-                  <td className='pl-16'>
+                  <td >
                     <p
                       className={`font-bold text-xs text-center ring-2 ring-offset-1 text-white px-2 rounded-full py-1 ${
                         user.isEmailVerified
@@ -252,7 +252,7 @@ const UserList = () => {
                     </p>
                   </td>
 
-                  <td className='pl-12'>
+                  <td>
                     {show == user._id ? (
                       <button
                         onClick={() => setShow(undefined)}
@@ -269,20 +269,20 @@ const UserList = () => {
                       </button>
                     )}
                     {show == user._id && (
-                      <div className=' bg-white shadow-lg w-24 absolute right-0 z-30 mr-6  rounded-lg'>
+                      <div className=' bg-white shadow-lg w-24 absolute right-0 z-30 mr-6  rounded-sm dark:bg-gray-900 dark:text-white'>
                         <div
                           onClick={() => handleViewUser(user)}
-                          className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-md hover:text-white'
+                          className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-sm hover:text-white'
                         >
                           <p>View</p>
                         </div>
                         <div
                           onClick={() => handleModifyUser(user)}
-                          className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-md hover:text-white'
+                          className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-sm hover:text-white'
                         >
                           <p>Edit</p>
                         </div>
-                        <div className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-md hover:text-white'>
+                        <div className='text-xs w-full hover:bg-blue-500 py-4 px-4 cursor-pointer  rounded-sm hover:text-white'>
                           <p>Delete</p>
                         </div>
                       </div>

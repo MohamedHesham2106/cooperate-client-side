@@ -13,7 +13,7 @@ interface IProps {
 const ViewUser: React.FC<IProps> = ({ user, onClose }) => {
   return (
     <Modal className='' onClose={onClose} fullScreen>
-      <Container className='mt-24 w-11/12 mx-auto border border-gray-300 rounded-md shadow-lg'>
+     <Container className='md:w-9/12 w-11/12 mx-auto my-24 border border-gray-300 dark:border-none dark:bg-gray-800 rounded-md shadow-lg'>
         <Profile
           isOwnProfile={true}
           isSameRole={false}

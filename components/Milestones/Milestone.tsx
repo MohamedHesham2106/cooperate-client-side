@@ -7,21 +7,28 @@ import { getTimeDifference } from '../../utils/date';
 
 interface IProps {
   milestone: IMilestone;
-  role: 'freelancer' | 'client' | undefined;
+  role: 'freelancer' | 'client' | 'admin' | undefined;
 }
 const Milestone: FC<IProps> = ({ milestone, role }) => {
   const [updatedAt, setUpdatedAt] = useState<string | undefined>();
+
+  // Update the 'updatedAt' state when the 'milestone' prop changes
   useEffect(() => {
     if (milestone) {
+      // Calculate the time difference and set it as the updated time
       setUpdatedAt(getTimeDifference(new Date(milestone.updatedAt).getTime()));
     }
   }, [milestone.updatedAt, milestone]);
+
+  // Function to handle marking the milestone as done
   const handleMarkAsDone = () => {
+    // Send a PUT request to update the milestone status to 'Complete'
     axiosInstance
       .put(`/api/milestone/${milestone._id}`, { status: 'Complete' })
       .then((_response) => {
         // Handle the successful response here
         toast.success(
+          // Display a success message with the capitalized milestone title
           `${milestone.title.charAt(0).toUpperCase()}${milestone.title.slice(
             1
           )} Complete.`
@@ -37,6 +44,7 @@ const Milestone: FC<IProps> = ({ milestone, role }) => {
         });
       });
   };
+
   return (
     <div
       className={`grid ${

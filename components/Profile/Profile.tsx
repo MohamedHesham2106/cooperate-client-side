@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FC, MouseEvent, ReactNode, useContext } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 import { BiMap } from 'react-icons/bi';
 import { BsBuilding } from 'react-icons/bs';
 
 import Button from '../UI/Button';
-import { ModalManagerContext } from '../../context/ModalManager';
+import { useModalManager } from '../../context/ModalManager';
 interface IProps {
   isOwnProfile: boolean;
   isSameRole: boolean;
@@ -40,24 +40,34 @@ const Profile: FC<IProps> = ({
   isSameRole,
   isFreelancer,
 }) => {
+  // Destructure properties from the 'user' object
   const { first_name, last_name, country, address, categories, company_name } =
     user;
+
+  // Determine the style for the name container based on whether it is the user's own profile or not
   const nameStyle = !isOwnProfile
     ? 'flex flex-col gap-3 md:w-full md:pl-6'
     : 'flex flex-col gap-3 md:w-full';
 
+  // Handle inviting the user
   const handleInvite = () => {
-    //Invite Logic
+    // Invitation logic
     router.push(`/invitation/~${user._id}`);
   };
-  const router = useRouter();
-  const { displayModal } = useContext(ModalManagerContext);
 
+  // Get the router instance
+  const router = useRouter();
+
+  // Get the displayModal function from the useModalManager hook
+  const { displayModal } = useModalManager();
+
+  // Handle opening the profile modal
   const handleModal = () => {
     displayModal('profile', {
       userId: user._id,
     });
   };
+
   return (
     <div className='p-6 bg-white dark:bg-gray-800 rounded-t-md '>
       <div

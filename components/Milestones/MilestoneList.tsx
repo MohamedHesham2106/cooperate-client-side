@@ -13,7 +13,7 @@ interface IMilestoneInput {
 }
 
 interface IProps {
-  role: 'freelancer' | 'client' | undefined;
+  role: 'freelancer' | 'client' | 'admin' | undefined;
   projectId: string;
   milestones: IMilestone[];
   isComplete: boolean;
@@ -28,11 +28,15 @@ const MilestoneList: FC<IProps> = ({
   const [showForm, setShowForm] = useState(false);
   const [newMilestones, setNewMilestones] = useState<IMilestoneInput[]>([]);
   const router = useRouter();
+
+  // Function to add a new milestone
   const addMilestone = () => {
     setShowForm(true);
     setNewMilestones([...newMilestones, { title: '' }]);
     console.log(newMilestones);
   };
+
+  // Function to handle input change for a milestone
   const changeHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -43,6 +47,7 @@ const MilestoneList: FC<IProps> = ({
     setNewMilestones(list);
   };
 
+  // Function to handle saving new milestones
   const handleSave = async () => {
     // Loop through newMilestones array and send each title to the backend
     for (const milestone of newMilestones) {
@@ -65,6 +70,8 @@ const MilestoneList: FC<IProps> = ({
     setNewMilestones([]);
     router.reload();
   };
+
+  // Function to handle deletion of a milestone
   const deleteHandler = (index: number) => {
     const inputData = [...newMilestones];
     inputData.splice(index, 1);

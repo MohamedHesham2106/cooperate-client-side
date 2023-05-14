@@ -28,6 +28,8 @@ interface IModal {
   show: boolean;
   onClose: (boolean: boolean) => void;
 }
+const MODAL_ANIMATION = 'animate-[slide-down_200ms_ease-out_forwards]';
+
 const ConfirmationModal: FC<IModal> = ({ show, onClose }) => {
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -46,13 +48,13 @@ const ConfirmationModal: FC<IModal> = ({ show, onClose }) => {
           <div className='flex gap-5 justify-center items-center'>
             <button
               onClick={() => onClose(true)}
-              className='inline-flex justify-center font-bold items-center px-6 py-3 w-1/3 text-white bg-green-500 rounded-md hover:bg-green-600 '
+              className={`inline-flex justify-center font-bold items-center px-6 py-3 w-1/3 text-white bg-green-500 rounded-md hover:bg-green-600 ${MODAL_ANIMATION}`}
             >
               Yes
             </button>
             <button
-              onClick={() => onClose(false)}
-              className='inline-flex items-center font-bold  justify-center px-6 py-3 w-1/3 text-white bg-red-500 rounded-md hover:bg-red-600 '
+              onClick={() => onClose(true)}
+              className={`inline-flex justify-center font-bold items-center px-6 py-3 w-1/3 text-white bg-red-500 rounded-md hover:bg-red-600 ${MODAL_ANIMATION}`}
             >
               No
             </button>

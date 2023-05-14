@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { FC, Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { FC, Fragment, useEffect, useMemo, useState } from 'react';
 import { SlEnvolopeLetter } from 'react-icons/sl';
 
-import { ModalManagerContext } from '../../context/ModalManager';
+import { useModalManager } from '../../context/ModalManager';
 import { getTimeDifference } from '../../utils/date';
 import { fadeIn } from '../../utils/variants';
 
@@ -13,12 +13,19 @@ interface IProps {
 }
 const Proposal: FC<IProps> = ({ proposal, offset }) => {
   const [createdAt, setCreatedAt] = useState<string | undefined>();
+
+  // Define animation variants using the 'fadeIn' effect with a specific offset
   const variants = useMemo(() => fadeIn('right', Number(offset)), [offset]);
+
+  // Update the 'createdAt' state when the 'proposal' prop changes
   useEffect(() => {
+    // Calculate the time difference and set it as the creation time
     setCreatedAt(getTimeDifference(new Date(proposal.createdAt).getTime()));
   }, [proposal.createdAt]);
 
-  const { displayModal } = useContext(ModalManagerContext);
+  const { displayModal } = useModalManager();
+
+  // Function to handle showing the proposal modal
   const showModalHandler = () => {
     displayModal('proposal', {
       proposal,

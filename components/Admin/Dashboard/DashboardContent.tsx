@@ -9,6 +9,7 @@ interface IProps {
   data: IDashboard;
 }
 const DashboardContent: React.FC<IProps> = ({ data }) => {
+  // Define an array of cards with different statistics
   const cards = [
     {
       title: 'Total Number of Users',
@@ -47,10 +48,15 @@ const DashboardContent: React.FC<IProps> = ({ data }) => {
       bgColor: 'bg-purple-500',
     },
   ];
+
+  // Calculate the percentage of freelancers among all users
   const freelancerPercentage =
     (data.freelancerCount / (data.clientCount + data.freelancerCount)) * 100;
+
+  // Calculate the percentage of clients among all users
   const clientPercentage =
     (data.clientCount / (data.clientCount + data.freelancerCount)) * 100;
+
   return (
     <Fragment>
       <section className='grid grid-cols-3 w-full gap-2'>

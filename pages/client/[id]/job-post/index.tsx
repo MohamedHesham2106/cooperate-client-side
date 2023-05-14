@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { ParsedUrlQuery } from 'querystring';
 import { Fragment } from 'react';
 
-import JobForm from '../../../../components/Forms/Job Forms/JobForm';
+import JobForm from '../../../../components/Jobs/Job Forms/JobForm';
 import Container from '../../../../components/UI/Container';
 import { getPayloadFromToken } from '../../../../utils/cookie';
 import { getUserData } from '../../../../utils/user';

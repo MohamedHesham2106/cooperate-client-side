@@ -25,12 +25,19 @@ const ClientDetails: FC<IProps> = ({
   isOwnProfile,
   user,
 }) => {
+  // Destructure properties from the 'user' object
   const { language, education, jobs, _id } = user;
+
+  // Fetch reviews using SWR
   const { data: reviews } = useSWR(`/api/rating/${_id}`, fetcher);
-  // console.log(reviews);
+
+  // Get the router instance
   const router = useRouter();
 
+  // Get the displayModal function from the ModalManagerContext
   const { displayModal } = useContext(ModalManagerContext);
+
+  // Handle opening the language modal
   const handleLanguageModal = () => {
     displayModal('language', {
       userId: user._id,

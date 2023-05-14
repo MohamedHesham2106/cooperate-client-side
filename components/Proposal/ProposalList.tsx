@@ -8,10 +8,12 @@ interface IProps {
 }
 
 const ProposalList: FC<IProps> = ({ proposals }) => {
+  // Sort proposals based on their createdAt date in descending order
   proposals.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
+  // Filter proposals based on their proposal_status
   const pendingProposals = proposals.filter(
     (prop: IProposal['proposal']) => prop.proposal_status === 'pending'
   );

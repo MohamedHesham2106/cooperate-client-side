@@ -1,28 +1,34 @@
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 
 import 'react-circular-progressbar/dist/styles.css';
 
-import { ModalManagerContext } from '../../context/ModalManager';
+import { useModalManager } from '../../context/ModalManager';
 import { getTimeDifference } from '../../utils/date';
 interface IProps {
   project: IProject;
 }
 const Project: FC<IProps> = ({ project }) => {
   const { theme } = useTheme();
-  const { displayModal } = useContext(ModalManagerContext);
+  const { displayModal } = useModalManager();
+
+  // Function to handle showing the project modal
   const showModalHandler = () => {
     displayModal('project', {
       project,
     });
   };
   const [createdAt, setCreatedAt] = useState<string | undefined>();
+
+  // Update the 'createdAt' state when the 'project' prop changes
   useEffect(() => {
+    // Calculate the time difference and set it as the creation time
     setCreatedAt(getTimeDifference(new Date(project.createdAt).getTime()));
   }, [project.createdAt]);
 
+  // Calculate the completion percentage of milestones
   const percentage =
     (project.milestone.filter((m) => m.status === 'Complete').length /
       project.milestone.length) *

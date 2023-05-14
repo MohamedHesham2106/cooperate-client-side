@@ -142,7 +142,7 @@ const LanguageModal: FC<IProps> = ({ onClose, user }) => {
         </Button>
       </div>
 
-      <Form OnSubmit={submitHandler}>
+      <Form OnSubmit={submitHandler} className='flex flex-col gap-2'>
         <div className='flex flex-col justify-between gap-2'>
           <h1 className='text-sm font-semibold'>Language</h1>
           <CustomSelect

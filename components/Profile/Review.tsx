@@ -7,11 +7,15 @@ interface IProps {
 
 const Review: React.FC<IProps> = ({ review }) => {
   const stars = [];
+
+  // Get the formatted creation date of the review
   const currDate = new Date(review.createdAt).toLocaleString('en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
+
+  // Generate star icons based on the review value
   for (let i = 0; i < 5; i++) {
     stars.push(
       <svg

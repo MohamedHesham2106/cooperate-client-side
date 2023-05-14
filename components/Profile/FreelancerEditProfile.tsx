@@ -12,11 +12,18 @@ interface IProps {
 }
 
 const FreelancerEditProfile: FC<IProps> = ({ user }) => {
+  // Define state for the open tab
   const [openTab, setOpenTab] = useState(1);
+
+  // Get the router instance
   const router = useRouter();
 
+  // Update the open tab based on the router query parameter
   useEffect(() => {
+    // Get the value of the 'tab' query parameter from the router
     const tab = router.query.tab;
+
+    // Set the open tab based on the value of the 'tab' query parameter
     if (tab === 'contact') {
       setOpenTab(1);
     } else if (tab === 'security') {

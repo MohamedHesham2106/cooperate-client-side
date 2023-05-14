@@ -8,13 +8,16 @@ import { getPayloadFromToken } from '../../../utils/cookie';
 
 const DashboardUser: NextPage = () => {
   return (
-    <Container className='p-5 w-full grid grid-cols-1 gap-16'>
-      <DashboardTitle
-        pageName='User Management'
-        url='Dashboard'
-        title='User Management'
-      />
-      <CreateUsers />
+    <Container className='w-full grid grid-cols-1 gap-16'>
+      <div className='p-5 '>
+        <DashboardTitle
+          pageName='User Management'
+          url='Dashboard'
+          title='User Management'
+        />
+        <CreateUsers />
+      </div>
+
       <UserList />
     </Container>
   );

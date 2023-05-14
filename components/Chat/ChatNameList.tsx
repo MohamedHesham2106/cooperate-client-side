@@ -10,17 +10,22 @@ interface IProps {
   latestMessages: IChat[];
 }
 const ChatNameList: FC<IProps> = ({ receiverIds, onClick, latestMessages }) => {
+  // Initialize state variables
   const [users, setUsers] = useState<IUser[] | undefined>();
   const [searchValue, setSearchValue] = useState('');
 
+  // Filter users based on search value
   const filteredUsers = users?.filter((user) => {
     const fullName = `${user.first_name} ${user.last_name}`;
     return fullName.toLowerCase().includes(searchValue.toLowerCase());
   });
 
+  // Handle search input change
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  // Retrieve users based on receiver IDs
   useEffect(() => {
     const getUsers = async () => {
       const receiver: IUser[] = await Promise.all(

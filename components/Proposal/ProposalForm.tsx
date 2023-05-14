@@ -27,10 +27,12 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
   const [file, setFile] = useState<File | null>(null);
 
   const MAX_CHARACTERS = 3000;
-  // calculate number of characters left
+
+  // Calculate the number of characters left for the cover letter
   const coverLetterLength = proposal.cover_letter?.length;
   const charactersLeft = MAX_CHARACTERS - Number(coverLetterLength);
 
+  // Handle input change for cover letter and website link
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -40,9 +42,13 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
       [name]: value,
     }));
   };
+
+  // Prevent default behavior when dragging over the element
   const handleOndragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
+
+  // Handle file selection from input
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currFile = event.target?.files?.[0];
     const validFileTypes = [
@@ -62,11 +68,10 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
     }
   };
 
+  // Handle file drop event
   const handleOndrop = (event: React.DragEvent<HTMLDivElement>) => {
-    // prevent the browser from opening the file
     event.preventDefault();
     event.stopPropagation();
-    // grab the file
     const currFile = event.dataTransfer.files[0];
     const validFileTypes = [
       'application/pdf',
@@ -85,10 +90,12 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
     }
   };
 
+  // Remove the selected file
   const removeImage = () => {
     setFile(null);
   };
 
+  // Handle form submission
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { cover_letter, website_link } = proposal;

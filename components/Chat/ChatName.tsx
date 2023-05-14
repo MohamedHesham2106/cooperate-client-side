@@ -10,17 +10,23 @@ interface IProps {
 }
 
 const ChatName: FC<IProps> = ({ user, onClick, latestMessage }) => {
+  // Initialize state variables
   const [lastMessage, setLastMessage] = useState<string>('');
+  const [date, setDate] = useState<string | undefined>();
+
+  // Update the last message when the latestMessage changes
   useEffect(() => {
-    // console.log(latestMessage);
     if (latestMessage?.message) {
       setLastMessage(latestMessage?.message);
     }
   }, [latestMessage, latestMessage?.message]);
+
+  // Handle click event
   const handleClick = () => {
     onClick(user._id);
   };
-  const [date, setDate] = useState<string | undefined>();
+
+  // Update the date when the latestMessage's createdAt changes
   useEffect(() => {
     if (latestMessage?.createdAt) {
       setDate(formatDateForChat(new Date(latestMessage?.createdAt)));

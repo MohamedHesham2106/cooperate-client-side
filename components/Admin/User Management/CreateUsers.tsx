@@ -10,7 +10,7 @@ import axiosInstance from '../../../utils/axios';
 import { fetchCountries } from '../../../utils/countries';
 
 const CreateUsers: React.FC = () => {
-  // State variables for the country list and the selected country
+  // Initialize state variables
   const [countryList, setCountryList] = useState<IOption[]>();
   const [country, setCountry] = useState('');
   const [role, setRole] = useState<string | undefined>();
@@ -23,6 +23,7 @@ const CreateUsers: React.FC = () => {
     repeat_password: '',
   };
 
+  // Use the useValidate hook to manage form validation
   const [
     userInfo,
     errors,
@@ -34,15 +35,17 @@ const CreateUsers: React.FC = () => {
   const selectCountryHandler = useCallback((selected: string) => {
     setCountry(selected);
   }, []);
+
   // Callback function for selecting a role
   const selectedRoleHandler = useCallback((selected: string) => {
     setRole(selected);
   }, []);
+
+  // Fetch the list of countries
   const countryListHandler = async function () {
     const countryList = await fetchCountries();
     setCountryList(countryList);
   };
-  // Fetch the list of countries
   useEffect(() => {
     if (countryList === undefined) {
       countryListHandler();
@@ -53,7 +56,7 @@ const CreateUsers: React.FC = () => {
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isValid) {
-      // Send registration data to the server and redirect to the login page
+      // Send registration data to the server and handle the response
       await axiosInstance
         .post('/api/register', {
           firstname: userInfo.firstname,
@@ -77,11 +80,14 @@ const CreateUsers: React.FC = () => {
         });
     }
   };
+
+  // Define the roles array
   const roles = [
     { id: '0', name: 'admin' },
     { id: '1', name: 'freelancer' },
     { id: '2', name: 'client' },
   ];
+
   return (
     <Form
       className='w-full bg-white border shadow rounded-md dark:bg-gray-700 dark:border-gray-600'

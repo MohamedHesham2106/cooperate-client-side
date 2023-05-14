@@ -14,17 +14,25 @@ interface IProps {
 }
 const ProposalDetails: FC<IProps> = ({ proposal, onClose }) => {
   const [createdAt, setCreatedAt] = useState<string | undefined>();
+
+  // Log the 'proposal' object for debugging purposes
   console.log(proposal);
+
+  // Update the 'createdAt' state when the 'proposal' or 'proposal.createdAt' prop changes
   useEffect(() => {
     if (proposal) {
+      // Calculate the time difference and set it as the creation time
       setCreatedAt(getTimeDifference(new Date(proposal?.createdAt).getTime()));
     }
   }, [proposal, proposal?.createdAt]);
+
+  // Function to handle accepting the proposal
   const acceptClickHandler = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
     if (proposal?._id) {
+      // Send a POST request to accept the proposal
       await axiosInstance
         .post('/api/project', {
           proposal_id: proposal?._id,
@@ -49,10 +57,13 @@ const ProposalDetails: FC<IProps> = ({ proposal, onClose }) => {
         });
     }
   };
+
+  // Function to handle declining the proposal
   const declineClickHandler = async (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
+    // Send a PUT request to decline the proposal
     await axiosInstance
       .put('/api/proposal')
       .then(() => {

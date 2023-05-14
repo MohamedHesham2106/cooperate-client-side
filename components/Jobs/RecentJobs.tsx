@@ -19,8 +19,14 @@ interface ISelectedCheckboxes {
 
 interface IProps {
   categories: ICategoryWithSkills[];
+  isFreelancer?: 'freelancer' | 'client';
+  isOwnProfile?: boolean;
 }
-const RecentJobs: React.FC<IProps> = ({ categories }) => {
+const RecentJobs: React.FC<IProps> = ({
+  categories,
+  isOwnProfile = false,
+  isFreelancer = 'freelancer',
+}) => {
   const PAGE_SIZE = 10; // Number of items per page
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -28,7 +34,7 @@ const RecentJobs: React.FC<IProps> = ({ categories }) => {
     console.log('getKey called:', pageIndex);
     if (previousPageData && !previousPageData.jobs.length) return null;
     if (pageIndex === 0) return `/api/job?per_page=${PAGE_SIZE}&page=1`;
-    return `/api/job?per_page=${PAGE_SIZE}&page=${pageIndex}`; // SWR key
+    return `/api/job?per_page=${PAGE_SIZE}&page=${pageIndex + 1}`; // SWR key
   };
 
   const { data, size, setSize, isValidating } = useSWRInfinite(getKey, fetcher);
@@ -165,16 +171,20 @@ const RecentJobs: React.FC<IProps> = ({ categories }) => {
         }}
         className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex-col shadow p-5'
       >
-        <JobList jobs={filteredJobs} isFreelancer='freelancer' />
+        <JobList
+          jobs={filteredJobs}
+          isFreelancer={isFreelancer}
+          isOwnProfile={isOwnProfile}
+        />
         {!isLoadingMore ? (
           <Button
-            className='bg-gray-200 text-sm rounded-sm p-3 hover:bg-gray-300'
+            className='bg-gray-200 text-sm rounded-sm p-3 hover:bg-gray-300 dark:bg-gray-900 dark:hover:bg-gray-800'
             onClick={handleLoadMore}
           >
             Load More
           </Button>
         ) : (
-          <div className='bg-gray-200 text-sm rounded-sm p-3 hover:bg-gray-300 text-center flex items-center justify-center'>
+          <div className='bg-gray-200 text-sm rounded-sm p-3 hover:bg-gray-300 text-center flex items-center justify-center dark:bg-gray-900 dark:hover:bg-gray-800'>
             <TailwindSpinner />
           </div>
         )}

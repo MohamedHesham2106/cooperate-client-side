@@ -7,7 +7,7 @@ import { BiCalendar } from 'react-icons/bi';
 import { BsPaypal } from 'react-icons/bs';
 import useSWR from 'swr';
 
-import FawryIcon from './FawryIcon';
+import FawryIcon from '../../SVG/FawryIcon';
 import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';

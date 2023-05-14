@@ -68,7 +68,7 @@ const InvitationForm: FC<IProps> = ({ user, freelancer }) => {
             } sees you as potential candidate For ${
               user.jobs?.find((job) => selectedJob === job._id)?.title
             }`,
-            `/invitation/received/${freelancer._id}`
+            `/invitation/received/~${freelancer._id}`
           );
           toast.success('Invitation Sent!', {
             style: {

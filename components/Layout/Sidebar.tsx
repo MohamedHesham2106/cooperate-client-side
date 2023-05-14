@@ -147,40 +147,41 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
             </h2>
           </div>
         </div>
-        {user && (
-          <div className='absolute bottom-0 left-0 p-4 w-full flex gap-2 items-center'>
-            {image ? (
-              <Image
-                src={image}
-                width={35}
-                height={35}
-                className='rounded-full'
-                alt={image}
-              />
-            ) : (
-              <HiOutlineUserCircle size={35} />
-            )}
 
-            <div
-              style={{
-                transitionDelay: '300ms',
-              }}
-              className={`flex flex-col gap-1 duration-500 ${
-                !open && 'opacity-0 translate-x-28 capitalize overflow-hidden'
-              }`}
-            >
-              <p className='text-sm'>
-                {user.first_name} {user.last_name}
-              </p>
-              <p className='text-xs'>{user.email}</p>
-            </div>
-            <IoLogOutOutline
-              size={25}
-              onClick={logOutHandler}
-              className='cursor-pointer'
+        <div className='absolute bottom-0 left-0 p-4 w-full flex gap-2 items-center'>
+          {image ? (
+            <Image
+              src={image}
+              width={35}
+              height={35}
+              className='rounded-full'
+              alt={image}
             />
-          </div>
-        )}
+          ) : (
+            <HiOutlineUserCircle size={35} />
+          )}
+
+          {open && (
+            <>
+              <div
+                style={{
+                  transitionDelay: '300ms',
+                }}
+                className="flex flex-col gap-1 duration-500"
+              >
+                <p className='text-sm'>
+                  {user?.first_name} {user?.last_name}
+                </p>
+                <p className='text-xs'>{user?.email}</p>
+              </div>
+              <IoLogOutOutline
+                size={25}
+                onClick={logOutHandler}
+                className='cursor-pointer'
+              />
+            </>
+          )}
+        </div>
       </nav>
     </header>
   );

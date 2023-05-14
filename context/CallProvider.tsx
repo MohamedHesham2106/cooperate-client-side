@@ -1,9 +1,9 @@
+import { useRouter } from 'next/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
 import { Toast, toast } from 'react-hot-toast';
 
 import { useSocket } from './SocketContext';
 import CallToast from '../components/UI/CallToast';
-import { useRouter } from 'next/router';
 
 const CallContext = createContext(null);
 

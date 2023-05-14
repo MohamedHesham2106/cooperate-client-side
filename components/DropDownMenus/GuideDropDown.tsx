@@ -1,8 +1,17 @@
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
+
+import { useAuthenticate } from '../../context/AuthProvider';
 const GuideDropDown: FC = () => {
   const [showDropDown, setShowDropDown] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+  const { refreshToken } = useAuthenticate();
+  useEffect(() => {
+    if (refreshToken) {
+      setIsAuth(true);
+    }
+  }, [refreshToken]);
 
   return (
     <div>
@@ -29,37 +38,52 @@ const GuideDropDown: FC = () => {
           transformOrigin: 'top',
         }}
       >
-        <ul className='grid grid-cols-2 pb-10 pt-3 px-3 gap-3 h-screen md:h-auto'>
-          <div className='grid grid-cols-1 text-start justify-start h-fit md:h-auto'>
+        <ul
+          className={`grid ${
+            isAuth ? 'grid-cols-2' : 'grid-cols-1'
+          } pb-10 pt-3 px-3 gap-3 h-screen md:h-auto`}
+        >
+          <div className='grid grid-cols-1 text-start justify-start h-fit md:h-auto w-full'>
             <h2 className='p-3 font-bold text-lg'>Guide</h2>
-            <Link
-              href='/guide/how-to-hire'
-              className=' p-3 rounded-md h-fit mb-2  hover:bg-gray-100 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600'
+            <div
+              className={`flex ${
+                isAuth ? 'flex-col' : 'flex-row'
+              } gap-1 w-full`}
             >
-              <div className='text-sm font-bold'>How to Hire</div>
-              <p className='text-gray-400 text-sm  opacity-80'>
-                Post job, review offers, hire best freelancer.
-              </p>
-            </Link>
-            <Link
-              href='/guide/how-to-work'
-              className='text-start p-3 rounded-md h-fit mb-2  hover:bg-gray-100 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600'
-            >
-              <div className='text-sm font-bold'>How to Work</div>
-              <p className='text-gray-400 text-sm  opacity-80'>
-                Learn how to grow your independent work.
-              </p>
-            </Link>
+              <Link
+                href='/guide/how-to-hire'
+                className=' p-3 rounded-md h-fit mb-2  hover:bg-gray-100 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 w-full'
+              >
+                <div className='text-sm font-bold'>How to Hire</div>
+                <p className='text-gray-400 text-sm  opacity-80'>
+                  Post job, review offers, hire best freelancer.
+                </p>
+              </Link>
+              <Link
+                href='/guide/how-to-work'
+                className='text-start p-3 rounded-md h-fit mb-2  hover:bg-gray-100 cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600 w-full'
+              >
+                <div className='text-sm font-bold'>How to Work</div>
+                <p className='text-gray-400 text-sm  opacity-80'>
+                  Learn how to grow your independent work.
+                </p>
+              </Link>
+            </div>
           </div>
-          <div className='grid grid-cols-1 text-start justify-start h-fit '>
-            <h2 className='p-3 font-bold text-lg'>Support</h2>
-            <li className=' p-3 rounded-md hover:bg-gray-100 mb-2 cursor-pointer h-fit dark:bg-gray-700 dark:hover:bg-gray-600'>
-              <div className='text-sm font-bold'>How to Contact Admins</div>
-              <p className='text-gray-400 text-sm  opacity-80'>
-                Email or call admin for user support.
-              </p>
-            </li>
-          </div>
+          {isAuth && (
+            <div className='grid grid-cols-1 text-start justify-start h-fit '>
+              <h2 className='p-3 font-bold text-lg'>Support</h2>
+              <Link
+                href='/admin-contact'
+                className=' p-3 rounded-md hover:bg-gray-100 mb-2 cursor-pointer h-fit dark:bg-gray-700 dark:hover:bg-gray-600'
+              >
+                <div className='text-sm font-bold'>How to Contact Admins</div>
+                <p className='text-gray-400 text-sm  opacity-80'>
+                  Email or call admin for user support.
+                </p>
+              </Link>
+            </div>
+          )}
         </ul>
       </div>
     </div>

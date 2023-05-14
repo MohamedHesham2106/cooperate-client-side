@@ -6,7 +6,10 @@ import axiosInstance from '../../utils/axios';
 import { fadeIn } from '../../utils/variants';
 
 const SkillsList: FC = () => {
+  // Define state for skills
   const [skills, setSkills] = useState<ISkill[]>([]);
+
+  // Fetch skills from the server
   const fetchSkills = useCallback(async () => {
     try {
       const data = (await axiosInstance.get('/api/skill')).data;
@@ -15,10 +18,15 @@ const SkillsList: FC = () => {
       console.log(error);
     }
   }, []);
+
+  // Trigger the fetchSkills function when the component mounts
   useEffect(() => {
     fetchSkills();
   }, [fetchSkills]);
+
+  // Define variants for animations
   const variants = useMemo(() => fadeIn('down', 0.7), []);
+
   return (
     <motion.div
       variants={variants}

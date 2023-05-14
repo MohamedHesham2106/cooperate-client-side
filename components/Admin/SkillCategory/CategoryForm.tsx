@@ -8,25 +8,33 @@ import Input from '../../UI/Input';
 import axiosInstance from '../../../utils/axios';
 
 const CategoryForm: React.FC = () => {
+  // Initialize the state for categories with an initial empty string
   const [categories, setCategories] = useState<string[]>(['']);
 
+  // Event handler for adding a new category
   const handleAddCategory = () => {
     setCategories([...categories, '']);
   };
 
+  // Event handler for updating a category at a specific index
   const handleCategoryChange = (index: number, value: string) => {
     const newCategories = [...categories];
     newCategories[index] = value;
     setCategories(newCategories);
   };
 
+  // Event handler for removing a category at a specific index
   const handleRemoveCategory = (index: number) => {
     const newCategories = [...categories];
     newCategories.splice(index, 1);
     setCategories(newCategories);
   };
+
+  // Form submission handler
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // Check if any category is empty
     let isEmpty = false;
     for (const category of categories) {
       if (category.trim() === '') {
@@ -34,11 +42,14 @@ const CategoryForm: React.FC = () => {
         break;
       }
     }
+
+    // If any category is empty, display an error toast and stop form submission
     if (isEmpty) {
       toast.error("You can't submit an empty category");
       return;
     }
-    // all categories are not empty, you can proceed with the form submission
+
+    // All categories are not empty, proceed with the form submission
     for (const category of categories) {
       await axiosInstance
         .post('/api/category', {
@@ -56,6 +67,7 @@ const CategoryForm: React.FC = () => {
         });
     }
   };
+
   return (
     <div className='border p-5 shadow bg-white rounded text-black dark:border-gray-800 dark:bg-gray-700 dark:text-white dark:shadow-gray-900 '>
       <h3 className='text-3xl font-black'>Add Categories</h3>

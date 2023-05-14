@@ -46,11 +46,12 @@ const Conversation: NextPage<IProps> = ({
 
   const conversationId = conversationToRender?._id;
 
-  const fetchMessages = useCallback(async () => {
-    const chats = (await axiosInstance.get(`/api/chat/${conversationId}`)).data
-      .messages;
-    chats && setChat(chats.filter((chat: IChat) => chat));
-  }, [conversationId]);
+  const { data: messages } = useSWR(`/api/chat/${conversationId}`, fetcher);
+  useEffect(() => {
+    if (messages) {
+      setChat(messages.messages.filter((chat: IChat) => chat));
+    }
+  }, [messages]);
 
   const { data: sender } = useSWR(`/api/user/${senderId}`, fetcher);
 
@@ -60,7 +61,6 @@ const Conversation: NextPage<IProps> = ({
 
   useEffect(() => {
     if (conversationId) {
-      fetchMessages();
       socket.emit('joinRoom', { conversationId });
       socket.on('newMessage', (data: IChat) => {
         setChat([...chat, data]);
@@ -91,7 +91,7 @@ const Conversation: NextPage<IProps> = ({
       socket.off('leaveRoom');
       socket.off('newMessage');
     };
-  }, [chat, conversationId, conversations, fetchMessages, socket]);
+  }, [chat, conversationId, conversations, socket]);
 
   const router = useRouter();
   useEffect(() => {

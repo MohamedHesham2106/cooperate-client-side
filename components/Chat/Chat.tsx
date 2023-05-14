@@ -19,26 +19,35 @@ interface IProps {
 }
 
 const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
+  // Initialize state variables
   const [message, setMessage] = useState<string>('');
-
   const { socket } = useSocket();
   const [showPicker, setShowPicker] = useState(false);
   const chatBubbleRef = useRef<HTMLDivElement>(null);
   const conversationId = conversation._id;
   const senderId = sender._id;
+  const prevChatLengthRef = useRef(0);
 
+  // Fetch receiver data using useSWR
   const { data: receiver } = useSWR(`/api/user/${receiverId}`, fetcher);
 
-  useEffect(() => {
+  // Scroll to the bottom of the chat bubble when a new message is received
+  const scrollToBottom = () => {
     if (chatBubbleRef.current !== null) {
-      chatBubbleRef.current.scrollTop = chatBubbleRef.current.scrollHeight;
+      chatBubbleRef.current.scrollTo({
+        top: chatBubbleRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
     }
-  }, [chats]);
+  };
 
+  // Event handler for input field change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setMessage(value);
   };
+
+  // Event handler for "Enter" key press in the input field
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       if (message === '') {
@@ -48,13 +57,14 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
       try {
         socket.emit('sendMessage', { conversationId, message, senderId });
         clearChange();
-        chatBubbleRef.current?.scrollTo(0, chatBubbleRef.current?.scrollHeight);
+        scrollToBottom();
       } catch (error) {
         console.error(error);
       }
     }
   };
 
+  // Event handler for sending a message
   const handleSendMessage = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (message === '') {
@@ -64,14 +74,32 @@ const Chat: FC<IProps> = ({ sender, conversation, chats, receiverId }) => {
     try {
       socket.emit('sendMessage', { conversationId, message, senderId });
       clearChange();
-      chatBubbleRef.current?.scrollTo(0, chatBubbleRef.current?.scrollHeight);
     } catch (error) {
       console.error(error);
+    } finally {
+      scrollToBottom();
     }
   };
+
+  // Function to clear the input field
   const clearChange = () => {
     setMessage('');
   };
+
+  // Add a useEffect hook to scroll to the bottom when chats change
+  useEffect(() => {
+    if (chatBubbleRef.current !== null) {
+      // Check if new messages are added to the chat
+      const isNewMessageAdded = chats.length > prevChatLengthRef.current;
+      // Update the previous chat length
+      prevChatLengthRef.current = chats.length;
+
+      // Scroll to the bottom if a new message is added
+      if (isNewMessageAdded) {
+        scrollToBottom();
+      }
+    }
+  }, [chats.length]);
 
   return (
     <div className='flex flex-col  justify-between border border-t-0 lg:border-t dark:border-gray-800  dark:bg-gray-700'>
