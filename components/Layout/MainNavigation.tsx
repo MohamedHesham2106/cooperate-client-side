@@ -115,7 +115,7 @@ const MainNavigation: FC = () => {
                 <li>
                   <GuideDropDown />
                 </li>
-                {!isAuth && (
+                {(!isAuth || role === 'client') && (
                   <li
                     className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
                       router.pathname === '/jobs'
@@ -129,7 +129,7 @@ const MainNavigation: FC = () => {
                         router.pathname === '/jobs' && e.preventDefault();
                       }}
                     >
-                      Find Work
+                      {role !== 'client' ? 'Find Work' : 'All Jobs'}
                     </Link>
                   </li>
                 )}

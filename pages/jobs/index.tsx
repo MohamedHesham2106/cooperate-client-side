@@ -11,6 +11,7 @@ import Container from '../../components/UI/Container';
 import Modal from '../../components/UI/Modal';
 import { useAuthenticate } from '../../context/AuthProvider';
 import axiosInstance from '../../utils/axios';
+import { getPayloadFromToken } from '../../utils/cookie';
 
 interface ICategoryWithSkills extends ICategory {
   skills: ISkill[];
@@ -43,12 +44,12 @@ const Jobs: NextPage<IProps> = ({ jobs, categories }) => {
         {}
       )
     );
-
+  const role = getPayloadFromToken(refreshToken)?.role === 'freelancer';
   useEffect(() => {
-    if (refreshToken) {
+    if (role) {
       router.push('/');
     }
-  }, [refreshToken, router]);
+  }, [refreshToken, role, router]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(
@@ -164,7 +165,10 @@ const Jobs: NextPage<IProps> = ({ jobs, categories }) => {
           }}
           className='border dark:border-none dark:bg-gray-800 rounded-lg flex overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full flex-col shadow p-5'
         >
-          <JobList jobs={filteredJobs} isFreelancer={undefined} />
+          <JobList
+            jobs={filteredJobs}
+            isFreelancer={!role ? 'client' : undefined}
+          />
         </motion.section>
       </Container>
     </Fragment>
@@ -174,7 +178,7 @@ const Jobs: NextPage<IProps> = ({ jobs, categories }) => {
 export const getStaticProps: GetStaticProps = async () => {
   try {
     const [{ data: jobs }, { data: categories }] = await Promise.all([
-      axiosInstance.get('/api/job?per_page=15&page=1'),
+      axiosInstance.get('/api/job?per_page=150&page=1'),
       axiosInstance.get('/api/category'),
     ]);
     return {

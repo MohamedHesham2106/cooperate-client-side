@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { FC, useMemo } from 'react';
 
 import Blob from '../SVG/Blob';
+import { useAuthenticate } from '../../context/AuthProvider';
 import { fadeIn } from '../../utils/variants';
 
 const Hero: FC = () => {
   const variants = useMemo(() => fadeIn('down', 0.5), []);
+  const { refreshToken } = useAuthenticate();
   return (
     <motion.div
       variants={variants}
@@ -30,20 +32,22 @@ const Hero: FC = () => {
               freelancers for your next project with ease. you'll find the
               expertise you need to get the job done right.
             </p>
-            <div className='mt-10 flex items-center justify-start gap-x-6'>
-              <Link
-                href='/signup'
-                className='rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500'
-              >
-                Get started
-              </Link>
-              <Link
-                href='#'
-                className='text-sm font-semibold leading-6 text-gray-900 dark:text-white'
-              >
-                Learn more <span aria-hidden='true'>→</span>
-              </Link>
-            </div>
+            {!refreshToken && (
+              <div className='mt-10 flex items-center justify-start gap-x-6'>
+                <Link
+                  href='/signup'
+                  className='rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500'
+                >
+                  Get started
+                </Link>
+                <Link
+                  href='#'
+                  className='text-sm font-semibold leading-6 text-gray-900 dark:text-white'
+                >
+                  Learn more <span aria-hidden='true'>→</span>
+                </Link>
+              </div>
+            )}
           </div>
           <div className='relative hidden sm:hidden xs:flex lg:flex lg:justify-end'>
             <Image

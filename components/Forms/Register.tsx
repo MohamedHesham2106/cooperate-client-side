@@ -48,6 +48,7 @@ const Register: React.FC<IRegister> = ({ role }) => {
   // Form submit handler
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (isValid) {
       // Send registration data to the server and redirect to the login page
       await axios

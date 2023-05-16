@@ -65,6 +65,11 @@ const CustomSelect: FC<IProps> = ({ options, onSelect, label }) => {
                   setSelected(option?.name);
                   setOpen(false);
                   setOptionValue('');
+                } else {
+                  onSelect('');
+                  setSelected('');
+                  setOpen(false);
+                  setOptionValue('');
                 }
               }}
             >
