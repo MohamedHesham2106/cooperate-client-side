@@ -167,7 +167,7 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
                 style={{
                   transitionDelay: '300ms',
                 }}
-                className="flex flex-col gap-1 duration-500"
+                className='flex flex-col gap-1 duration-500'
               >
                 <p className='text-sm'>
                   {user?.first_name} {user?.last_name}

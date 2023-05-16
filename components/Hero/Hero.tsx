@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import Blob from '../SVG/Blob';
 import { useAuthenticate } from '../../context/AuthProvider';
@@ -10,6 +10,13 @@ import { fadeIn } from '../../utils/variants';
 const Hero: FC = () => {
   const variants = useMemo(() => fadeIn('down', 0.5), []);
   const { refreshToken } = useAuthenticate();
+  const [isAuth, setIsAuth] = useState(false);
+  useEffect(() => {
+    if (refreshToken) {
+      setIsAuth(true);
+    }
+  }, [refreshToken]);
+
   return (
     <motion.div
       variants={variants}
@@ -32,7 +39,7 @@ const Hero: FC = () => {
               freelancers for your next project with ease. you'll find the
               expertise you need to get the job done right.
             </p>
-            {!refreshToken && (
+            {!isAuth && (
               <div className='mt-10 flex items-center justify-start gap-x-6'>
                 <Link
                   href='/signup'

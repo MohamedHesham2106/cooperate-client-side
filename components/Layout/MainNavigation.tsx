@@ -24,11 +24,15 @@ const MainNavigation: FC = () => {
   // console.log(router.pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [isAuth, setIsAuth] = useState<boolean>(false);
-  const [role] = useState<string | undefined>(getRole() || undefined);
+  const [role, setRole] = useState<string | undefined>();
   const { uuid } = useAuthenticate();
   const scrollPosition = useScrollPosition();
   const checkAuthentication = isAuthenticated();
   const { SignOut } = useContext(AuthContext);
+
+  useEffect(() => {
+    setRole(getRole());
+  }, []);
 
   const logOutHandler = () => {
     SignOut();

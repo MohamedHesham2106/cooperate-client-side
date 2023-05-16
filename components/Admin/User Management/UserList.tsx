@@ -220,18 +220,18 @@ const UserList = () => {
                       </div>
                     </div>
                   </td>
-                  <td >
+                  <td>
                     <p className='text-sm font-medium leading-none text-gray-800 capitalize dark:text-white'>
                       {user.role}
                     </p>
                   </td>
-                  <td >
+                  <td>
                     <p className='font-medium'>
                       {user.createdAt &&
                         new Date(user.createdAt).toLocaleDateString('en-GB')}
                     </p>
                   </td>
-                  <td >
+                  <td>
                     <p className='font-medium'>
                       {user.updatedAt &&
                         new Date(user.updatedAt).toLocaleDateString('en-GB')}
@@ -240,7 +240,7 @@ const UserList = () => {
                   <td>
                     <p className='font-medium'>{user.email}</p>
                   </td>
-                  <td >
+                  <td>
                     <p
                       className={`font-bold text-xs text-center ring-2 ring-offset-1 text-white px-2 rounded-full py-1 ${
                         user.isEmailVerified

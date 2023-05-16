@@ -4,7 +4,7 @@ import React from 'react';
 import ClientGuide from '../../components/Guide/ClientGuide';
 import Container from '../../components/UI/Container';
 
-const HowToHire:NextPage = () => {
+const HowToHire: NextPage = () => {
   return (
     <Container className='px-5 mt-24 w-full '>
       <h1 className='text-6xl mb-10 font-serif text-center bg-blue-900 p-5 text-white rounded-md'>
