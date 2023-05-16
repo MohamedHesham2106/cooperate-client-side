@@ -17,12 +17,14 @@ import LanguageSection from './Sections/LanguageSection';
 import PersonalProjectsSection from './Sections/PersonalProjectsSection';
 import SkillsSection from './Sections/SkillsSection';
 import WorkCategorySection from './Sections/WorkCategorySection';
+import WorkHistoryList from './Sections/WorkHistory/WorkHistoryList';
 import { ModalManagerContext } from '../../context/ModalManager';
 import axiosInstance from '../../utils/axios';
 
 interface IProps {
   isOwnProfile: boolean;
   user: IUser;
+  workHistory?: IProject[];
 }
 interface IModal {
   show: boolean;
@@ -65,7 +67,7 @@ const ConfirmationModal: FC<IModal> = ({ show, onClose }) => {
   );
 };
 
-const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user }) => {
+const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user, workHistory }) => {
   const {
     language = [],
     education = '',
@@ -211,9 +213,9 @@ const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user }) => {
           </div>
           <div className='flex flex-col border-t-2 px-3 dark:border-gray-700 border-gray-200 pt-5'>
             <h1 className='font-semibold text-2xl'>Work History</h1>
+            <span className='md:w-1/2 w-full border-t-2 border-black my-2 dark:border-gray-700 '></span>
             <div className='flex mt-2 gap-2'>
-              No work yet. Once you start getting hired on Coo/rate, your work
-              with clients will appear here.
+              {workHistory && <WorkHistoryList workHistory={workHistory} />}
             </div>
           </div>
         </div>

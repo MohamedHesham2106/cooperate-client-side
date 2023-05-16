@@ -6,6 +6,7 @@ import { Fragment } from 'react';
 import FreelancerDetails from '../../../components/Profile/FreelancerDetails';
 import Profile from '../../../components/Profile/Profile';
 import Container from '../../../components/UI/Container';
+import axiosInstance from '../../../utils/axios';
 import { getPayloadFromToken } from '../../../utils/cookie';
 import { getUserData } from '../../../utils/user';
 
@@ -14,6 +15,7 @@ interface IProps {
   isOwnProfile: boolean;
   isSameRole: boolean;
   isFreelancer: 'freelancer' | 'client' | undefined;
+  workHistory?: IProject[];
 }
 
 const Freelancer: NextPage<IProps> = ({
@@ -21,6 +23,7 @@ const Freelancer: NextPage<IProps> = ({
   user,
   isSameRole,
   isFreelancer,
+  workHistory,
 }) => {
   return (
     <Fragment>
@@ -45,7 +48,11 @@ const Freelancer: NextPage<IProps> = ({
           isFreelancer={isFreelancer}
           user={user}
         />
-        <FreelancerDetails isOwnProfile={isOwnProfile} user={user} />
+        <FreelancerDetails
+          isOwnProfile={isOwnProfile}
+          user={user}
+          workHistory={workHistory}
+        />
       </Container>
     </Fragment>
   );
@@ -65,6 +72,9 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   try {
     const user = await getUserData(userId, jwt_access);
+    const workHistory = (
+      await axiosInstance.get(`/api/user/${userId}/getWorkHistory`)
+    ).data;
     const payload = getPayloadFromToken(jwt_refresh);
     if (payload) {
       const isFreelancer =
@@ -83,6 +93,7 @@ export const getServerSideProps: GetServerSideProps = async ({
           isOwnProfile: payload.sub === user._id,
           isSameRole: payload.role === user.role,
           isFreelancer: isFreelancer,
+          workHistory: workHistory.projects,
         },
       };
     }

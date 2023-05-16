@@ -7,6 +7,7 @@ import LanguageModal from '../components/Forms/Modal Forms/LanguageModal';
 import ProfilePictureModal from '../components/Forms/Modal Forms/ProfilePictureModal';
 import InvitationDetails from '../components/Invitation/InvitationDetails';
 import JobDetails from '../components/Jobs/JobDetails';
+import WorkHistoryDetails from '../components/Profile/Sections/WorkHistory/WorkHistoryDetails';
 import ProjectDetails from '../components/Project/ProjectDetails';
 import ProposalDetails from '../components/Proposal/ProposalDetails';
 
@@ -89,6 +90,13 @@ export const ModalManagerProvider: FC<IModalManagerProvider> = ({
         return <ViewUser onClose={closeModal} user={modalProps.user} />;
       case 'modifyUser':
         return <EditUser onClose={closeModal} user={modalProps.user} />;
+      case 'history':
+        return (
+          <WorkHistoryDetails
+            onClose={closeModal}
+            workHistory={modalProps.project}
+          />
+        );
       default:
         return null;
     }

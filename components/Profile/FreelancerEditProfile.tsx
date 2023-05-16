@@ -5,6 +5,7 @@ import { FC, useEffect, useState } from 'react';
 
 import ChangePassword from '../Forms/User Forms/ChangePassword';
 import ContactInfo from '../Forms/User Forms/ContactInfo';
+import PersonalProjectsForm  from '../Forms/User Forms/PersonalProjectsForm ';
 import SkillsAndCategory from '../Forms/User Forms/SkillsAndCategory';
 
 interface IProps {
@@ -30,6 +31,8 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
       setOpenTab(2);
     } else if (tab === 'skills&categories') {
       setOpenTab(3);
+    } else if (tab === 'personal-projects') {
+      setOpenTab(4);
     }
   }, [router.query]);
 
@@ -96,6 +99,23 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             Skills &amp; Categories
           </Link>
         </li>
+        <li>
+          <Link
+            href={{
+              pathname: `/${user.role}/~${user._id}/settings`,
+              query: { tab: 'personal-projects' },
+            }}
+            scroll={false}
+            prefetch={false}
+            className={` ${
+              openTab === 4
+                ? 'bg-blue-500 text-white'
+                : 'text-black dark:text-white dark:bg-gray-700'
+            }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500`}
+          >
+            Personal Projects
+          </Link>
+        </li>
       </ul>
       <div className='p-3 bg-white md:border-l dark:bg-gray-800 dark:border-gray-700'>
         <div className={openTab === 1 ? 'block' : 'hidden'}>
@@ -106,6 +126,9 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
         </div>
         <div className={openTab === 3 ? 'block' : 'hidden'}>
           <SkillsAndCategory user={user} />
+        </div>
+        <div className={openTab === 4 ? 'block' : 'hidden'}>
+          <PersonalProjectsForm  user={user} />
         </div>
       </div>
     </motion.div>

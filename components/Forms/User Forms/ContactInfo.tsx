@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Button from '../../UI/Button';
+import EducationSelect from '../../UI/EducationSelect';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
 import axiosInstance from '../../../utils/axios';
@@ -24,7 +25,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     role,
     company_name,
   } = user;
-
+  const [selected, setSelected] = useState('');
   const [contactInfo, setContactInfo] = useState<IUser>({
     first_name,
     last_name,
@@ -42,9 +43,21 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     setContactInfo((prevUserInfo) => ({ ...prevUserInfo, [name]: value }));
     console.log(contactInfo);
   };
-
+  const selectUniversity = useCallback((selected: string) => {
+    setSelected(selected);
+  }, []);
+  useEffect(() => {
+    if (selected !== education) {
+      setContactInfo((prevUserInfo) => ({
+        ...prevUserInfo,
+        education: selected,
+      }));
+    }
+  }, [education, selected]);
+  
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const isContactInfoChanged =
       JSON.stringify(contactInfo) !==
       JSON.stringify({
@@ -116,8 +129,8 @@ const ContactInfo: FC<IProps> = ({ user }) => {
       </div>
 
       <span className='md:w-1/2 w-full border-t-2 border-black my-2 dark:border-gray-700 '></span>
-      <Form OnSubmit={submitHandler}>
-        <div className='grid gap-6 mb-6 lg:grid-cols-2'>
+      <Form OnSubmit={submitHandler} className='flex flex-col gap-2'>
+        <div className='grid gap-6  lg:grid-cols-2'>
           <div className='flex flex-col gap-1'>
             <label
               htmlFor='first_name'
@@ -158,7 +171,6 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             Email
           </label>
           <Input
-            ContainerClass='mb-6'
             name='email'
             type='email'
             defaultValue={email}
@@ -174,14 +186,9 @@ const ContactInfo: FC<IProps> = ({ user }) => {
           >
             Education
           </label>
-          <Input
-            ContainerClass='mb-6'
-            name='education'
-            type='text'
+          <EducationSelect
+            onSelect={selectUniversity}
             defaultValue={education}
-            placeholder='Education'
-            onChange={handleChange}
-            required={true}
           />
         </div>
         <div className='flex flex-col gap-1'>
@@ -192,7 +199,6 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             Phone Number
           </label>
           <Input
-            ContainerClass='mb-6'
             name='phone'
             type='text'
             defaultValue={phone}
@@ -209,7 +215,6 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             Address
           </label>
           <Input
-            ContainerClass='mb-6'
             name='address'
             type='text'
             defaultValue={address}

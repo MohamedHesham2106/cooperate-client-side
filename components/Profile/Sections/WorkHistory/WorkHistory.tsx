@@ -1,32 +1,26 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 
-import {
-  useModalManager,
-} from '../../context/ModalManager';
+import { useModalManager } from '../../../../context/ModalManager';
 interface IProps {
-  job: IJobs;
-  isSameRole?: boolean;
-  isFreelancer?: 'freelancer' | 'client';
-  isOwnProfile?: boolean;
+  workHistory: IProject;
 }
-
-const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
-  const [showFullDescription, setShowFullDescription] = useState(false);
+const WorkHistory: FC<IProps> = ({ workHistory }) => {
   const { displayModal } = useModalManager();
-  const date = new Date(job.project_length).toLocaleString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  });
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const date = new Date(workHistory.job.project_length).toLocaleString(
+    'en-GB',
+    {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }
+  );
   const showModalHandler = () => {
-    displayModal('job', {
-      jobId: job._id,
-      isFreelancer,
-      isOwnProfile,
-      isSameRole,
+    displayModal('history', {
+      project: workHistory,
     });
   };
-  const truncatedDescription = job.description.slice(0, 200);
+  const truncatedDescription = workHistory.job.description.slice(0, 200);
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
   return (
     <div
@@ -34,15 +28,17 @@ const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
       onClick={showModalHandler}
     >
       <div className='font-bold p-5 capitalize dark:text-white rounded-t-lg dark:bg-gray-900 leading-3'>
-        {job.title}
+        {workHistory.job.title}
       </div>
       <div className='text-gray-400 px-4 text-sm font-thin capitalize dark:text-white'>
-        Est. Budget: ${job.budget} - {job.experience_level} Level - Deadline:{' '}
-        {date}
+        Est. Budget: ${workHistory.job.budget} -{' '}
+        {workHistory.job.experience_level} Level - Deadline: {date}
       </div>
       <div className='mt-2 px-4 text-sm'>
-        {showFullDescription ? job.description : truncatedDescription}
-        {job.description.length > 200 && (
+        {showFullDescription
+          ? workHistory.job.description
+          : truncatedDescription}
+        {workHistory.job.description.length > 200 && (
           <button
             className='text-blue-500 hover:text-blue-600 font-medium px-2'
             onClick={toggleDescription}
@@ -52,7 +48,7 @@ const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
         )}
       </div>
       <div className='flex mt-2 gap-2 pb-4 flex-wrap px-4'>
-        {job.skills.map((skill) => (
+        {workHistory.job.skills.map((skill) => (
           <span
             key={skill._id}
             className='px-4 py-2 shadow  text-sm rounded-3xl text-blue-500 font-medium bg-blue-200  '
@@ -65,4 +61,4 @@ const Job: FC<IProps> = ({ job, isFreelancer, isOwnProfile, isSameRole }) => {
   );
 };
 
-export default Job;
+export default WorkHistory;
