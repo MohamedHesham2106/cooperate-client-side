@@ -97,7 +97,6 @@ function AuthProvider({ children }: Props) {
         }
         window.location.reload();
       } catch (error) {
-
         toast.error('Something went wrong.', {
           style: {
             border: '1px solid #ce1500',

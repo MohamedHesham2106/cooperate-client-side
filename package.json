@@ -7,8 +7,8 @@
     "lint": "next lint",
     "lint:fix": "eslint components && eslint pages --fix && yarn format",
     "lint:strict": "eslint --max-warnings=0 components && eslint --max-warnings=0 pages",
-    "format": "prettier -w .",
-    "format:check": "prettier -c .",
+    "prettier": "prettier -w .",
+    "prettier:check": "prettier -c .",
     "typecheck": "tsc --noEmit --incremental false",
     "autofix": "eslint --fix components && prettier --write components"
   },

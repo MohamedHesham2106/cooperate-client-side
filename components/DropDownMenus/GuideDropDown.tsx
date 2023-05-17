@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 
 import { useAuthenticate } from '../../context/AuthProvider';
