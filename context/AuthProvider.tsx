@@ -97,9 +97,8 @@ function AuthProvider({ children }: Props) {
         }
         window.location.reload();
       } catch (error) {
-        const err = error as IError;
-        const { message } = err.response.data;
-        toast.error(message, {
+
+        toast.error('Something went wrong.', {
           style: {
             border: '1px solid #ce1500',
             padding: '16px',

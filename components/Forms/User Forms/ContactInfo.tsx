@@ -24,8 +24,10 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     address,
     role,
     company_name,
+    birthDate,
+    gender,
   } = user;
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState(education ? education : '');
   const [contactInfo, setContactInfo] = useState<IUser>({
     first_name,
     last_name,
@@ -35,13 +37,17 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     education,
     address,
     company_name,
+    birthDate,
+    gender,
   });
   const router = useRouter();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
     setContactInfo((prevUserInfo) => ({ ...prevUserInfo, [name]: value }));
-    console.log(contactInfo);
+    //console.log(contactInfo);
   };
   const selectUniversity = useCallback((selected: string) => {
     setSelected(selected);
@@ -54,26 +60,27 @@ const ContactInfo: FC<IProps> = ({ user }) => {
       }));
     }
   }, [education, selected]);
-  
+
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const isContactInfoChanged =
-      JSON.stringify(contactInfo) !==
-      JSON.stringify({
-        first_name,
-        last_name,
-        email,
-        phone,
-        country,
-        education,
-        address,
-        company_name,
-      });
+      contactInfo.first_name !== first_name ||
+      contactInfo.last_name !== last_name ||
+      contactInfo.email !== email ||
+      contactInfo.phone !== phone ||
+      contactInfo.country !== country ||
+      selected !== education ||
+      contactInfo.address !== address ||
+      contactInfo.gender !== gender ||
+      (birthDate &&
+        contactInfo.birthDate &&
+        new Date(contactInfo.birthDate).toISOString().split('T')[0] !==
+          new Date(birthDate).toISOString().split('T')[0]);
 
     // If there were no changes made, return from the function
     if (!isContactInfoChanged) {
-      toast.error('No Changes were made.', {
+      toast.error('No changes were made.', {
         style: {
           border: '1px solid #ce1500',
           padding: '16px',
@@ -89,8 +96,10 @@ const ContactInfo: FC<IProps> = ({ user }) => {
         new_email: contactInfo.email,
         new_phone: contactInfo.phone,
         new_address: contactInfo.address,
-        new_education: contactInfo.education,
+        new_education: selected,
         new_company_name: contactInfo.company_name,
+        new_birthDate: contactInfo.birthDate,
+        new_gender: contactInfo.gender,
       })
       .then((_response) => {
         toast.success('Updated Information Successfully.', {
@@ -99,7 +108,9 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             padding: '16px',
           },
         });
-        router.reload();
+        setTimeout(() => {
+          router.reload();
+        }, 2000);
       })
       .catch((error) => {
         const err = error as IError;
@@ -129,7 +140,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
       </div>
 
       <span className='md:w-1/2 w-full border-t-2 border-black my-2 dark:border-gray-700 '></span>
-      <Form OnSubmit={submitHandler} className='flex flex-col gap-2'>
+      <Form OnSubmit={submitHandler} className='flex flex-col gap-3'>
         <div className='grid gap-6  lg:grid-cols-2'>
           <div className='flex flex-col gap-1'>
             <label
@@ -223,6 +234,47 @@ const ContactInfo: FC<IProps> = ({ user }) => {
             required={true}
           />
         </div>
+        <div className='flex flex-col gap-1'>
+          <label
+            htmlFor='address'
+            className='text-sm font-medium text-gray-600  dark:text-white'
+          >
+            Birth Date
+          </label>
+          <input
+            name='birthDate'
+            onChange={handleChange}
+            type='date'
+            defaultValue={
+              birthDate
+                ? new Date(birthDate).toISOString().split('T')[0]
+                : new Date().toISOString().split('T')[0]
+            }
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full outline-none  p-2.5 dark:bg-gray-900 dark:text-white dark:border-gray-900  '
+            placeholder='Select BirthDate'
+          />
+        </div>
+        <div className='flex flex-col gap-1'>
+          <label
+            htmlFor='address'
+            className='text-sm font-medium text-gray-600  dark:text-white'
+          >
+            Gender
+          </label>
+          <select
+            className='w-full border border-gray-300 rounded-md text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none dark:bg-gray-900 dark:text-white'
+            defaultValue={gender}
+            name='gender'
+            onChange={handleChange}
+          >
+            <option disabled value=''>
+              Choose a Gender
+            </option>
+            <option value='M'>Male</option>
+            <option value='F'>Female</option>
+          </select>
+        </div>
+
         {role === 'client' && (
           <div className='flex flex-col gap-1'>
             <label

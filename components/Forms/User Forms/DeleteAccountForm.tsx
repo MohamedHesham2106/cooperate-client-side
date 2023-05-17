@@ -4,44 +4,28 @@ import toast from 'react-hot-toast';
 import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
+import { useAuthenticate } from '../../../context/AuthProvider';
 import axiosInstance from '../../../utils/axios';
-import { getCookie } from '../../../utils/cookie';
-
 interface IProps {
   user: IUser;
 }
-
-const ChangePassword: FC<IProps> = ({ user }) => {
+const DeleteAccountForm: FC<IProps> = ({ user }) => {
   const { _id } = user;
-
   const [contactInfo, setContactInfo] = useState({
-    oldPassword: '',
-    newPassword: '',
+    password: '',
     confirmPassword: '',
   });
-
+  const { SignOut } = useAuthenticate();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setContactInfo((prevUserInfo) => ({ ...prevUserInfo, [name]: value }));
     //console.log(contactInfo);
   };
-
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { oldPassword, newPassword, confirmPassword } = contactInfo;
-    if (oldPassword === newPassword) {
-      toast.error(
-        'Your new password cannot be same as your current password.',
-        {
-          style: {
-            border: '1px solid #ce1500',
-            padding: '16px',
-          },
-        }
-      );
-      return;
-    }
-    if (confirmPassword !== newPassword) {
+    const { password, confirmPassword } = contactInfo;
+
+    if (confirmPassword !== password) {
       toast.error('Passwords do not match.', {
         style: {
           border: '1px solid #ce1500',
@@ -52,22 +36,17 @@ const ChangePassword: FC<IProps> = ({ user }) => {
       return;
     }
     await axiosInstance
-      .put(
-        `/api/user/change-password`,
-        {
-          oldPassword,
-          newPassword,
-          userId: _id,
-        },
-        { headers: { Authorization: `Bearer ${getCookie('jwt_access')}` } }
-      )
+      .delete(`/api/user/${_id}/deleteAccount`, { data: { password } })
       .then((_response) => {
-        toast.success('Password Changed Successfully.', {
+        toast.success('Good Bye.', {
           style: {
             border: '1px solid #07bd3a',
             padding: '16px',
           },
         });
+        setTimeout(() => {
+          SignOut();
+        }, 2000);
       })
       .catch((error) => {
         const err = error as IError;
@@ -84,34 +63,22 @@ const ChangePassword: FC<IProps> = ({ user }) => {
   return (
     <div className='p-1 flex flex-col gap-2'>
       <h2 className='text-2xl font-semibold w-full text-center md:text-start'>
-        Change Password
+        Delete Account
       </h2>
-
-      <span className='md:w-1/2 w-full border-t-2 border-black my-2 '></span>
+      <span className='md:w-1/2 w-full border-t-2 border-black my-2 dark:border-gray-700 '></span>
+      <span className='text-sm text-red-400'>
+        <span className='font-bold'>Note:</span> This is irreversible action.
+      </span>
       <Form OnSubmit={submitHandler} className='flex flex-col gap-3'>
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label
-            htmlFor='OldPassword'
+            htmlFor='password'
             className='text-sm font-medium text-gray-600 dark:text-white'
           >
-            Current Password
+            Password
           </label>
           <Input
-            name='oldPassword'
-            type='password'
-            onChange={handleChange}
-            required={true}
-          />
-        </div>
-        <div className='flex flex-col gap-1 lg:w-1/2'>
-          <label
-            htmlFor='newPassword'
-            className='text-sm font-medium text-gray-600 dark:text-white'
-          >
-            New Password
-          </label>
-          <Input
-            name='newPassword'
+            name='password'
             type='password'
             onChange={handleChange}
             required={true}
@@ -122,7 +89,7 @@ const ChangePassword: FC<IProps> = ({ user }) => {
             htmlFor='confirmPassword'
             className='text-sm font-medium text-gray-600 dark:text-white'
           >
-            Confirm New Password
+            Confirm Password
           </label>
           <Input
             name='confirmPassword'
@@ -132,8 +99,11 @@ const ChangePassword: FC<IProps> = ({ user }) => {
           />
         </div>
         <div className='flex justify-end'>
-          <Button type='submit' width='md:w-1/3 w-full'>
-            Change Password
+          <Button
+            className='md:w-1/3 w-full text-white bg-red-500 p-3 rounded-xl hover:bg-red-600'
+            type='submit'
+          >
+            Delete Account
           </Button>
         </div>
       </Form>
@@ -141,4 +111,4 @@ const ChangePassword: FC<IProps> = ({ user }) => {
   );
 };
 
-export default ChangePassword;
+export default DeleteAccountForm;

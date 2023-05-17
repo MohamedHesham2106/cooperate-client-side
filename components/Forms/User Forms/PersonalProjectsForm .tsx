@@ -73,6 +73,9 @@ const PersonalProjectsForm: FC<IProps> = ({ user }) => {
               personalProjects.length === 1 ? 'Project' : 'Projects'
             } Added Successfully.`
           );
+          setTimeout(() => {
+            router.reload();
+          }, 2000);
         })
         .catch((_error) => {
           toast.error('Something went wrong.');

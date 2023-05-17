@@ -16,7 +16,10 @@ const EducationSelect: FC<IProps> = ({ onSelect, defaultValue }) => {
 
   const selectedText =
     selected?.length > 25 ? selected?.substring(0, 25) + '...' : selected;
-  const displayText = selected ? selectedText : `Select University`;
+  const defaultValueAvailable = defaultValue
+    ? defaultValue
+    : `Select University`;
+  const displayText = selected ? selectedText : defaultValueAvailable;
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.toLowerCase();

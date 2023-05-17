@@ -8,7 +8,6 @@ interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
 }
 const WorkHistoryDetails: FC<IProps> = ({ workHistory, onClose }) => {
-
   return (
     <Modal className='p-2 flex flex-col' onClose={onClose} Side>
       <Container className='flex flex-col min-h-[85vh] justify-between'>
@@ -75,7 +74,6 @@ const WorkHistoryDetails: FC<IProps> = ({ workHistory, onClose }) => {
             </div>
           </div>
         </div>
-  
       </Container>
     </Modal>
   );

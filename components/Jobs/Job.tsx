@@ -1,8 +1,6 @@
 import { FC, useState } from 'react';
 
-import {
-  useModalManager,
-} from '../../context/ModalManager';
+import { useModalManager } from '../../context/ModalManager';
 interface IProps {
   job: IJobs;
   isSameRole?: boolean;

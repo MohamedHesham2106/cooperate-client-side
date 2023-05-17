@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import WorkHistory from './WorkHistory';
 
-
 interface IProps {
   workHistory: IProject[];
 }
