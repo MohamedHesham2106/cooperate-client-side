@@ -59,7 +59,6 @@ const IdentityVerification: React.FC = () => {
       mediaRecorder.onstop = () => {
         const recordedBlob = new Blob(chunks, { type: 'video/webm' });
         setRecording(false);
-        downloadVideoBlob(recordedBlob, `${uuid}.webm`);
         sendVerificationRequest(recordedBlob);
       };
 
@@ -93,18 +92,7 @@ const IdentityVerification: React.FC = () => {
         console.error(error);
       });
   };
-  const downloadVideoBlob = (blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
 
-    // Trigger the click event to start the download
-    link.click();
-
-    // Clean up the URL object
-    URL.revokeObjectURL(url);
-  };
   return (
     <div className='flex flex-col justify-between gap-5 items-center min-h-[500px] relative'>
       <div className='flex flex-col gap-5 mb-16 items-center'>
