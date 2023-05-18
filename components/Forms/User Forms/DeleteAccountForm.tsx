@@ -6,14 +6,12 @@ import Form from '../../UI/Form';
 import Input from '../../UI/Input';
 import { useAuthenticate } from '../../../context/AuthProvider';
 import axiosInstance from '../../../utils/axios';
-interface IProps {
-  user: IUser;
-}
-const DeleteAccountForm: FC<IProps> = ({ user }) => {
-  const { _id } = user;
+
+const DeleteAccountForm: FC = () => {
+  const { uuid } = useAuthenticate();
   const [contactInfo, setContactInfo] = useState({
     password: '',
-    confirmPassword: '',
+    repeatPassword: '',
   });
   const { SignOut } = useAuthenticate();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,9 +21,9 @@ const DeleteAccountForm: FC<IProps> = ({ user }) => {
   };
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { password, confirmPassword } = contactInfo;
+    const { password, repeatPassword } = contactInfo;
 
-    if (confirmPassword !== password) {
+    if (repeatPassword !== password) {
       toast.error('Passwords do not match.', {
         style: {
           border: '1px solid #ce1500',
@@ -36,7 +34,7 @@ const DeleteAccountForm: FC<IProps> = ({ user }) => {
       return;
     }
     await axiosInstance
-      .delete(`/api/user/${_id}/deleteAccount`, { data: { password } })
+      .delete(`/api/user/${uuid}/deleteAccount`, { data: { password } })
       .then((_response) => {
         toast.success('Good Bye.', {
           style: {
@@ -86,13 +84,13 @@ const DeleteAccountForm: FC<IProps> = ({ user }) => {
         </div>
         <div className='flex flex-col gap-1 lg:w-1/2'>
           <label
-            htmlFor='confirmPassword'
+            htmlFor='repeatPassword'
             className='text-sm font-medium text-gray-600 dark:text-white'
           >
             Confirm Password
           </label>
           <Input
-            name='confirmPassword'
+            name='repeatPassword'
             type='password'
             onChange={handleChange}
             required={true}

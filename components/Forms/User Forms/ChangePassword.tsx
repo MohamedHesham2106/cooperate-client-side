@@ -4,15 +4,12 @@ import toast from 'react-hot-toast';
 import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
+import { useAuthenticate } from '../../../context/AuthProvider';
 import axiosInstance from '../../../utils/axios';
 import { getCookie } from '../../../utils/cookie';
 
-interface IProps {
-  user: IUser;
-}
-
-const ChangePassword: FC<IProps> = ({ user }) => {
-  const { _id } = user;
+const ChangePassword: FC = () => {
+  const { uuid } = useAuthenticate();
 
   const [contactInfo, setContactInfo] = useState({
     oldPassword: '',
@@ -57,7 +54,7 @@ const ChangePassword: FC<IProps> = ({ user }) => {
         {
           oldPassword,
           newPassword,
-          userId: _id,
+          userId: uuid,
         },
         { headers: { Authorization: `Bearer ${getCookie('jwt_access')}` } }
       )

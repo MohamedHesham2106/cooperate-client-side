@@ -6,6 +6,7 @@ import { FC, useEffect, useState } from 'react';
 import ChangePassword from '../Forms/User Forms/ChangePassword';
 import ContactInfo from '../Forms/User Forms/ContactInfo';
 import DeleteAccountForm from '../Forms/User Forms/DeleteAccountForm';
+import IdentityVerification from '../Forms/User Forms/IdentityVerification';
 import PersonalProjectsForm from '../Forms/User Forms/PersonalProjectsForm ';
 import SkillsAndCategory from '../Forms/User Forms/SkillsAndCategory';
 
@@ -26,16 +27,28 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
     const tab = router.query.tab;
 
     // Set the open tab based on the value of the 'tab' query parameter
-    if (tab === 'contact') {
-      setOpenTab(1);
-    } else if (tab === 'security') {
-      setOpenTab(2);
-    } else if (tab === 'skills&categories') {
-      setOpenTab(3);
-    } else if (tab === 'personal-projects') {
-      setOpenTab(4);
-    } else if (tab === 'delete-account') {
-      setOpenTab(5);
+    switch (tab) {
+      case 'contact':
+        setOpenTab(1);
+        break;
+      case 'security':
+        setOpenTab(2);
+        break;
+      case 'skills&categories':
+        setOpenTab(3);
+        break;
+      case 'personal-projects':
+        setOpenTab(4);
+        break;
+      case 'delete-account':
+        setOpenTab(5);
+        break;
+      case 'identity-verification':
+        setOpenTab(6);
+        break;
+      default:
+        // Handle any other cases here
+        break;
     }
   }, [router.query]);
 
@@ -136,23 +149,55 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
             Delete Account
           </Link>
         </li>
+        <li>
+          <Link
+            href={{
+              pathname: `/${user.role}/~${user._id}/settings`,
+              query: { tab: 'identity-verification' },
+            }}
+            scroll={false}
+            prefetch={false}
+            className={` ${
+              openTab === 6
+                ? 'bg-blue-500 text-white'
+                : 'text-black dark:text-white dark:bg-gray-700'
+            }  inline-block px-4 py-2  shadow  w-full cursor-pointer md:rounded-sm rounded-full text-center hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500`}
+          >
+            ID Verification
+          </Link>
+        </li>
       </ul>
       <div className='p-3 bg-white md:border-l dark:bg-gray-800 dark:border-gray-700'>
-        <div className={openTab === 1 ? 'block' : 'hidden'}>
-          <ContactInfo user={user} />
-        </div>
-        <div className={openTab === 2 ? 'block' : 'hidden'}>
-          <ChangePassword user={user} />
-        </div>
-        <div className={openTab === 3 ? 'block' : 'hidden'}>
-          <SkillsAndCategory user={user} />
-        </div>
-        <div className={openTab === 4 ? 'block' : 'hidden'}>
-          <PersonalProjectsForm user={user} />
-        </div>
-        <div className={openTab === 5 ? 'block' : 'hidden'}>
-          <DeleteAccountForm user={user} />
-        </div>
+        {openTab === 1 && (
+          <div className={openTab === 1 ? 'block' : 'hidden'}>
+            <ContactInfo user={user} />
+          </div>
+        )}
+        {openTab === 2 && (
+          <div className={openTab === 2 ? 'block' : 'hidden'}>
+            <ChangePassword />
+          </div>
+        )}
+        {openTab === 3 && (
+          <div className={openTab === 3 ? 'block' : 'hidden'}>
+            <SkillsAndCategory user={user} />
+          </div>
+        )}
+        {openTab === 4 && (
+          <div className={openTab === 4 ? 'block' : 'hidden'}>
+            <PersonalProjectsForm user={user} />
+          </div>
+        )}
+        {openTab === 5 && (
+          <div className={openTab === 5 ? 'block' : 'hidden'}>
+            <DeleteAccountForm />
+          </div>
+        )}
+        {openTab === 6 && (
+          <div className={openTab === 6 ? 'block' : 'hidden'}>
+            <IdentityVerification />
+          </div>
+        )}
       </div>
     </motion.div>
   );
