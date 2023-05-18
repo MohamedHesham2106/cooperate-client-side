@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 
-import TailwindSpinner from '../../SVG/TailwindSpinner';
 import Button from '../../UI/Button';
 import { useAuthenticate } from '../../../context/AuthProvider';
 
@@ -73,14 +72,14 @@ const IdentityVerification: React.FC = () => {
 
   const sendVerificationRequest = (videoBlob: Blob) => {
     const formData = new FormData();
-    formData.append('user_id', uuid);
+
     formData.append('video', videoBlob, `${uuid}.webm`);
 
     // console.log('user_id:', formData.get('user_id'));
     // console.log('video:', formData.get('video'));
 
     axios
-      .post('http://localhost:4000/match_face', formData, {
+      .post(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
