@@ -20,7 +20,7 @@ const Dashboard: NextPage<IProps> = ({ dashboardData }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { jwt_refresh } = req.cookies;
   try {
-    const role = getPayloadFromToken(jwt_refresh).role;
+    const role = getPayloadFromToken(jwt_refresh)?.role;
     const dashboardData = (await axiosInstance.get('/api/admin/')).data;
     if (role !== 'admin') {
       return { redirect: { destination: '/404', permanent: false } };

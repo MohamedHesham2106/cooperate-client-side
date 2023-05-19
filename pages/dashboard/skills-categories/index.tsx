@@ -23,7 +23,7 @@ const AddSkillsOrCategories: NextPage = () => {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { jwt_refresh } = req.cookies;
   try {
-    const role = getPayloadFromToken(jwt_refresh).role;
+    const role = getPayloadFromToken(jwt_refresh)?.role;
     if (role !== 'admin') {
       return { redirect: { destination: '/404', permanent: false } };
     }

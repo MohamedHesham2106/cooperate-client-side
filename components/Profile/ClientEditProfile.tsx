@@ -133,7 +133,7 @@ const ClientEditProfile: FC<IProps> = ({ user }) => {
         )}
         {openTab === 2 && (
           <div className={openTab === 2 ? 'block' : 'hidden'}>
-            <ChangePassword />
+            <ChangePassword user={user} />
           </div>
         )}
         {openTab === 3 && (
@@ -143,7 +143,10 @@ const ClientEditProfile: FC<IProps> = ({ user }) => {
         )}
         {openTab === 4 && (
           <div className={openTab === 4 ? 'block' : 'hidden'}>
-            <IdentityVerification />
+            <IdentityVerification
+              isIDVerified={user.isIDVerified}
+              IDimage={user.IDimage}
+            />
           </div>
         )}
       </div>

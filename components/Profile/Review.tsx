@@ -38,16 +38,22 @@ const Review: React.FC<IProps> = ({ review }) => {
     <article className='border shadow-md rounded-md grid grid-cols-1 gap-2 dark:shadow-gray-900 cursor-pointer dark:bg-gray-700 dark:border-gray-600'>
       <div className='flex justify-center flex-col  bg-gray-100 dark:bg-gray-800 rounded-md shadow-sm  '>
         <div className='flex items-center gap-2 px-5 py-3'>
-          {review.user.imageUrl && (
-            <div className='w-10 h-10 relative '>
-              <Image
-                src={review.user.imageUrl}
-                alt={review._id}
-                fill
-                className=' object-cover rounded-full'
-              />
-            </div>
-          )}
+          <div className='w-10 h-10 relative '>
+            <Image
+              src={
+                review.user.imageUrl
+                  ? review.user.imageUrl
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+              }
+              alt={
+                review.user._id
+                  ? review.user._id
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+              }
+              fill
+              className=' object-cover rounded-md'
+            />
+          </div>
 
           <div className='font-medium '>
             <p>

@@ -15,38 +15,22 @@ import { useNotification } from '../../context/NotificationProvider';
 import axiosInstance from '../../utils/axios';
 import { getPayloadFromToken } from '../../utils/cookie';
 import { getTimeDifference } from '../../utils/date';
+import { projectFileType } from '../../utils/validations';
 
 interface IProps {
   onClose: (event?: MouseEvent<HTMLDivElement | HTMLButtonElement>) => void;
   project?: IProject;
 }
-const validFileTypes = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/x-rar-compressed',
-  'application/x-7z-compressed',
-  'application/zip',
-  'application/gzip',
-  'application/x-tar',
-  'application/x-bzip',
-  'application/x-bzip2',
-  'application/x-ace-compressed',
-  'application/x-gzip',
-  'application/x-stuffit',
-  'application/x-stuffitx',
-  'application/x-tar-gz',
-  'application/x-tar-bz2',
-  'application/x-tar-lzma',
-  'application/x-tar-xz',
-  'application/x-zip-compressed',
-  'image/jpeg',
-  'image/png',
-];
+
 const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   const { uuid, refreshToken } = useAuthenticate(); // Get the UUID and refreshToken using the useAuthenticate hook
   const { sendNotification } = useNotification(); // Get the sendNotification function using the useNotification hook
   const [showFullDescription, setShowFullDescription] = useState(false); // State variable to track whether the full description should be shown or not
+
+  const [file, setFile] = useState<File | null>(null); // State variable to store the selected file
+  const role = getPayloadFromToken(refreshToken)?.role; // Extract the role from the refreshToken
+  const [createdAt, setCreatedAt] = useState<string | undefined>(); // State variable to store the time difference between project creation and current time
+  const router = useRouter();
 
   // Truncate the project description to 200 characters
   const truncatedDescription = project && project.job.description.slice(0, 200);
@@ -60,7 +44,10 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   // Append ellipsis if the description is truncated
   const showMore = shouldShowMore ? '...' : '';
 
-  const [file, setFile] = useState<File | null>(null); // State variable to store the selected file
+  // View Profile URL
+  const viewProfileURL = `/${
+    role === 'freelancer' ? 'client' : 'freelancer'
+  }/~${role === 'freelancer' ? project?.client_id : project?.Freelancer_id}`;
 
   // Function to handle the drag-over event
   const handleOndragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -70,7 +57,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   // Function to handle the file selection event
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currFile = event.target?.files?.[0];
-    if (currFile && validFileTypes.includes(currFile.type)) {
+    if (currFile && projectFileType.includes(currFile.type)) {
       setFile(currFile);
     } else {
       toast.error('Only zip, rar, jpeg, png, and gif files are accepted.', {
@@ -89,7 +76,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
     event.stopPropagation();
     // Grab the dropped file
     const currFile = event.dataTransfer.files[0];
-    if (currFile && validFileTypes.includes(currFile.type)) {
+    if (currFile && projectFileType.includes(currFile.type)) {
       setFile(currFile);
     } else {
       toast.error('Only zip, rar, jpeg, png, and gif files are accepted.', {
@@ -105,9 +92,6 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
   const removeImage = () => {
     setFile(null);
   };
-  const role = getPayloadFromToken(refreshToken)?.role; // Extract the role from the refreshToken
-  const [createdAt, setCreatedAt] = useState<string | undefined>(); // State variable to store the time difference between project creation and current time
-  const router = useRouter();
 
   // Update the createdAt state when the project or project.createdAt changes
   useEffect(() => {
@@ -204,6 +188,7 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
         toast.error('Something went wrong.');
       });
   };
+
   return (
     <Fragment>
       {project && (
@@ -213,7 +198,16 @@ const ProjectDetails: FC<IProps> = ({ project, onClose }) => {
           Side
         >
           <div className='grid grid-cols-[9fr_9fr_1fr] gap-2 items-center'>
-            <span className='text-xs text-gray-400'>Started {createdAt}</span>
+            <div className='flex flex-col gap-2'>
+              <span className='text-xs text-gray-400'>Started {createdAt}</span>
+              <Link
+                href={viewProfileURL}
+                className='px-5 py-2 rounded-md bg-blue-500 w-1/2 text-sm text-white text-center dark:bg-gray-900 dark:hover:bg-gray-800 hover:bg-blue-600'
+              >
+                View Profile
+              </Link>
+            </div>
+
             <div className='flex justify-end'>
               <Button
                 onClick={createChatHandler}

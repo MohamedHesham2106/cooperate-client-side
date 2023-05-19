@@ -1,18 +1,18 @@
 type IUser = {
-  _id?: string;
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  username?: string;
+  _id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  username: string;
   password?: string;
-  isEmailVerified?: boolean;
+  isEmailVerified: boolean;
   address?: string;
   phone?: string;
   gender?: 'M' | 'F';
   birthDate?: Date;
   imageUrl?: string;
-  country?: string;
-  role?: 'admin' | 'freelancer' | 'client';
+  country: string;
+  role: 'admin' | 'freelancer' | 'client';
   CvUrl?: string;
   language?: { _id: string; language: string; level: string }[];
   education?: string;
@@ -22,7 +22,8 @@ type IUser = {
   categories?: { _id: string; name: string }[];
   personal_projects?: { _id: string; title: string; url: string }[];
   jobs?: IJobs[];
-  status?: 'online' | 'offline';
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+  isIDVerified: boolean;
+  IDimage?: Buffer;
 };

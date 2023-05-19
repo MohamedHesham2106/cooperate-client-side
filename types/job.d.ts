@@ -7,6 +7,9 @@ interface IJob {
   experience_level?: 'entry' | 'intermediate' | 'expert';
   category?: string;
   skills?: string[] | [];
+  card_number?: string;
+  cvc?: string;
+  name_on_card?: string;
 }
 interface IJobs {
   _id: string;

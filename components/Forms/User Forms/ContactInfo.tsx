@@ -28,7 +28,7 @@ const ContactInfo: FC<IProps> = ({ user }) => {
     gender,
   } = user;
   const [selected, setSelected] = useState(education ? education : '');
-  const [contactInfo, setContactInfo] = useState<IUser>({
+  const [contactInfo, setContactInfo] = useState<Partial<IUser>>({
     first_name,
     last_name,
     email,

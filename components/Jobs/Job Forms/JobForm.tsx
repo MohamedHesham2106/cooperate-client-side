@@ -3,15 +3,19 @@ import Multiselect from 'multiselect-react-dropdown';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
 import { FC, useMemo, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { BiCalendar } from 'react-icons/bi';
-import { BsPaypal } from 'react-icons/bs';
 import useSWR from 'swr';
 
-import FawryIcon from '../../SVG/FawryIcon';
 import Button from '../../UI/Button';
 import Form from '../../UI/Form';
 import Input from '../../UI/Input';
 import axiosInstance from '../../../utils/axios';
+import {
+  validateCardholderName,
+  validateCardNumber,
+  validateCVC,
+} from '../../../utils/validations';
 import { fadeIn } from '../../../utils/variants';
 type IProps = {
   user: IUser;
@@ -26,8 +30,10 @@ const JobForm: FC<IProps> = ({ user }) => {
     description: '',
     skills: [],
     category: '',
-    budget: 0,
-    payment_type: undefined,
+    budget: undefined,
+    card_number: '',
+    cvc: undefined,
+    name_on_card: '',
     project_length: new Date().toISOString().substr(0, 10),
   });
 
@@ -103,7 +109,6 @@ const JobForm: FC<IProps> = ({ user }) => {
   const skills = data?.categories.flatMap((category: ICategory) =>
     category.skills?.map((skill: ISkill) => skill.name)
   );
-
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const {
@@ -115,23 +120,62 @@ const JobForm: FC<IProps> = ({ user }) => {
       project_length,
       skills,
       title,
+      card_number,
+      cvc,
+      name_on_card,
     } = jobValues;
-    await axiosInstance
-      .post(`/api/job/${user._id}`, {
-        description,
-        budget,
-        category_name: category,
-        payment_type,
-        experience_level,
-        title,
-        skills,
-        project_length,
-      })
-      .then((_res) => {
+
+    const validations = [
+      {
+        value: cvc,
+        validator: validateCVC,
+        errorMessage: 'Wrong CVC',
+      },
+      {
+        value: card_number,
+        validator: validateCardNumber,
+        errorMessage: 'Wrong Card Number',
+      },
+      {
+        value: name_on_card,
+        validator: validateCardholderName,
+        errorMessage: 'Wrong Name on Card',
+      },
+    ];
+
+    let isValid = true;
+
+    for (const validation of validations) {
+      const { value, validator, errorMessage } = validation;
+      if (value && !validator(value)) {
+        toast.error(errorMessage);
+        isValid = false;
+      }
+    }
+
+    if (isValid) {
+      try {
+        await axiosInstance.post(`/api/job/${user._id}`, {
+          description,
+          budget,
+          category_name: category,
+          payment_type,
+          experience_level,
+          title,
+          skills,
+          project_length,
+          name_on_card,
+          cvc,
+          card_number,
+        });
         router.back();
-      })
-      .catch((error) => console.log(error));
+      } catch (error) {
+        console.log(error);
+        toast.error('Something went wrong.');
+      }
+    }
   };
+
   const variants = useMemo(() => fadeIn('down', 0.5), []);
   return (
     <motion.div
@@ -385,42 +429,28 @@ const JobForm: FC<IProps> = ({ user }) => {
         <div className='border-2 rounded-2xl p-4 flex flex-col dark:bg-gray-800 dark:border-none dark:shadow-sm dark:shadow-gray-900'>
           <div className='flex flex-col gap-2 '>
             <h3 className='text-left text-lg font-bold'>
-              Payment&apos;s Method
+              Payment&apos;s Method (Credit Card)
             </h3>
             <div className=' flex gap-2 mt-3'>
-              <div className='w-full md:w-1/5 '>
-                <input
-                  className='hidden'
-                  type='radio'
-                  value='paypal'
-                  id='paypal'
-                  name='payment_type'
+              <div className='grid grid-cols-[5fr_2fr] w-full gap-2'>
+                <Input
+                  name='name_on_card'
+                  placeholder='Name on Card'
+                  value={jobValues.name_on_card}
                   onChange={handleChange}
                 />
-                <label
-                  className='flex flex-col items-center p-4 border-2 rounded-xl border-gray-400 cursor-pointer dark:bg-gray-900 '
-                  htmlFor='paypal'
-                >
-                  <BsPaypal size={50} className=' p-2' />
-                  <span>Paypal</span>
-                </label>
-              </div>
-              <div className='w-full md:w-1/5'>
-                <input
-                  id='Fawry'
-                  className='hidden'
-                  type='radio'
-                  name='payment_type'
-                  value='Fawry'
+                <Input
+                  name='CVC'
+                  placeholder='CVC'
+                  value={jobValues.cvc}
                   onChange={handleChange}
                 />
-                <label
-                  className='flex flex-col p-4 border-2 rounded-xl items-center border-gray-400 cursor-pointer dark:bg-gray-900  '
-                  htmlFor='Fawry'
-                >
-                  <FawryIcon />
-                  <span>Fawry</span>
-                </label>
+                <Input
+                  name='card_number'
+                  placeholder='Card Number'
+                  value={jobValues.card_number}
+                  onChange={handleChange}
+                />
               </div>
             </div>
           </div>

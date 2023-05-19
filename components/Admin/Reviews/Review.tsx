@@ -29,7 +29,11 @@ const Review: React.FC<IProps> = ({ review }) => {
         {review.user.imageUrl && (
           <div className='relative w-12 h-12'>
             <Image
-              src={review.user.imageUrl}
+              src={
+                review.user.imageUrl
+                  ? review.user.imageUrl
+                  : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+              }
               fill
               alt={`${review.user.first_name}`}
               className=' rounded-full'

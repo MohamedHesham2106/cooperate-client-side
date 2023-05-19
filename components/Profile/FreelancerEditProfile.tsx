@@ -175,7 +175,7 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
         )}
         {openTab === 2 && (
           <div className={openTab === 2 ? 'block' : 'hidden'}>
-            <ChangePassword />
+            <ChangePassword user={user} />
           </div>
         )}
         {openTab === 3 && (
@@ -195,7 +195,10 @@ const FreelancerEditProfile: FC<IProps> = ({ user }) => {
         )}
         {openTab === 6 && (
           <div className={openTab === 6 ? 'block' : 'hidden'}>
-            <IdentityVerification />
+            <IdentityVerification
+              isIDVerified={user.isIDVerified}
+              IDimage={user.IDimage}
+            />
           </div>
         )}
       </div>
