@@ -190,7 +190,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
                 onChange={handleFileChange}
               />
             </label>
-            <Button className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-600'>
+            <Button type="submit" className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-600'>
               <TiTick size={20} title='submit Uploaded Image' />
             </Button>
           </Form>
