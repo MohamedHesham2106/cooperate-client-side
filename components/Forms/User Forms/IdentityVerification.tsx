@@ -126,7 +126,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
 
     // Send a verification request with the video blob
     axios
-      .put(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
+      .post(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
