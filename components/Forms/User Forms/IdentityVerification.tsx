@@ -84,82 +84,65 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
   }, [IDimage]);
 
   const startRecording = () => {
-    if (IDimage) {
-      if (
-        webcamRef.current &&
-        webcamRef.current.video &&
-        webcamRef.current.video.srcObject
-      ) {
-        const videoStream = webcamRef.current.video.srcObject as MediaStream;
+    if (
+      webcamRef.current &&
+      webcamRef.current.video &&
+      webcamRef.current.video.srcObject
+    ) {
+      const videoStream = webcamRef.current.video.srcObject as MediaStream;
+      const mediaRecorder = new MediaRecorder(videoStream, {
+        mimeType: 'video/webm',
+      });
+      const chunks: Blob[] = [];
 
-        // Create a media recorder to record the video stream
-        const mediaRecorder = new MediaRecorder(videoStream, {
-          mimeType: 'video/webm',
-        });
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          chunks.push(e.data);
+        }
+      };
 
-        const chunks: Blob[] = [];
+      mediaRecorder.onstart = () => {
+        setRecording(true);
+      };
 
-        // Event handler when data is available from the media recorder
-        mediaRecorder.ondataavailable = (e) => {
-          if (e.data && e.data.size > 0) {
-            chunks.push(e.data);
-          }
-        };
+      mediaRecorder.onstop = () => {
+        const recordedBlob = new Blob(chunks, { type: 'video/webm' });
+        setRecording(false);
+        sendVerificationRequest(recordedBlob);
+      };
 
-        // Event handler when recording starts
-        mediaRecorder.onstart = () => {
-          setRecording(true);
-        };
-
-        // Event handler when recording stops
-        mediaRecorder.onstop = () => {
-          const recordedBlob = new Blob(chunks, { type: 'video/webm' });
-
-          // Set recording state to false
-          setRecording(false);
-
-          // Send the recorded video blob for verification
-          sendVerificationRequest(recordedBlob);
-        };
-
-        // Start recording
-        mediaRecorder.start();
-
-        // Stop recording after 15 seconds
-        setTimeout(() => {
-          mediaRecorder.stop();
-        }, 15000);
-      }
+      mediaRecorder.start();
+      setTimeout(() => {
+        mediaRecorder.stop();
+      }, 15000);
     }
   };
 
   const sendVerificationRequest = (videoBlob: Blob) => {
-    if (IDimage) {
-      const formData = new FormData();
+    const formData = new FormData();
 
-      // Append the video blob to the form data
-      formData.append('video', videoBlob, `${uuid}.webm`);
+    // Append the video blob to the form data
+    formData.append('video', videoBlob, `${uuid}.webm`);
 
-      // Send a verification request with the video blob
-      axios
-        .put(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((response) => {
-          // Handle the verification response
-          if (response.data.response === 'matched') {
-            toast.success('Verification Process Status: Matched');
-          } else {
-            toast.error('Verification Process Status: Unknown');
-          }
-        })
-        .catch((_error) => {
-          // Handle errors
-          toast.error('Something went wrong.');
-        });
-    }
+    // Send a verification request with the video blob
+    axios
+      .put(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        // Handle the verification response
+        if (response.data.response === 'matched') {
+          toast.success('Verification Process Status: Matched');
+        } else {
+          toast.error('Verification Process Status: Unknown');
+        }
+      })
+      .catch((_error) => {
+        // Handle errors
+        toast.error('Something went wrong.');
+      });
   };
 
   // Render Verification with Conditions.
@@ -190,7 +173,10 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
                 onChange={handleFileChange}
               />
             </label>
-            <Button type="submit" className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-600'>
+            <Button
+              type='submit'
+              className='rounded-md bg-blue-500 p-4 text-white shadow-md hover:bg-blue-600'
+            >
               <TiTick size={20} title='submit Uploaded Image' />
             </Button>
           </Form>
