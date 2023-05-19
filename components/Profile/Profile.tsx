@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode } from 'react';
 import { BiMap } from 'react-icons/bi';
 import { BsBuilding } from 'react-icons/bs';
+import { GoVerified } from 'react-icons/go';
 
 import Button from '../UI/Button';
 import { useModalManager } from '../../context/ModalManager';
@@ -41,8 +42,15 @@ const Profile: FC<IProps> = ({
   isFreelancer,
 }) => {
   // Destructure properties from the 'user' object
-  const { first_name, last_name, country, address, categories, company_name } =
-    user;
+  const {
+    first_name,
+    last_name,
+    country,
+    address,
+    categories,
+    company_name,
+    isIDVerified,
+  } = user;
 
   // Determine the style for the name container based on whether it is the user's own profile or not
   const nameStyle = !isOwnProfile
@@ -118,8 +126,13 @@ const Profile: FC<IProps> = ({
           </div>
         </div>
         <div className={nameStyle}>
-          <div className='capitalize text-2xl md:text-start text-center font-normal '>
-            {first_name} {last_name?.charAt(0)}.
+          <div className='capitalize text-2xl md:text-start text-center font-normal flex items-center justify-start gap-3 '>
+            {first_name} {last_name?.charAt(0)}.{' '}
+            <GoVerified
+              size={18}
+              className='text-blue-500'
+              title='Identity Verified'
+            />
           </div>
           <div className='flex gap-2 justify-center md:justify-start'>
             {company_name && <BsBuilding />}
