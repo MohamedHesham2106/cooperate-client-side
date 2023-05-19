@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { GoVerified } from 'react-icons/go';
 import { TiTick } from 'react-icons/ti';
 import Webcam from 'react-webcam';
 
@@ -11,7 +12,7 @@ import { useAuthenticate } from '../../../context/AuthProvider';
 import axiosInstance from '../../../utils/axios';
 
 interface IProps {
-  isIDVerified?: IUser['isIDVerified'];
+  isIDVerified: IUser['isIDVerified'];
   IDimage?: IUser['IDimage'];
 }
 const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
@@ -20,6 +21,8 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
   const [cameraPermission, setCameraPermission] = useState(
     IDimage ? true : false
   );
+  const [IsIDVerified, setIsIDVerified] = useState<boolean>(isIDVerified);
+
   const [selectedFile, setSelectedFile] = useState<File>();
   const { uuid } = useAuthenticate();
   const router = useRouter();
@@ -51,7 +54,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
     }
   };
   useEffect(() => {
-    if (IDimage) {
+    if (IDimage && !isIDVerified && !cameraPermission) {
       let mediaStream: MediaStream | null = null;
 
       const requestCameraPermission = async () => {
@@ -81,7 +84,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
         }
       };
     }
-  }, [IDimage]);
+  }, [IDimage, cameraPermission, isIDVerified]);
 
   const startRecording = () => {
     if (
@@ -135,6 +138,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
         // Handle the verification response
         if (response.data.response === 'matched') {
           toast.success('Verification Process Status: Matched');
+          setIsIDVerified(true);
         } else {
           toast.error('Verification Process Status: Unknown');
         }
@@ -147,7 +151,16 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
 
   // Render Verification with Conditions.
   const renderVerificationContent = () => {
-    if (!isIDVerified && IDimage === undefined) {
+    if (isIDVerified) {
+      return (
+        <Button
+          className='bg-gray-700 w-full font-bold p-5 text-lg rounded-md flex gap-2 items-center justify-center'
+          disabled={true}
+        >
+          Already Verified <GoVerified />
+        </Button>
+      );
+    } else if (!isIDVerified && IDimage === undefined) {
       return (
         <div className='flex justify-center items-center '>
           <Form
@@ -183,13 +196,18 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
         </div>
       );
     } else {
-      return <Button onClick={startRecording}>Verify Identity</Button>;
+      return (
+        <Button onClick={startRecording} disabled={isIDVerified}>
+          Verify Identity
+        </Button>
+      );
     }
   };
+
   return (
     <div className='flex flex-col justify-between gap-5 items-center min-h-[500px] relative'>
       <div className='flex flex-col gap-5 mb-16 items-center'>
-        {IDimage && cameraPermission ? (
+        {IDimage && cameraPermission && !IsIDVerified ? (
           <Webcam
             audio={false}
             ref={webcamRef}
@@ -202,9 +220,11 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
               : 'Please provide an ID image to proceed.'}
           </p>
         )}
-        <span className='text-gray-500 dark:text-white'>
-          Please keep your face in frame during the verification process.
-        </span>
+        {!IsIDVerified && (
+          <span className='text-gray-500 dark:text-white'>
+            Please keep your face in frame during the verification process.
+          </span>
+        )}
       </div>
 
       <div className='absolute bottom-2 w-full'>
