@@ -33,7 +33,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
     event.preventDefault();
     if (selectedFile) {
       const formData = new FormData();
-      formData.append('IDimage', selectedFile);
+      formData.append('image', selectedFile);
       try {
         await axiosInstance.put(`/api/user/${uuid}/createID`, formData, {
           headers: {
@@ -142,7 +142,7 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
 
       // Send a verification request with the video blob
       axios
-        .post(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
+        .put(`http://localhost:4000/match_face?user_id=${uuid}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
