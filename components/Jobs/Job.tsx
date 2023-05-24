@@ -4,7 +4,7 @@ import { useModalManager } from '../../context/ModalManager';
 interface IProps {
   job: IJobs;
   isSameRole?: boolean;
-  isFreelancer?: 'freelancer' | 'client';
+  isFreelancer?: 'freelancer' | 'client' | null;
   isOwnProfile?: boolean;
 }
 

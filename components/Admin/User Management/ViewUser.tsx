@@ -17,7 +17,7 @@ const ViewUser: React.FC<IProps> = ({ user, onClose }) => {
         <Profile
           isOwnProfile={true}
           isSameRole={false}
-          isFreelancer={undefined}
+          isFreelancer={null}
           user={user}
         />
         {user.role === 'freelancer' ? (
@@ -26,7 +26,7 @@ const ViewUser: React.FC<IProps> = ({ user, onClose }) => {
           <ClientDetails
             isOwnProfile={true}
             isSameRole={false}
-            isFreelancer={undefined}
+            isFreelancer={null}
             user={user}
           />
         )}

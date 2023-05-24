@@ -6,7 +6,6 @@ import { Fragment } from 'react';
 import FreelancerDetails from '../../../components/Profile/FreelancerDetails';
 import Profile from '../../../components/Profile/Profile';
 import Container from '../../../components/UI/Container';
-import axiosInstance from '../../../utils/axios';
 import { getPayloadFromToken } from '../../../utils/cookie';
 import { getUserData } from '../../../utils/user';
 
@@ -14,7 +13,7 @@ interface IProps {
   user: IUser;
   isOwnProfile: boolean;
   isSameRole: boolean;
-  isFreelancer: 'freelancer' | 'client' | undefined;
+  isFreelancer: 'freelancer' | 'client' | null;
   workHistory?: IProject[];
 }
 
@@ -72,32 +71,24 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   try {
     const user = await getUserData(userId, jwt_access);
-    const workHistory = (
-      await axiosInstance.get(`/api/user/${userId}/getWorkHistory`)
-    ).data;
     const payload = getPayloadFromToken(jwt_refresh);
-    if (payload) {
-      const isFreelancer =
-        payload.role === 'freelancer'
-          ? 'freelancer'
-          : payload.role === 'client'
-          ? 'client'
-          : undefined;
 
-      if (user.role !== 'freelancer') {
-        return { redirect: { destination: '/404', permanent: false } };
-      }
-      return {
-        props: {
-          user,
-          isOwnProfile: payload.sub === user._id,
-          isSameRole: payload.role === user.role,
-          isFreelancer: isFreelancer,
-          workHistory: workHistory.projects,
-        },
-      };
+    let isFreelancer = null;
+
+    if (payload?.role === 'freelancer') {
+      isFreelancer = 'freelancer';
+    } else if (payload?.role === 'client') {
+      isFreelancer = 'client';
     }
-    return { redirect: { destination: '/404', permanent: false } };
+
+    return {
+      props: {
+        user,
+        isOwnProfile: payload ? payload.sub === user._id : false,
+        isSameRole: payload ? payload.role === user.role : false,
+        isFreelancer,
+      },
+    };
   } catch {
     return { redirect: { destination: '/404', permanent: false } };
   }

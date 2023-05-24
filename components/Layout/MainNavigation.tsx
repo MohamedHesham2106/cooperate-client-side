@@ -99,7 +99,7 @@ const MainNavigation: FC = () => {
                 isOpen ? 'block p-6 shadow-xl' : 'hidden'
               }`}
             >
-              <ul className='items-center justify-center space-y-8 md:flex md:gap-x-6 md:space-y-0 font-normal text-lg md:text-base'>
+              <ul className='items-center justify-center space-y-8 md:flex md:gap-x-6 md:space-y-0 font-normal text-lg md:text-sm'>
                 <li
                   className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
                     router.pathname === '/' || router.pathname === '/freelancer'
@@ -134,6 +134,24 @@ const MainNavigation: FC = () => {
                       }}
                     >
                       {role !== 'client' ? 'Find Work' : 'All Jobs'}
+                    </Link>
+                  </li>
+                )}
+                {role === 'client' && (
+                  <li
+                    className={` hover:text-blue-500 dark:hover:text-blue-500 text-center  ${
+                      router.pathname === '/client'
+                        ? 'text-blue-500 dark:text-blue-500'
+                        : 'text-gray-900 dark:text-white'
+                    }`}
+                  >
+                    <Link
+                      href='/client'
+                      onClick={(e) => {
+                        router.pathname === '/client' && e.preventDefault();
+                      }}
+                    >
+                      Find Talent
                     </Link>
                   </li>
                 )}

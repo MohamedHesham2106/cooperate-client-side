@@ -12,7 +12,7 @@ interface IProps {
   user: IUser;
   isOwnProfile: boolean;
   isSameRole: boolean;
-  isFreelancer: 'freelancer' | 'client' | undefined;
+  isFreelancer: 'freelancer' | 'client' | null;
 }
 const Client: NextPage<IProps> = ({
   isOwnProfile,
@@ -68,27 +68,23 @@ export const getServerSideProps: GetServerSideProps = async ({
   try {
     const user = await getUserData(userId, jwt_access);
     const payload = getPayloadFromToken(jwt_refresh);
-    if (payload) {
-      const isFreelancer =
-        payload.role === 'freelancer'
-          ? 'freelancer'
-          : payload.role === 'client'
-          ? 'client'
-          : undefined;
 
-      if (user.role !== 'client') {
-        return { redirect: { destination: '/404', permanent: false } };
-      }
-      return {
-        props: {
-          user,
-          isOwnProfile: payload.sub === user._id,
-          isSameRole: payload.role === user.role,
-          isFreelancer: isFreelancer,
-        },
-      };
+    let isFreelancer = null;
+
+    if (payload?.role === 'freelancer') {
+      isFreelancer = 'freelancer';
+    } else if (payload?.role === 'client') {
+      isFreelancer = 'client';
     }
-    return { redirect: { destination: '/404', permanent: false } };
+
+    return {
+      props: {
+        user,
+        isOwnProfile: payload ? payload.sub === user._id : false,
+        isSameRole: payload ? payload.role === user.role : false,
+        isFreelancer,
+      },
+    };
   } catch {
     return { redirect: { destination: '/404', permanent: false } };
   }

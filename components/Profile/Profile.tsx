@@ -11,7 +11,7 @@ interface IProps {
   isOwnProfile: boolean;
   isSameRole: boolean;
   user: IUser;
-  isFreelancer: 'freelancer' | 'client' | undefined;
+  isFreelancer: 'freelancer' | 'client' | null;
 }
 interface IProfileButton {
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -128,11 +128,13 @@ const Profile: FC<IProps> = ({
         <div className={nameStyle}>
           <div className='capitalize text-2xl md:text-start text-center font-normal flex items-center justify-start gap-3 '>
             {first_name} {last_name?.charAt(0)}.{' '}
-            <GoVerified
-              size={18}
-              className='text-blue-500'
-              title='Identity Verified'
-            />
+            {isIDVerified && (
+              <GoVerified
+                size={18}
+                className='text-blue-500'
+                title='Identity Verified'
+              />
+            )}
           </div>
           <div className='flex gap-2 justify-center md:justify-start'>
             {company_name && <BsBuilding />}

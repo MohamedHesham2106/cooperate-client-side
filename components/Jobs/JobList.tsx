@@ -8,7 +8,7 @@ import Container from '../UI/Container';
 interface IProps {
   jobs: IUser['jobs'];
   isSameRole?: boolean;
-  isFreelancer?: 'freelancer' | 'client';
+  isFreelancer?: 'freelancer' | 'client' | null;
   isOwnProfile?: boolean;
 }
 

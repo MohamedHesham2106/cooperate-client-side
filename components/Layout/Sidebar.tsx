@@ -50,8 +50,8 @@ const Sidebar: React.FC<IProps> = ({ isOpen }) => {
     { name: 'Dashboard', link: '/dashboard', icon: MdOutlineDashboard },
     { name: 'User', link: '/dashboard/manage-users', icon: AiOutlineUser },
     {
-      name: 'Analytics',
-      link: '/dashboard/analytics',
+      name: 'Reports',
+      link: '/dashboard/reports',
       icon: TbReportAnalytics,
     },
     {

@@ -17,7 +17,7 @@ interface IProps {
   isOwnProfile: boolean;
   user: IUser;
   isSameRole: boolean;
-  isFreelancer: 'freelancer' | 'client' | undefined;
+  isFreelancer: 'freelancer' | 'client' | null;
 }
 const ClientDetails: FC<IProps> = ({
   isFreelancer,
