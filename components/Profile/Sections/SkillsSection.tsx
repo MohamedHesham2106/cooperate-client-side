@@ -11,15 +11,21 @@ const SkillsSection: React.FC<IProps> = ({
 }) => {
   return (
     <div className='flex mt-2 gap-3 flex-wrap'>
-      {skills?.map((skill: ISkill) => (
-        <div
-          key={skill._id}
-          title={skill.name}
-          className={`px-4 py-2 cursor-pointer  text-sm rounded-3xl ${color} font-bold ${bg} shadow-md dark:shadow-gray-900 dark:border-2 dark:border-gray-900 `}
-        >
-          {skill.name}
+      {skills && skills.length > 0 ? (
+        skills?.map((skill: ISkill) => (
+          <div
+            key={skill._id}
+            title={skill.name}
+            className={`px-4 py-2 cursor-pointer  text-sm rounded-3xl ${color} font-bold ${bg} shadow-md dark:shadow-gray-900 dark:border-2 dark:border-gray-900 `}
+          >
+            {skill.name}
+          </div>
+        ))
+      ) : (
+        <div className='flex justify-center flex-col mt-3'>
+          No Skills added yet.
         </div>
-      ))}
+      )}
     </div>
   );
 };

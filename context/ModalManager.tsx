@@ -11,34 +11,43 @@ import WorkHistoryDetails from '../components/Profile/Sections/WorkHistory/WorkH
 import ProjectDetails from '../components/Project/ProjectDetails';
 import ProposalDetails from '../components/Proposal/ProposalDetails';
 
+// Interface for Context value of ModalManagerContext
 interface IModalManagerContext {
   displayModal: (type: string, props?: any) => void;
 }
 
+// Create a context for managing modals
 export const ModalManagerContext = createContext<IModalManagerContext>(
   {} as IModalManagerContext
 );
 
+// Interface for the Props of ModalManagerProvider
 interface IModalManagerProvider {
   children: React.ReactNode;
 }
 
+// Component for providing the modal manager context
 export const ModalManagerProvider: FC<IModalManagerProvider> = ({
   children,
 }) => {
+  // State for the type of modal being displayed
   const [modalType, setModalType] = useState<string | null>(null);
+  // State for the props of the modal being displayed
   const [modalProps, setModalProps] = useState<any>({});
 
+  // Function to display a modal
   const displayModal = (type: string, props?: any) => {
     setModalType(type);
     setModalProps(props || {});
   };
 
+  // Function to close the modal
   const closeModal = () => {
     setModalType(null);
     setModalProps({});
   };
 
+  // Function to render the appropriate modal Component based on modalType
   const renderModal = () => {
     switch (modalType) {
       case 'language':
@@ -101,12 +110,15 @@ export const ModalManagerProvider: FC<IModalManagerProvider> = ({
         return null;
     }
   };
+  // Create the value for the ModalManagerContext
   const value = useMemo(
     () => ({
       displayModal,
     }),
     []
   ) as IModalManagerContext;
+
+  // Render the ModalManagerProvider with the provided children and modal component
   return (
     <ModalManagerContext.Provider value={value}>
       {children}
@@ -115,4 +127,5 @@ export const ModalManagerProvider: FC<IModalManagerProvider> = ({
   );
 };
 
+// Custom Hook to use the Modals
 export const useModalManager = () => useContext(ModalManagerContext);

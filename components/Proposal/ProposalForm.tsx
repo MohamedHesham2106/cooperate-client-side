@@ -24,7 +24,6 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
     cover_letter: '',
     website_link: '',
   });
-  const [file, setFile] = useState<File | null>(null);
 
   const MAX_CHARACTERS = 3000;
 
@@ -41,58 +40,6 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
       ...prevValues,
       [name]: value,
     }));
-  };
-
-  // Prevent default behavior when dragging over the element
-  const handleOndragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  // Handle file selection from input
-  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const currFile = event.target?.files?.[0];
-    const validFileTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ];
-    if (currFile && validFileTypes.includes(currFile.type)) {
-      setFile(currFile);
-    } else {
-      toast.error('Only Word and PDF files are accepted.', {
-        style: {
-          border: '1px solid #ce1500',
-          padding: '16px',
-        },
-      });
-    }
-  };
-
-  // Handle file drop event
-  const handleOndrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const currFile = event.dataTransfer.files[0];
-    const validFileTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ];
-    if (currFile && validFileTypes.includes(currFile.type)) {
-      setFile(currFile);
-    } else {
-      toast.error('Only Word and PDF files are accepted.', {
-        style: {
-          border: '1px solid #ce1500',
-          padding: '16px',
-        },
-      });
-    }
-  };
-
-  // Remove the selected file
-  const removeImage = () => {
-    setFile(null);
   };
 
   // Handle form submission
@@ -214,63 +161,7 @@ const ProposalForm: FC<IProps> = ({ userId, job }) => {
                 />
               </div>
             </section>
-            <h3 className='text-left text-lg font-bold'>
-              Attachments (Optional)
-            </h3>
-            <section className='w-full rounded-md'>
-              <div
-                onDragOver={handleOndragOver}
-                onDrop={handleOndrop}
-                className='h-28 w-full overflow-hidden relative border-2 items-center rounded-md cursor-pointer   border-gray-300 border-dotted'
-              >
-                <input
-                  type='file'
-                  onChange={handleFile}
-                  className='h-full w-full opacity-0 z-10 absolute'
-                  name='files'
-                />
-                <div className='h-full w-full absolute z-1 flex flex-col justify-center items-center top-0 p-2'>
-                  <svg
-                    aria-hidden='true'
-                    className='w-20 h-20 mb-3 text-gray-400'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                    xmlns='http://www.w3.org/2000/svg'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
-                    ></path>
-                  </svg>
-                  <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
-                    <span className='font-semibold'>Click to upload</span> or
-                    drag and drop
-                  </p>
-                  <p className='text-xs text-gray-500 dark:text-gray-400'>
-                    PDF or WORD
-                  </p>
-                </div>
-              </div>
-              <div className='flex flex-wrap gap-2 mt-2'>
-                {file && (
-                  <div className='w-full h-16 flex items-center justify-between rounded p-3 bg-blue-200 shadow'>
-                    <div className='flex flex-row items-center gap-2'>
-                      <div className='h-12 w-12 '></div>
-                      <span className='truncate w-44'>{file.name}</span>
-                    </div>
-                    <div
-                      onClick={removeImage}
-                      className='h-6 w-6 bg-red-400 flex items-center cursor-pointer justify-center rounded-sm'
-                    >
-                      <ImCross color='#fff' />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
+
             <div className='flex justify-end'>
               <Button type='submit' width='md:w-1/2 w-full'>
                 Send Proposal

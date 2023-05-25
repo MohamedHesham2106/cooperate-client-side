@@ -16,9 +16,12 @@ const ACCESS_TOKEN_EXPIRE = 30 * 60 * 1000; // 30 min
 type Props = {
   children: JSX.Element;
 };
+
+// Custom Hook to access the authentication context
 export const useAuthenticate = () => useContext(AuthContext);
 
 function AuthProvider({ children }: Props) {
+  // State variables to store the tokens and user ID
   const [accessToken, setAccessToken] = useState(
     getCookie('jwt_access') || undefined
   );
@@ -27,8 +30,10 @@ function AuthProvider({ children }: Props) {
   );
   const [userId, setUserId] = useState(getCookie('uuid') || undefined);
 
+  // State Variable to track initial mount
   const [isFirstMounted, setIsFirstMounted] = useState(true);
 
+  // Function to handle user Authentication
   const handleAuthentication = useCallback(
     async (email: IUser['email'], password: IUser['password']) => {
       try {
@@ -46,11 +51,7 @@ function AuthProvider({ children }: Props) {
 
         window.location.href = 'http://localhost:3000/';
       } catch (error) {
-        // const err = error as IError;
-        // const { message } = err.response.data;
-
         toast.error('Invalid email or password.');
-        // console.log(message);
       }
       if (isFirstMounted) {
         setIsFirstMounted(false);
@@ -59,6 +60,7 @@ function AuthProvider({ children }: Props) {
     [isFirstMounted]
   );
 
+  // Function to handle user Sign Out
   const handleSignOut = useCallback(async () => {
     const access = getCookie('jwt_access');
     const refresh = getCookie('jwt_refresh');
@@ -75,6 +77,7 @@ function AuthProvider({ children }: Props) {
       ]);
     }
   }, []);
+  // Function to check if a token is expired
   const isTokenExpired = (token: string): boolean => {
     const decoded = getPayloadFromToken(token);
     if (!decoded || !decoded.exp) {
@@ -83,6 +86,7 @@ function AuthProvider({ children }: Props) {
     return Date.now() > decoded.exp * 1000;
   };
 
+  // Function to update the access token using the refresh token
   const updateAccessToken = useCallback(async (refresh?: string) => {
     const access = getCookie('jwt_access');
     if (refresh && (!access || isTokenExpired(access))) {
@@ -110,20 +114,27 @@ function AuthProvider({ children }: Props) {
   useEffect(() => {
     if (refreshToken) {
       if (!accessToken) {
-        updateAccessToken(refreshToken);
+        updateAccessToken(refreshToken).catch((_error) => {
+          // Handle the error
+          toast.error('Something went wrong');
+        });
       }
       const intervalId = setInterval(() => {
-        updateAccessToken(refreshToken);
+        updateAccessToken(refreshToken).catch((_error) => {
+          // Handle the error
+          toast.error('Something went wrong');
+        });
       }, ACCESS_TOKEN_EXPIRE);
       return () => clearInterval(intervalId);
     } else {
-      handleSignOut();
+      handleSignOut().catch((_error) => {
+        toast.error('Something went wrong');
+      });
     }
   }, [
     isFirstMounted,
     accessToken,
     refreshToken,
-
     updateAccessToken,
     handleSignOut,
   ]);

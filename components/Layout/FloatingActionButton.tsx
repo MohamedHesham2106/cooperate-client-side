@@ -31,14 +31,14 @@ const FloatingActionButton: FC = () => {
       {role === 'client' ? (
         <Link
           href={`/client/~${uuid}/job-post`}
-          className='w-44 fixed z-90 bottom-5 right-5 bg-blue-500 p-2 rounded-md drop-shadow-lg flex justify-center items-center text-white text-base hover:bg-blue-600 hover:drop-shadow-2xl'
+          className='w-44 fixed z-[9999] bottom-5 right-5 bg-blue-500 p-2 rounded-md drop-shadow-lg flex justify-center items-center text-white text-base hover:bg-blue-600 hover:drop-shadow-2xl'
         >
           Post a Job
         </Link>
       ) : (
         <button
           title='Scroll Up'
-          className={`fixed z-90 bottom-10 right-8 bg-blue-500 p-2 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-orange-600 hover:drop-shadow-2xl ${
+          className={`fixed z-[9999] bottom-10 right-8 bg-blue-500 p-2 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-orange-600 hover:drop-shadow-2xl ${
             showButton ? '' : 'hidden'
           }`}
           onClick={handleClick}

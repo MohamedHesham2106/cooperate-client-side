@@ -49,8 +49,13 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   try {
     const user = await getUserData(user_id, jwt_access);
-    const invitations = (await axiosInstance.get(`/api/invitation/${user._id}`))
-      .data;
+    const invitations = (
+      await axiosInstance.get(`/api/invitation/${user._id}`, {
+        headers: {
+          Authorization: `Bearer ${jwt_access}`,
+        },
+      })
+    ).data;
     const payload = getPayloadFromToken(jwt_refresh);
     if (payload && payload.sub === user._id && user.role === 'freelancer') {
       return {

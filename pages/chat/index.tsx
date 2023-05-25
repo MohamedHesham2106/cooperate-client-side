@@ -154,7 +154,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   try {
     const userId = getPayloadFromToken(jwt_refresh)?.sub;
     const conversations = (
-      await axiosInstance.get(`/api/conversation/${userId}`)
+      await axiosInstance.get(`/api/conversation/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt_access}`,
+        },
+      })
     ).data.conversations;
 
     const senderId = userId;

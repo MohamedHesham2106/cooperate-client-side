@@ -204,7 +204,9 @@ const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user, workHistory }) => {
                 )}
               </div>
 
-              <div className='md:p-4 pt-4'>{biography}</div>
+              <div className='md:p-4 pt-4'>
+                {biography ? biography : 'Nothing to show here.'}
+              </div>
             </div>
           </div>
           <div className='flex flex-col border-t-2 px-3 dark:border-gray-700 border-gray-200 pt-5'>
@@ -214,8 +216,18 @@ const FreelancerDetails: FC<IProps> = ({ isOwnProfile, user, workHistory }) => {
           <div className='flex flex-col border-t-2 px-3 dark:border-gray-700 border-gray-200 pt-5'>
             <h1 className='font-semibold text-2xl'>Work History</h1>
             <span className='md:w-1/2 w-full border-t-2 border-black my-2 dark:border-gray-700 '></span>
-            <div className='flex mt-2 gap-2'>
-              {workHistory && <WorkHistoryList workHistory={workHistory} />}
+            <div
+              className={`flex mt-2 gap-2 min-h-[300px] ${
+                !workHistory && 'justify-center items-center'
+              }`}
+            >
+              {workHistory ? (
+                <WorkHistoryList workHistory={workHistory} />
+              ) : (
+                <p className='text-center w-full text-lg font-bold'>
+                  No Work History to Show Yet.
+                </p>
+              )}
             </div>
           </div>
         </div>

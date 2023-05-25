@@ -165,13 +165,17 @@ const ManageJobs: NextPage<IProps> = ({ categories }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { jwt_refresh } = req.cookies;
+  const { jwt_refresh, jwt_access } = req.cookies;
   try {
     const role = getPayloadFromToken(jwt_refresh)?.role;
     if (role !== 'admin') {
       return { redirect: { destination: '/404', permanent: false } };
     }
-    const { data: categories } = await axiosInstance.get('/api/category');
+    const { data: categories } = await axiosInstance.get('/api/category', {
+      headers: {
+        Authorization: `Bearer ${jwt_access}`,
+      },
+    });
     return {
       props: {
         categories: categories.categories,
