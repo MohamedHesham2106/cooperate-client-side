@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -88,35 +89,38 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
 
   const startRecording = () => {
     if (
-      webcamRef.current &&
-      webcamRef.current.video &&
-      webcamRef.current.video.srcObject
+      webcamRef.current && // Check if the webcamRef is defined and not null
+      webcamRef.current.video && // Check if the video element is available within the webcamRef
+      webcamRef.current.video.srcObject // Check if the video has a valid srcObject
     ) {
-      const videoStream = webcamRef.current.video.srcObject as MediaStream;
+      const videoStream = webcamRef.current.video.srcObject as MediaStream; // Get the MediaStream object from the video element
       const mediaRecorder = new MediaRecorder(videoStream, {
-        mimeType: 'video/webm',
+        mimeType: 'video/webm', // Specify the desired MIME type for the recorded video
       });
-      const chunks: Blob[] = [];
+      const chunks: Blob[] = []; // Array to store the recorded video chunks
 
+      // Event handler for data available event
       mediaRecorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) {
-          chunks.push(e.data);
+          chunks.push(e.data); // Store the data chunks in the array
         }
       };
 
+      // Event handler for recording start event
       mediaRecorder.onstart = () => {
-        setRecording(true);
+        setRecording(true); // Update the state to indicate that recording has started
       };
 
+      // Event handler for recording stop event
       mediaRecorder.onstop = () => {
-        const recordedBlob = new Blob(chunks, { type: 'video/webm' });
-        setRecording(false);
-        sendVerificationRequest(recordedBlob);
+        const recordedBlob = new Blob(chunks, { type: 'video/webm' }); // Create a Blob object from the recorded chunks
+        setRecording(false); // Update the state to indicate that recording has stopped
+        sendVerificationRequest(recordedBlob); // Send the recorded video blob for verification
       };
 
-      mediaRecorder.start();
+      mediaRecorder.start(); // Start recording the video
       setTimeout(() => {
-        mediaRecorder.stop();
+        mediaRecorder.stop(); // Stop recording after 15 seconds
       }, 15000);
     }
   };
@@ -221,9 +225,17 @@ const IdentityVerification: React.FC<IProps> = ({ isIDVerified, IDimage }) => {
           </p>
         )}
         {!IsIDVerified && (
-          <span className='text-gray-500 dark:text-white'>
-            Please keep your face in frame during the verification process.
-          </span>
+          <div className='flex flex-col items-center gap-2'>
+            <Image
+              src='/images/IdVerify.svg'
+              width={700}
+              height={700}
+              alt='Id Verification'
+            />
+            <span className='text-gray-500 dark:text-white font-bold'>
+              Please keep your face in frame during the verification process.
+            </span>
+          </div>
         )}
       </div>
 

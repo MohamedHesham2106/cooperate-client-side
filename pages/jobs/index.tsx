@@ -177,22 +177,27 @@ const Jobs: NextPage<IProps> = ({ jobs, categories }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
+    // Fetch jobs and categories data simultaneously using Promise.all
     const [{ data: jobs }, { data: categories }] = await Promise.all([
-      axiosInstance.get('/api/job?per_page=150&page=1'),
-      axiosInstance.get('/api/category'),
+      axiosInstance.get('/api/job?per_page=150&page=1'), // Fetch jobs data
+      axiosInstance.get('/api/category'), // Fetch categories data
     ]);
+
+    // Return the fetched data as props to be passed to the component
     return {
       props: {
-        jobs: jobs.jobs,
-        categories: categories.categories,
+        jobs: jobs.jobs, // Pass the "jobs" array from the fetched data
+        categories: categories.categories, // Pass the "categories" array from the fetched data
       },
-      revalidate: 30 * 1000 * 60,
+      revalidate: 30 * 1000 * 60, // Enable automatic revalidation every 30 minutes
     };
   } catch {
+    // If an error occurs during the data fetching process
+    // Redirect the user to the "/404" page temporarily
     return {
       redirect: {
-        destination: '/404',
-        permanent: false,
+        destination: '/404', // Redirect destination
+        permanent: false, // Set as a temporary redirect
       },
     };
   }

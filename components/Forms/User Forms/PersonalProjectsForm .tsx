@@ -187,7 +187,7 @@ const PersonalProjectsForm: FC<IProps> = ({ user }) => {
               return (
                 <div
                   key={index}
-                  className='flex gap-5 items-center justify-between bg-white'
+                  className='flex gap-5 items-center justify-between bg-white dark:bg-gray-900'
                 >
                   <h3 className='p-3 font-bold rounded-md bg-gray-100 dark:bg-gray-900 text-xl w-full dark:text-white '>
                     {project.title}
@@ -197,7 +197,7 @@ const PersonalProjectsForm: FC<IProps> = ({ user }) => {
                       handleRemovePersonalProject(project.title, event)
                     }
                     type='button'
-                    className='w-1/3 focus:outline-none font-medium rounded-md text-base bg-gray-200 hover:bg-gray-300 px-5 py-2.5 text-center dark:text-gray-900'
+                    className='w-1/3 focus:outline-none font-medium rounded-md text-base bg-gray-200 hover:bg-gray-300 px-5 py-2.5 text-center dark:text-white dark:bg-red-500'
                   >
                     Remove
                   </Button>

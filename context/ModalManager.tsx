@@ -1,3 +1,9 @@
+/* This code is creating a context and provider for managing modals in a React application. It defines
+an interface for the context value, creates a context using `createContext`, and provides a
+`ModalManagerProvider` component that wraps the children and renders the appropriate modal component
+based on the `modalType` state. It also provides a custom hook `useModalManager` that can be used to
+access the `displayModal` function from the context. The imported components are the various modal
+components that can be displayed. */
 import { createContext, FC, useContext, useMemo, useState } from 'react';
 
 import EditUser from '../components/Admin/User Management/EditUser';

@@ -19,15 +19,18 @@ const CallRoom: NextPage<IProps> = ({
   receiverId,
   fullName,
 }) => {
-  const { socket } = useSocket();
-  const { uuid } = useAuthenticate();
+  const { socket } = useSocket(); // Get the socket object from a custom hook
+  const { uuid } = useAuthenticate(); // Get the UUID from a custom hook
 
+  // Function to initiate the video call
   const myMeeting = async (element: HTMLElement) => {
-    const appID = 1141166665;
-    const serverSecret = '9ddfbe3e5b6d521f8c15731f3a5e6261';
+    const appID = 1977067723; // Zego app ID
+    const serverSecret = '8bf6539de5e99c85fe01db7e3ed23d7d'; // Zego server secret
     const { ZegoUIKitPrebuilt } = await import(
       '@zegocloud/zego-uikit-prebuilt'
-    );
+    ); // Import the ZegoUIKitPrebuilt library dynamically
+
+    // Generate a kit token for the test environment
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -35,12 +38,14 @@ const CallRoom: NextPage<IProps> = ({
       uuid,
       fullName
     );
+    // Create a ZegoUIKitPrebuilt instance
     const zc = ZegoUIKitPrebuilt.create(kitToken);
+
     if (zc) {
       zc.joinRoom({
-        container: element,
+        container: element, // Set the HTML element as the container for the video call
         scenario: {
-          mode: ZegoUIKitPrebuilt.OneONoneCall,
+          mode: ZegoUIKitPrebuilt.OneONoneCall, // Set the scenario mode for a one-on-one call
         },
 
         showScreenSharingButton: true,
@@ -53,7 +58,7 @@ const CallRoom: NextPage<IProps> = ({
         layout: 'Sidebar',
         turnOnMicrophoneWhenJoining: false, // set this option to false to turn off the microphone when joining
         onJoinRoom: (_users: ZegoUser[]) => {
-          socket.emit('call', { conversation_id, receiverId, fullName });
+          socket.emit('call', { conversation_id, receiverId, fullName }); // Emit a 'call' event through the socket
         },
       });
     }
@@ -62,7 +67,7 @@ const CallRoom: NextPage<IProps> = ({
   return (
     <div className='mt-28 min-h-screen bg-[#1d1e2e] dark:bg-[#1d1e2e] rounded-sm m-10 flex items-center justify-center'>
       <div
-        ref={myMeeting as LegacyRef<HTMLDivElement>}
+        ref={myMeeting as LegacyRef<HTMLDivElement>} // Assign the myMeeting function as the ref for the div element
         className='w-[100vw] h-[100vh]'
       ></div>
     </div>
@@ -83,9 +88,18 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   try {
     const conversations = await axiosInstance.get(
-      `/api/conversation/${userId}`
+      `/api/conversation/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt_access}`,
+        },
+      }
     );
-    const { data } = await axiosInstance.get(`/api/user/${userId}`);
+    const { data } = await axiosInstance.get(`/api/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${jwt_access}`,
+      },
+    });
     const full_name = `${data.user.first_name} ${data.user.last_name}`;
     let isValid = false;
     let receiverId = null;

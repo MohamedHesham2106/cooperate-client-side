@@ -67,20 +67,28 @@ function MyApp({ Component, pageProps }: AppProps) {
         </div>
       ) : (
         <AuthProvider>
-          <SocketProvider url='http://localhost:8080/'>
-            <CallProvider>
-              <ThemeProvider enableSystem={false} attribute='class'>
-                <NotificationProvider>
-                  <ModalManagerProvider>
-                    <Layout>
-                      <Component {...pageProps} />
-                    </Layout>
-                  </ModalManagerProvider>
-                </NotificationProvider>
-              </ThemeProvider>
-            </CallProvider>
-          </SocketProvider>
-        </AuthProvider>
+        {/* Wrap the components with the AuthProvider to provide authentication context */}
+        <SocketProvider url='http://localhost:8080/'>
+          {/* Wrap the components with the SocketProvider to provide socket connection context */}
+          <CallProvider>
+            {/* Wrap the components with the CallProvider to provide call-related context */}
+            <ThemeProvider enableSystem={false} attribute='class'>
+              {/* Wrap the components with the ThemeProvider to provide theme-related context */}
+              <NotificationProvider>
+                {/* Wrap the components with the NotificationProvider to provide notification-related context */}
+                <ModalManagerProvider>
+                  {/* Wrap the components with the ModalManagerProvider to manage modals */}
+                  <Layout>
+                    {/* Use the Layout component to provide a consistent layout structure */}
+                    <Component {...pageProps} />
+                    {/* Render the component passed as a prop with its respective page props */}
+                  </Layout>
+                </ModalManagerProvider>
+              </NotificationProvider>
+            </ThemeProvider>
+          </CallProvider>
+        </SocketProvider>
+      </AuthProvider>
       )}
     </Fragment>
   );

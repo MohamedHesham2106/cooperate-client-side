@@ -76,7 +76,7 @@ const NotificationProvider: React.FC<IProps> = ({ children }) => {
   const handleNotificationReceived = useCallback(
     (notification: INotification) => {
       toast.custom((t) => <CustomToast notification={notification} t={t} />, {
-        duration: 7000, // set duration to Infinity to prevent auto-dismissal
+        duration: 7000, 
       });
     },
     []
